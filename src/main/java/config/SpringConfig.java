@@ -43,7 +43,7 @@ import java.util.List;
 @Configuration
 //Enable API documentation
 // Specifies which package to scan
-@ComponentScan({ "codix" })
+@ComponentScan({ "ht" })
 // Enables Spring's annotations
 @EnableWebMvc
 @EnableAspectJAutoProxy(proxyTargetClass=true)
@@ -57,8 +57,7 @@ public class SpringConfig extends WebMvcConfigurerAdapter {
   }
 
   @Bean
-  public MappingJackson2HttpMessageConverter customJackson2HttpMessageConverter()
-  {
+  public MappingJackson2HttpMessageConverter customJackson2HttpMessageConverter() {
     MappingJackson2HttpMessageConverter jsonConverter = new MappingJackson2HttpMessageConverter();
 
     ObjectMapper objectMapper = new ObjectMapper();
@@ -70,8 +69,7 @@ public class SpringConfig extends WebMvcConfigurerAdapter {
   }
 
   @Override
-  public void configureMessageConverters(List<HttpMessageConverter<?>> converters)
-  {
+  public void configureMessageConverters(List<HttpMessageConverter<?>> converters) {
     converters.add(customJackson2HttpMessageConverter());
   }
 
@@ -101,7 +99,7 @@ public class SpringConfig extends WebMvcConfigurerAdapter {
 
   @Bean(name = "transactionTemplate")
   public TransactionTemplate transactionTemplate() throws SQLException {
-  	return new TransactionTemplate(txManager());
+    return new TransactionTemplate(txManager());
   }
 
   @Override
@@ -128,15 +126,14 @@ public class SpringConfig extends WebMvcConfigurerAdapter {
    */
 
   @Override
-  public void addInterceptors(InterceptorRegistry registry)
-  {
+  public void addInterceptors(InterceptorRegistry registry) {
     super.addInterceptors(registry);
   }
 
 
   @Bean(name = "multipartResolver")
   public CommonsMultipartResolver createMultipartResolver() {
-    CommonsMultipartResolver resolver=new CommonsMultipartResolver();
+    CommonsMultipartResolver resolver = new CommonsMultipartResolver();
     resolver.setDefaultEncoding("utf-8");
     return resolver;
   }
@@ -149,8 +146,7 @@ public class SpringConfig extends WebMvcConfigurerAdapter {
    * @param argumentResolvers list af argumentResolvers
    */
   @Override
-  public void addArgumentResolvers(List<HandlerMethodArgumentResolver> argumentResolvers)
-  {
+  public void addArgumentResolvers(List<HandlerMethodArgumentResolver> argumentResolvers) {
     PageableHandlerMethodArgumentResolver resolver = new PageableHandlerMethodArgumentResolver();
     resolver.setOneIndexedParameters(true);
     resolver.setFallbackPageable(new PageRequest(0, 25));
@@ -163,13 +159,12 @@ public class SpringConfig extends WebMvcConfigurerAdapter {
   }
 
   @Configuration
-  @EnableHazelcastHttpSession(maxInactiveIntervalInSeconds = (int)sessionTimeoutInSec, sessionMapName = "spring:session:sessions")
-  protected static class SessionConfig
-  {
+  @EnableHazelcastHttpSession(maxInactiveIntervalInSeconds = (int) sessionTimeoutInSec, sessionMapName = "spring:session:sessions")
+  protected static class SessionConfig {
     @Bean
     public HazelcastInstance embeddedHazelcast() {
       Config cfg = new Config();
-      cfg.setProperty("hazelcast.logging.type","slf4j");
+      cfg.setProperty("hazelcast.logging.type", "slf4j");
       final NetworkConfig netConfig = cfg.getNetworkConfig();
       netConfig.getJoin().getTcpIpConfig().setEnabled(false);
       netConfig.getJoin().getMulticastConfig().setEnabled(false);
@@ -178,22 +173,21 @@ public class SpringConfig extends WebMvcConfigurerAdapter {
     }
 
     @Bean
-    public HttpSessionStrategy httpSessionStrategy(){
+    public HttpSessionStrategy httpSessionStrategy() {
       return new HeaderHttpSessionStrategy();
     }
 
   }
-  @Bean(name="jdbcTemplate")
+
+  @Bean(name = "jdbcTemplate")
   public JdbcTemplate jdbcTemplate()
-    throws SQLException
-  {
+      throws SQLException {
     return new JdbcTemplate(dataSource());
   }
 
-  @Bean(name="namedTemplate")
+  @Bean(name = "namedTemplate")
   public NamedParameterJdbcTemplate namedTemplate()
-    throws SQLException
-  {
+      throws SQLException {
     return new NamedParameterJdbcTemplate(dataSource());
   }
 

@@ -11,8 +11,8 @@
 <context:annotation-config/>
 
 <!-- <tx:annotation-driven proxy-target-class="true" /> -->
-<bean class="config.factoring.absa.AbsaConfig"/>
-<bean class="config.EditorConfigurer"/>
+<bean class="config.SpringConfig"/>
+<!--<bean class="config.EditorConfigurer"/>-->
 
 
 <!-- the transactional advice (what 'happens'; see the <aop:advisor/> bean below) -->
@@ -31,7 +31,7 @@
         of an operation defined by the FooService interface -->
     <aop:config>
         <aop:pointcut
-            id="fooServiceOperation" expression="execution(* codix.api..*.*(..)) || execution(* codix.auth..*.*(..))"/>
+            id="fooServiceOperation" expression="execution(* ht.api..*.*(..))"/>
         <aop:advisor advice-ref="txAdvice" pointcut-ref="fooServiceOperation"/>
     </aop:config>
 
