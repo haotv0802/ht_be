@@ -7,12 +7,12 @@ import com.hazelcast.config.Config;
 import com.hazelcast.config.NetworkConfig;
 import com.hazelcast.core.Hazelcast;
 import com.hazelcast.core.HazelcastInstance;
+import ht.auth.LoggingEnhancingFilter;
+import ht.auth.filters.*;
 import oracle.jdbc.pool.OracleDataSource;
-import org.aopalliance.intercept.MethodInvocation;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.context.MessageSource;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
@@ -22,8 +22,6 @@ import org.springframework.context.support.ResourceBundleMessageSource;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.web.PageableHandlerMethodArgumentResolver;
 import org.springframework.data.web.SortHandlerMethodArgumentResolver;
-import org.springframework.expression.spel.support.StandardEvaluationContext;
-import org.springframework.expression.spel.support.StandardTypeLocator;
 import org.springframework.http.HttpMethod;
 import org.springframework.http.MediaType;
 import org.springframework.http.converter.HttpMessageConverter;
@@ -31,19 +29,12 @@ import org.springframework.http.converter.json.MappingJackson2HttpMessageConvert
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate;
 import org.springframework.jdbc.datasource.DataSourceTransactionManager;
-import org.springframework.security.access.expression.method.DefaultMethodSecurityExpressionHandler;
-import org.springframework.security.access.expression.method.MethodSecurityExpressionHandler;
-import org.springframework.security.authentication.AuthenticationManager;
-import org.springframework.security.authentication.AuthenticationProvider;
-import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.config.annotation.method.configuration.EnableGlobalMethodSecurity;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
 import org.springframework.security.config.http.SessionCreationPolicy;
-import org.springframework.security.core.Authentication;
 import org.springframework.security.core.userdetails.UserDetailsService;
-import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.access.channel.ChannelProcessingFilter;
 import org.springframework.security.web.access.intercept.FilterSecurityInterceptor;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
@@ -73,10 +64,10 @@ import java.util.List;
 @Configuration
 //Enable API documentation
 // Specifies which package to scan
-@ComponentScan({ "ht" })
+@ComponentScan({"ht"})
 // Enables Spring's annotations
 @EnableWebMvc
-@EnableAspectJAutoProxy(proxyTargetClass=true)
+@EnableAspectJAutoProxy(proxyTargetClass = true)
 public class SpringConfig extends WebMvcConfigurerAdapter {
 
   private Logger log = LogManager.getLogger(getClass());
@@ -151,8 +142,11 @@ public class SpringConfig extends WebMvcConfigurerAdapter {
   @Override
   public void addCorsMappings(CorsRegistry registry) {
     //registry.addMapping("*//*").allowedOrigins("http://localhost:8383");
-    registry.addMapping("*//**").allowCredentials(true).exposedHeaders("Location");
-  }
+    registry.addMapping("*/
+
+  /**
+   * ").allowCredentials(true).exposedHeaders("Location");
+   * }
    */
 
   @Override
@@ -228,6 +222,18 @@ public class SpringConfig extends WebMvcConfigurerAdapter {
     @Autowired
     PlatformTransactionManager txManager;
 
+    @Resource(name = "authService")
+    private UserDetailsService userDetailsService;
+
+    @Autowired
+    private RestAuthenticationEntryPoint restAuthenticationEntryPoint;
+
+    @Autowired
+    private CorsFilter corsFilter;
+
+    @Autowired
+    private CustomizedAccessDeniedHandler customizedAccessDeniedHandler;
+
     @Bean(name = "messageSource")
     public MessageSource messageSource() {
       ResourceBundleMessageSource b = new ResourceBundleMessageSource();
@@ -236,6 +242,93 @@ public class SpringConfig extends WebMvcConfigurerAdapter {
       );
       b.setUseCodeAsDefaultMessage(true);
       return b;
+    }
+
+    @Bean
+    public CustomizedAuthenticationFailureHandler customizedAuthenticationFailureHandler() {
+      return new CustomizedAuthenticationFailureHandler(messageSource());
+    }
+
+    @Bean
+    public CustomizedAuthenticationSuccessHandler customizedAuthenticationSuccessHandler() {
+      return new CustomizedAuthenticationSuccessHandler();
+    }
+
+    @Override
+    protected UserDetailsService userDetailsService() {
+      return userDetailsService;
+    }
+
+    @Bean
+    public CustomizedAccessDeniedHandler customizedAccessDeniedHandler() {
+      return new CustomizedAccessDeniedHandler(messageSource());
+    }
+
+
+    @Override
+    protected void configure(HttpSecurity http) throws Exception {
+      http
+          .sessionManagement()
+          .sessionCreationPolicy(SessionCreationPolicy.IF_REQUIRED)
+          .maximumSessions(10)
+          .and()
+          .and()
+          .exceptionHandling()
+          .authenticationEntryPoint(restAuthenticationEntryPoint)
+          .accessDeniedHandler(customizedAccessDeniedHandler)
+          .and()
+          .csrf().disable()
+          .authorizeRequests()
+          //allow anonymous POSTs to login
+          .antMatchers(HttpMethod.POST, "/login").permitAll()
+          //all other request need to be authenticated
+          .antMatchers("/svc/**").authenticated()
+          .and()
+          .logout()
+          .logoutRequestMatcher(new AntPathRequestMatcher("/logout", HttpMethod.POST.name()))
+          .invalidateHttpSession(true)
+          .logoutSuccessHandler(new HttpStatusReturningLogoutSuccessHandler())
+          .and()
+          // custom CORS filter as the mvc cors config doesn't play well, yet, with security
+          .addFilterBefore(corsFilter, ChannelProcessingFilter.class)
+          // custom JSON based authentication by POST of {"userName":"<name>","userPass":"<password>"}
+          .addFilterBefore(statelessLoginFilter(), UsernamePasswordAuthenticationFilter.class)
+          .addFilterAfter(loggingEnhancingFilter(), FilterSecurityInterceptor.class)
+      ;
+    }
+
+    @Bean
+    public CorsFilter corsFilter() {
+      UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
+      CorsConfiguration config = new CorsConfiguration();
+      config.setAllowCredentials(true); // you USUALLY want this
+      config.addAllowedOrigin("*");
+      config.addAllowedHeader("*");
+      config.addAllowedMethod("GET");
+      config.addAllowedMethod("HEAD");
+      config.addAllowedMethod("POST");
+      config.addAllowedMethod("DELETE");
+      config.addAllowedMethod("PATCH");
+      config.addAllowedMethod("PUT");
+
+      config.addExposedHeader("Location");
+      config.addExposedHeader("X-AUTH-TOKEN");
+      source.registerCorsConfiguration("/**", config);
+      return new CorsFilter(source);
+    }
+
+    @Bean
+    LoggingEnhancingFilter loggingEnhancingFilter() {
+      return new LoggingEnhancingFilter();
+    }
+
+    @Bean
+    StatelessLoginFilter statelessLoginFilter() throws Exception {
+      return new StatelessLoginFilter(
+          "/login"
+          , authenticationManagerBean()
+          , customizedAuthenticationFailureHandler()
+          , customizedAuthenticationSuccessHandler());
     }
 
   }
