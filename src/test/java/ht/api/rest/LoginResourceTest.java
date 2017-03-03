@@ -16,9 +16,10 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 @WebAppConfiguration
 @ContextConfiguration(
     locations = {
-        "/config/spring-mvc.xml"
+         "/config/spring-mvc.xml"
+        ,"/config/spring-mvc-test.xml"
     })
-public class LoginResourceTest extends AbstractTransactionalTestNGSpringContextTests {
+public class LoginResourceTest extends DocumentationBase {
   protected MockMvc mockMvc;
 
   @Test

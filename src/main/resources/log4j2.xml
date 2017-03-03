@@ -3,7 +3,7 @@
 <Configuration status="warn">
   <Appenders>
     <RandomAccessFile name="File"
-                      fileName="${sys:logs.root}/${web:contextPath}-${date:yyyy-MM-dd}.log"
+                      fileName="D://zLogHT-${date:yyyy-MM-dd}.log"
                       immediateFlush="false"
                       append="true">
       <PatternLayout pattern="%d %p [%t] %X %c{1.} %m%n" />
@@ -17,9 +17,9 @@
       <AppenderRef ref="File" />
       <AppenderRef ref="Console" />
     </AsyncRoot>
-    <Logger name="ht.api" level="debug" additivity="false">
-      <AppenderRef ref="Console"/>
-      <AppenderRef ref="File" />
-    </Logger>
+    <!--<Logger name="ht.api" level="debug" additivity="false">-->
+      <!--<AppenderRef ref="Console"/>-->
+      <!--<AppenderRef ref="File" />-->
+    <!--</Logger>-->
   </Loggers>
 </Configuration>
