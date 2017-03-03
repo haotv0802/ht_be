@@ -84,8 +84,8 @@ public abstract class DocumentationBase extends AbstractTransactionalTestNGSprin
 
   public static Locale locale = new Locale("en");
 
-  @JsonFilter("iMXClients")
-  protected static class ImxClientsMixIn{}
+//  @JsonFilter("iMXClients")
+//  protected static class ImxClientsMixIn{}
 
   @BeforeClass
   public void setup() throws UnknownHostException
@@ -97,7 +97,7 @@ public abstract class DocumentationBase extends AbstractTransactionalTestNGSprin
             .webAppContextSetup(wac)
             .addFilter(sessionRepositoryFilter)
 //            .addFilter(txFilter)
-            .apply(springSecurity())
+//            .apply(springSecurity())
             .apply(documentationConfiguration(this.restDocumentation)
                           .uris()
                           .withScheme("http")
