@@ -1,12 +1,9 @@
 package ht.api.rest;
 
 import org.springframework.test.context.ContextConfiguration;
-import org.springframework.test.context.testng.AbstractTransactionalTestNGSpringContextTests;
 import org.springframework.test.context.web.WebAppConfiguration;
-import org.springframework.test.web.servlet.MockMvc;
 import org.testng.annotations.Test;
 
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
@@ -20,7 +17,6 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
         ,"/config/spring-mvc-test.xml"
     })
 public class LoginResourceTest extends DocumentationBase {
-  protected MockMvc mockMvc;
 
   @Test
   public void testLogin() throws Exception {
@@ -30,6 +26,5 @@ public class LoginResourceTest extends DocumentationBase {
         )
         .andExpect(status().is(200))
         ;
-
   }
 }
