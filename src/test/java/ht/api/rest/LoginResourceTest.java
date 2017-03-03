@@ -20,6 +20,7 @@ public class LoginResourceTest extends DocumentationBase {
 
   @Test
   public void testLogin() throws Exception {
+    //
     mockMvc
         .perform(get("/svc/login")
             .header("Accept-Language", "en")
