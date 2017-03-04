@@ -97,7 +97,7 @@ public abstract class DocumentationBase extends AbstractTransactionalTestNGSprin
             .webAppContextSetup(wac)
             .addFilter(sessionRepositoryFilter)
 //            .addFilter(txFilter)
-//            .apply(springSecurity())
+            .apply(springSecurity())
             .apply(documentationConfiguration(this.restDocumentation)
                           .uris()
                           .withScheme("http")

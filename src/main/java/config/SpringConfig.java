@@ -7,9 +7,9 @@ import com.hazelcast.config.Config;
 import com.hazelcast.config.NetworkConfig;
 import com.hazelcast.core.Hazelcast;
 import com.hazelcast.core.HazelcastInstance;
+import com.mysql.cj.jdbc.MysqlDataSource;
 import ht.auth.LoggingEnhancingFilter;
 import ht.auth.filters.*;
-import oracle.jdbc.pool.OracleDataSource;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -97,14 +97,30 @@ public class SpringConfig extends WebMvcConfigurerAdapter {
   @Bean(name = "dataSource")
   public DataSource dataSource() throws SQLException {
 
-    final String databaseUrl = "jdbc:oracle:thin:@BULL.codixfr.private:22630/BULL";
-    final String usr = "imxdb";
-    final String pass = "manager";
+//    final String databaseUrl = "jdbc:oracle:thin:@BULL.codixfr.private:22630/BULL";
+//    final String usr = "imxdb";
+//    final String pass = "manager";
+
+    final String databaseUrl = "jdbc:mysql://localhost:3306/security_db";
+    final String usr = "haho";
+    final String pass = "hoanhhao";
 
     log.debug("databaseUrl=={}", databaseUrl);
 
-    // JdbcDataSource ds = new JdbcDataSource();
-    OracleDataSource ds = new OracleDataSource();
+//    BasicDataSource dataSource = new BasicDataSource();
+//
+//    dataSource.setDriverClassName("com.mysql.jdbc.Driver");
+//    dataSource.setUsername("username");
+//    dataSource.setPassword("password");
+//    dataSource.setUrl("jdbc:mysql://<host>:<port>/<database>");
+//    dataSource.setMaxActive(10);
+//    dataSource.setMaxIdle(5);
+//    dataSource.setInitialSize(5);
+//    dataSource.setValidationQuery("SELECT 1");
+
+//     JdbcDataSource ds = new JdbcDataSource();
+    MysqlDataSource ds = new MysqlDataSource();
+//    OracleDataSource ds = new OracleDataSource();
     ds.setURL(databaseUrl);
     ds.setUser(usr);
     ds.setPassword(pass);
