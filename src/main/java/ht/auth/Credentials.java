@@ -1,7 +1,6 @@
 package ht.auth;
 
-public class Credentials
-{
+public class Credentials {
   /**
    * The user name
    */
@@ -17,33 +16,27 @@ public class Credentials
    */
   private String userLang;
 
-  public String getUserName()
-  {
+  public String getUserName() {
     return userName;
   }
 
-  public void setUserName(String userName)
-  {
+  public void setUserName(String userName) {
     this.userName = userName;
   }
 
-  public String getUserPass()
-  {
+  public String getUserPass() {
     return userPass;
   }
 
-  public void setUserPass(String userPass)
-  {
+  public void setUserPass(String userPass) {
     this.userPass = userPass;
   }
 
-  public String getUserLang()
-  {
+  public String getUserLang() {
     return userLang;
   }
 
-  public void setUserLang(String userLang)
-  {
+  public void setUserLang(String userLang) {
     this.userLang = userLang;
   }
 }

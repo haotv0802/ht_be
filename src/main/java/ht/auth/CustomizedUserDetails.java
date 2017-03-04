@@ -120,8 +120,6 @@ public class CustomizedUserDetails implements UserDetails {
   public CustomizedUserDetails(String username, String password, Collection<? extends GrantedAuthority> authorities) {
     this(username
         , password
-        , -1
-        , "_N/A_"
         , "_N/A_"
         , "AN"
         , true
@@ -133,7 +131,6 @@ public class CustomizedUserDetails implements UserDetails {
         , true
         , true
         , ""
-        , "ttyE0PPP" //defaultOne
         , null
         , null
         , authorities);
@@ -147,8 +144,6 @@ public class CustomizedUserDetails implements UserDetails {
    *                                   <code>DaoAuthenticationProvider</code>
    * @param password                   the password that should be presented to the
    *                                   <code>DaoAuthenticationProvider</code>
-   * @param refPerson                  reference of person
-   * @param refIndividual              reference of individual
    * @param fullName                   User full name
    * @param enabled                    set to <code>true</code> if the user is enabled
    * @param accountNonExpired          set to <code>true</code> if the account has not
@@ -164,7 +159,6 @@ public class CustomizedUserDetails implements UserDetails {
    * @param notManagingOutOfCompetence set to<code>true<code/> when user is not managing
    *                                   case elements out of competence
    * @param schema                     imx schema
-   * @param tty                        imx tty identifier
    * @param mgmtGroupPartNum           management group partition number
    * @param authorities                the authorities that should be granted to the caller
    *                                   if they presented the correct username and password and the user
@@ -175,8 +169,6 @@ public class CustomizedUserDetails implements UserDetails {
    */
   public CustomizedUserDetails(String username
       , String password
-      , int refPerson
-      , String refIndividual
       , String fullName
       , String lang
       , boolean enabled
@@ -188,7 +180,6 @@ public class CustomizedUserDetails implements UserDetails {
       , boolean extranetOnly
       , boolean notManagingOutOfCompetence
       , String schema
-      , String tty
       , Integer mgmtGroupPartNum
       , String personCategory
       , Collection<? extends GrantedAuthority> authorities) {
