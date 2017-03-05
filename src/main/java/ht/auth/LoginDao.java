@@ -82,37 +82,38 @@ public class LoginDao {
     return ud;
   }
 
-  public Long storeUserDetailsToToken(TokenType tokenType, UserDetails user, Date expDate) {
-    final String getIdSql = "SELECT v9_auth_token_seq.nextval FROM DUAL";
+  public Integer storeUserDetailsToToken(TokenType tokenType, UserDetails user, Date expDate) {
+//    final String getIdSql = "SELECT v9_auth_token_seq.nextval FROM DUAL";
 
     final String addTokenSql =
-        "INSERT INTO v9_auth_token "
-            + "  ( ID                    "
-            + "  , TYPE                  "
+              "INSERT INTO auth_token    "
+            + "  (TYPE                   "
             + "  , auth_obj              "
             + "  , dtexpiration_dt)      "
             + "VALUES                    "
             + "  ( ?                     "
             + "  , ?                     "
-            + "  , ?                     "
             + "  , ?)                    ";
 
-    final Long id = jdbcTemplate.queryForObject(getIdSql, Long.class);
+//    final Long id = jdbcTemplate.queryForObject(getIdSql, Long.class);
 
     final SqlLobValue sqlLobValue = new SqlLobValue(SerializationUtils.serialize(user));
 
-    DaoUtils.debugQuery(log, addTokenSql, new Object[]{id, tokenType.value(), "SIPPED_BLOB", expDate});
+    DaoUtils.debugQuery(log, addTokenSql, new Object[]{tokenType.value(), "SIPPED_BLOB", expDate});
     jdbcTemplate.update(
         addTokenSql
-        , new Object[]{id, tokenType.value(), sqlLobValue, expDate}
+        , new Object[]{tokenType.value(), sqlLobValue, expDate}
         , new int[]{Types.NUMERIC, Types.VARCHAR, Types.BLOB, Types.TIMESTAMP}
     );
 
-    return id;
+    final String sql = "SELECT ID FROM AUTH_TOKEN WHERE row_count() = 1 ORDER BY ID DESC";
+    DaoUtils.debugQuery(log, sql);
+
+    return namedTemplate.queryForObject(sql, new MapSqlParameterSource(), Integer.class);
   }
 
-  public UserDetails readUserDetailsForToken(Long id) {
-    final String getTokenSql = "SELECT auth_obj FROM v9_auth_token WHERE 1 = 1 AND id = ?";
+  public UserDetails readUserDetailsForToken(Integer id) {
+    final String getTokenSql = "SELECT TOKEN_TYPE, AUTH_OBJECT, EXP_DATE FROM AUTH_TOKEN WHERE ID = ?";
     final Object[] args = {id};
 
     DaoUtils.debugQuery(log, getTokenSql, args);

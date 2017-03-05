@@ -32,7 +32,7 @@ public class TokenAuthenticationService {
     final UserDetails user = (UserDetails) authentication.getPrincipal();
     final Date expDate = computeExpirationDate();
 
-    final Long tokenId = loginDao.storeUserDetailsToToken(TokenType.ACCESS, user, expDate);
+    final Integer tokenId = loginDao.storeUserDetailsToToken(TokenType.ACCESS, user, expDate);
 
     response.addHeader(AuthConstants.AUTH_HEADER_NAME, tokenHandler.createTokenForUser(tokenId, user, expDate));
   }
@@ -47,7 +47,7 @@ public class TokenAuthenticationService {
     final String token = resolveToken(request);
     if (token != null) {
       try {
-        final Long tokenId = tokenHandler.getAuthId(token);
+        final Integer tokenId = tokenHandler.getAuthId(token);
 
         final UserDetails userDetails = loginDao.readUserDetailsForToken(tokenId);
         if (userDetails != null) {
@@ -69,7 +69,6 @@ public class TokenAuthenticationService {
       if (null == token) {
         token = request.getParameter(AuthConstants.AUTH_HEADER_NAME.toLowerCase());
       }
-
     }
 
     if (logger.isDebugEnabled()) {
