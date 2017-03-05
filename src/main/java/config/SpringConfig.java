@@ -296,7 +296,7 @@ public class SpringConfig extends WebMvcConfigurerAdapter {
           .csrf().disable()
           .authorizeRequests()
           //allow anonymous POSTs to login
-          .antMatchers(HttpMethod.POST, "/login").permitAll()
+          .antMatchers(HttpMethod.POST, "/svc/login").permitAll()
           //all other request need to be authenticated
           .antMatchers("/svc/**").authenticated()
           .and()
