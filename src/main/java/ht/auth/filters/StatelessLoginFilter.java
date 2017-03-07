@@ -18,32 +18,22 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 
-/**
- * Property of CODIX Bulgaria EAD
- * Created by vtodorov
- * Date:  23/03/2016 Time: 9:28 AM
- */
-public class StatelessLoginFilter extends AbstractAuthenticationProcessingFilter
-{
+public class StatelessLoginFilter extends AbstractAuthenticationProcessingFilter {
 
-
-  public StatelessLoginFilter(String urlMapping, AuthenticationManager authManager, AuthenticationFailureHandler failureHandler, AuthenticationSuccessHandler successHandler)
-  {
+  public StatelessLoginFilter(String urlMapping, AuthenticationManager authManager, AuthenticationFailureHandler failureHandler, AuthenticationSuccessHandler successHandler) {
     super(new AntPathRequestMatcher(urlMapping));
     setAuthenticationManager(authManager);
     setAuthenticationFailureHandler(failureHandler);
     setAuthenticationSuccessHandler(successHandler);
   }
 
-
   @Override
-  public Authentication attemptAuthentication(HttpServletRequest request, HttpServletResponse response) throws AuthenticationException, IOException, ServletException
-  {
+  public Authentication attemptAuthentication(HttpServletRequest request, HttpServletResponse response)
+      throws AuthenticationException, IOException, ServletException {
     final Credentials user;
     try {
       user = new ObjectMapper().readValue(request.getInputStream(), Credentials.class);
-    }
-    catch (IOException e ) {
+    } catch (IOException e) {
       throw new BadLoginPayloadException("Invalid login paylod");
     }
 

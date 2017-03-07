@@ -16,34 +16,33 @@ import javax.servlet.ServletResponse;
 import javax.servlet.http.HttpServletRequest;
 import java.io.IOException;
 
-public class StatelessAuthenticationFilter extends GenericFilterBean
-{
+public class StatelessAuthenticationFilter extends GenericFilterBean {
   private static final Logger logger = LogManager.getLogger(StatelessAuthenticationFilter.class);
 
   private final TokenAuthenticationService authenticationService;
   private final UrlPathHelper urlPathHelper = new UrlPathHelper();
 
-  public StatelessAuthenticationFilter(TokenAuthenticationService authenticationService)
-  {
+  public StatelessAuthenticationFilter(TokenAuthenticationService authenticationService) {
     this.authenticationService = authenticationService;
   }
 
   private String getRelativeRequestURI(ServletRequest request) {
-    if ( request instanceof HttpServletRequest) {
-      return  urlPathHelper.getPathWithinApplication((HttpServletRequest)request);
+    if (request instanceof HttpServletRequest) {
+      return urlPathHelper.getPathWithinApplication((HttpServletRequest) request);
     }
 
     return null;
   }
 
   @Override
-  public void doFilter(ServletRequest request, ServletResponse response, FilterChain chain) throws IOException, ServletException
-  {
+  public void doFilter(ServletRequest request, ServletResponse response, FilterChain chain)
+      throws IOException, ServletException {
+
     HttpServletRequest httpRequest = (HttpServletRequest) request;
     Authentication authentication = authenticationService.getAuthentication(httpRequest);
 
     if (null != authentication) {
-      ThreadContext.put("username", authentication.getName() );
+      ThreadContext.put("username", authentication.getName());
     }
     ThreadContext.put("URI", getRelativeRequestURI(request));
     SecurityContextHolder.getContext().setAuthentication(authentication);
