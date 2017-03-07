@@ -205,7 +205,8 @@ public class CustomizedUserDetails implements UserDetails {
     this.schema = schema;
     this.mgmtGroupPartNum = mgmtGroupPartNum;
     this.personCategory = personCategory;
-    this.authorities = Collections.unmodifiableSet(sortAuthorities(authorities));
+//    this.authorities = Collections.unmodifiableSet(sortAuthorities(authorities));
+    this.authorities = null;
   }
 
   private static SortedSet<GrantedAuthority> sortAuthorities(Collection<? extends GrantedAuthority> authorities) {

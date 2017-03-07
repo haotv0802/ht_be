@@ -25,7 +25,6 @@ import java.util.Date;
 public class LoginDao {
   private static final Logger log = LogManager.getLogger(LoginDao.class);
 
-
   @Autowired
   NamedParameterJdbcTemplate namedTemplate;
 
@@ -36,19 +35,16 @@ public class LoginDao {
   JdbcTemplate jdbcTemplate;
 
   public CredentialsResult checkCredentials(Credentials credentials) {
-    final String sql = "SELECT user_name, password FROM security_db.user_table where user_name = :username and password = :password";
+    final String sql =
+        "SELECT user_name, password FROM security_db.user_table where user_name = :username and password = :password";
 
     final MapSqlParameterSource paramsMap = new MapSqlParameterSource()
         .addValue("username", credentials.getUserName())
         .addValue("password", credentials.getUserPass());
-    CredentialsResult result = namedTemplate.queryForObject(sql, paramsMap, new RowMapper<CredentialsResult>() {
-
-      @Override
-      public CredentialsResult mapRow(ResultSet resultSet, int i) throws SQLException {
-        CredentialsResult result = new CredentialsResult();
-        result.setUserLang(resultSet.getString("user_name"));
-        return result;
-      }
+    CredentialsResult result = namedTemplate.queryForObject(sql, paramsMap, (resultSet, i) -> {
+      CredentialsResult result1 = new CredentialsResult();
+      result1.setUserLang(resultSet.getString("user_name"));
+      return result1;
     });
 
     return result;
@@ -59,19 +55,18 @@ public class LoginDao {
     final String sql = "SELECT user_name, password FROM security_db.user_table where user_name = :username";
 
     final MapSqlParameterSource paramsMap = new MapSqlParameterSource()
-        .addValue("userName", username);
+        .addValue("username", username);
+
+    DaoUtils.debugQuery(log, sql, paramsMap.getValues());
 
     CustomizedUserDetails ud = null;
     try {
-      ud = namedTemplate.queryForObject(sql, paramsMap, new RowMapper<CustomizedUserDetails>() {
-        @Override
-        public CustomizedUserDetails mapRow(ResultSet rs, int rowNum) throws SQLException {
+      ud = namedTemplate.queryForObject(sql, paramsMap, (rs, rowNum) -> {
 
-          //TODO geting lang from authentication object is plain stupid. So, AN by default
-          CustomizedUserDetails iud = new CustomizedUserDetails(rs.getString("user_name"), rs.getString("password"), null);
+        //TODO geting lang from authentication object is plain stupid. So, AN by default
+        CustomizedUserDetails iud = new CustomizedUserDetails(rs.getString("user_name"), rs.getString("password"), null);
 
-          return iud;
-        }
+        return iud;
       });
     } catch (EmptyResultDataAccessException e) {
       log.warn("Credentials not found: ");
@@ -86,30 +81,32 @@ public class LoginDao {
 //    final String getIdSql = "SELECT v9_auth_token_seq.nextval FROM DUAL";
 
     final String addTokenSql =
-              "INSERT INTO auth_token    "
-            + "  (TYPE                   "
-            + "  , auth_obj              "
-            + "  , dtexpiration_dt)      "
-            + "VALUES                    "
-            + "  ( ?                     "
-            + "  , ?                     "
-            + "  , ?)                    ";
+              "INSERT INTO auth_token"
+            + "  (TOKEN_TYPE         "
+            + "  , AUTH_OBJECT       "
+            + "  , EXP_DATE)         "
+            + "VALUES                "
+            + "  ( ?                 "
+            + "  , ?                 "
+            + "  , ?)                ";
 
 //    final Long id = jdbcTemplate.queryForObject(getIdSql, Long.class);
 
     final SqlLobValue sqlLobValue = new SqlLobValue(SerializationUtils.serialize(user));
 
     DaoUtils.debugQuery(log, addTokenSql, new Object[]{tokenType.value(), "SIPPED_BLOB", expDate});
+//    jdbcTemplate.update(addTokenSql, paramsMap);
     jdbcTemplate.update(
         addTokenSql
         , new Object[]{tokenType.value(), sqlLobValue, expDate}
-        , new int[]{Types.NUMERIC, Types.VARCHAR, Types.BLOB, Types.TIMESTAMP}
+        , new int[]{Types.VARCHAR, Types.BLOB, Types.TIMESTAMP}
     );
 
-    final String sql = "SELECT ID FROM AUTH_TOKEN WHERE row_count() = 1 ORDER BY ID DESC";
+    final String sql = "SELECT ID FROM AUTH_TOKEN ORDER BY ID DESC LIMIT 1";
     DaoUtils.debugQuery(log, sql);
 
-    return namedTemplate.queryForObject(sql, new MapSqlParameterSource(), Integer.class);
+    int id = namedTemplate.queryForObject(sql, new MapSqlParameterSource(), Integer.class);
+    return 1;
   }
 
   public UserDetails readUserDetailsForToken(Integer id) {
@@ -117,12 +114,9 @@ public class LoginDao {
     final Object[] args = {id};
 
     DaoUtils.debugQuery(log, getTokenSql, args);
-    return jdbcTemplate.queryForObject(getTokenSql, args, new RowMapper<UserDetails>() {
-      @Override
-      public UserDetails mapRow(ResultSet resultSet, int i) throws SQLException {
-        final Blob blob = resultSet.getBlob(1);
-        return (UserDetails) SerializationUtils.deserialize(blob.getBytes(1, (int) blob.length()));
-      }
+    return jdbcTemplate.queryForObject(getTokenSql, args, (resultSet, i) -> {
+      final Blob blob = resultSet.getBlob(1);
+      return (UserDetails) SerializationUtils.deserialize(blob.getBytes(1, (int) blob.length()));
     });
 
   }
