@@ -2,6 +2,8 @@ package ht.api.rest;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import ht.auth.Credentials;
+import oracle.net.ano.AuthenticationService;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.web.WebAppConfiguration;
@@ -22,6 +24,9 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
     })
 public class LoginResourceTest extends DocumentationBase {
 
+//  @Autowired
+//  private IAuthTokenService authTokenService;
+
   @Test
   public void testLogin() throws Exception {
     Credentials c = new Credentials();
@@ -29,14 +34,18 @@ public class LoginResourceTest extends DocumentationBase {
     c.setUserPass("admin");
     c.setUserLang("AN");
 
-    mockMvc
+    String auth = mockMvc
         .perform(post("/svc/login")
             .header("Accept-Language", "en")
             .contentType(MediaType.APPLICATION_JSON)
             .content(new ObjectMapper().writeValueAsString(c))
         )
         .andExpect(status().is(200))
+        .andReturn()
+        .getResponse()
+        .getHeader("X-AUTH-TOKEN")
         ;
+    logger.info("X-AUTH: " + auth);
   }
 
   @Test
