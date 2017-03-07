@@ -1,6 +1,7 @@
 package ht.api.rest;
 
 import com.fasterxml.jackson.annotation.JsonFilter;
+import ht.transaction.TransactionFilter;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.apache.logging.log4j.io.IoBuilder;
@@ -84,6 +85,9 @@ public abstract class DocumentationBase extends AbstractTransactionalTestNGSprin
 
   public static Locale locale = new Locale("en");
 
+  @Autowired
+  private TransactionFilter txFilter;
+
 //  @JsonFilter("iMXClients")
 //  protected static class ImxClientsMixIn{}
 
@@ -96,7 +100,7 @@ public abstract class DocumentationBase extends AbstractTransactionalTestNGSprin
         MockMvcBuilders
             .webAppContextSetup(wac)
             .addFilter(sessionRepositoryFilter)
-//            .addFilter(txFilter)
+            .addFilter(txFilter)
             .apply(springSecurity())
             .apply(documentationConfiguration(this.restDocumentation)
                           .uris()

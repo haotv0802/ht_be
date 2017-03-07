@@ -10,6 +10,9 @@ import com.hazelcast.core.HazelcastInstance;
 import com.mysql.cj.jdbc.MysqlDataSource;
 import ht.auth.LoggingEnhancingFilter;
 import ht.auth.filters.*;
+import ht.transaction.ConnectionsWatchdog;
+import ht.transaction.TransactionFilter;
+import ht.transaction.TransactionsList;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -59,6 +62,7 @@ import javax.annotation.Resource;
 import javax.sql.DataSource;
 import java.sql.SQLException;
 import java.util.List;
+import java.util.concurrent.TimeUnit;
 
 //Marks this class as configuration
 @Configuration
@@ -217,6 +221,22 @@ public class SpringConfig extends WebMvcConfigurerAdapter {
       return new HeaderHttpSessionStrategy();
     }
 
+  }
+
+  @Bean
+  public TransactionFilter txFilter() {
+    return new TransactionFilter();
+  }
+
+  @Bean(destroyMethod = "stop")
+  public ConnectionsWatchdog connectionsWatchdog() {
+    TransactionsList transactions = TransactionsList.getInstance();
+    ConnectionsWatchdog watcher = new ConnectionsWatchdog(TimeUnit.SECONDS.toMillis(sessionTimeoutInSec), transactions);
+    Thread watcherThread = new Thread(watcher);
+    watcherThread.setDaemon(true);
+    watcherThread.start();
+
+    return watcher;
   }
 
   @Bean(name = "jdbcTemplate")
