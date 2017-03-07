@@ -106,6 +106,19 @@ public class LoginDao {
     DaoUtils.debugQuery(log, sql);
 
     int id = namedTemplate.queryForObject(sql, new MapSqlParameterSource(), Integer.class);
+
+    final String sql2 = "SELECT ID, TOKEN_TYPE, AUTH_OBJECT, EXP_DATE FROM AUTH_TOKEN ORDER BY ID DESC LIMIT 1";
+    namedTemplate.queryForObject(sql2, new MapSqlParameterSource(), new RowMapper<CredentialsResult>() {
+
+      @Override
+      public CredentialsResult mapRow(ResultSet resultSet, int i) throws SQLException {
+        log.info(resultSet.getString("ID"));
+        log.info(resultSet.getString("TOKEN_TYPE"));
+        log.info(resultSet.getString("EXP_DATE"));
+        log.info(resultSet.getString("AUTH_OBJECT"));
+        return null;
+      }
+    });
     return 1;
   }
 
