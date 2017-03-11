@@ -7,6 +7,6 @@ package ht.auth;
  */
 public interface AuthConstants extends Constants
 {
-  public static final String AUTH_HEADER_NAME = "X-AUTH-TOKEN";
+  String AUTH_HEADER_NAME = "X-AUTH-TOKEN";
 }
 

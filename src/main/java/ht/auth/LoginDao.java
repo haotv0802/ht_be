@@ -120,7 +120,7 @@ public class LoginDao {
         return null;
       }
     });
-    return 1;
+    return id;
   }
 
   public UserDetails readUserDetailsForToken(Integer id) {
@@ -129,7 +129,7 @@ public class LoginDao {
 
     DaoUtils.debugQuery(log, getTokenSql, args);
     return jdbcTemplate.queryForObject(getTokenSql, args, (resultSet, i) -> {
-      final Blob blob = resultSet.getBlob(1);
+      final Blob blob = resultSet.getBlob(2);
       return (UserDetails) SerializationUtils.deserialize(blob.getBytes(1, (int) blob.length()));
     });
 

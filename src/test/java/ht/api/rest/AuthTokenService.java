@@ -21,7 +21,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.
  * Created by vtodorov
  * Date:  10/09/2016 Time: 12:54 PM
  */
-@Service
+@Service("authTokenService")
 public class AuthTokenService implements IAuthTokenService {
 
   private static final Logger logger = LogManager.getLogger(AuthTokenService.class);
@@ -30,27 +30,26 @@ public class AuthTokenService implements IAuthTokenService {
 
   @Autowired
   public AuthTokenService(
-    WebApplicationContext wac,
-    @Qualifier("springSessionRepositoryFilter") Filter sessionRepositoryFilter,
-    @Qualifier("txFilter") Filter txFilter
-    ) throws Exception
-  {
+      WebApplicationContext wac,
+      @Qualifier("springSessionRepositoryFilter") Filter sessionRepositoryFilter,
+      @Qualifier("txFilter") Filter txFilter
+  ) throws Exception {
     final PrintWriter printWriter = IoBuilder.forLogger(logger).buildPrintWriter();
 
     MockMvc mockMvc
-      = MockMvcBuilders
-         .webAppContextSetup(wac)
-           .addFilter(sessionRepositoryFilter)
-           .addFilter(txFilter)
-         .apply(springSecurity())
-         .alwaysDo(print(printWriter))
+        = MockMvcBuilders
+        .webAppContextSetup(wac)
+        .addFilter(sessionRepositoryFilter)
+        .addFilter(txFilter)
+        .apply(springSecurity())
+        .alwaysDo(print(printWriter))
         .build();
 
     authToken = TestUtils.performLogin(mockMvc, "admin", "admin");
   }
 
   @Override
-  public String getAuthToken(){
+  public String getAuthToken() {
     return authToken;
   }
 }

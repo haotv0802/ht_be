@@ -9,6 +9,7 @@ import com.hazelcast.core.Hazelcast;
 import com.hazelcast.core.HazelcastInstance;
 import com.mysql.cj.jdbc.MysqlDataSource;
 import ht.auth.LoggingEnhancingFilter;
+import ht.auth.TokenAuthenticationService;
 import ht.auth.filters.*;
 import ht.transaction.ConnectionsWatchdog;
 import ht.transaction.TransactionFilter;
@@ -265,6 +266,9 @@ public class SpringConfig extends WebMvcConfigurerAdapter {
     private RestAuthenticationEntryPoint restAuthenticationEntryPoint;
 
     @Autowired
+    private TokenAuthenticationService tokenAuthenticationService;
+
+    @Autowired
     private CorsFilter corsFilter;
 
     @Autowired
@@ -305,9 +309,10 @@ public class SpringConfig extends WebMvcConfigurerAdapter {
     protected void configure(HttpSecurity http) throws Exception {
       http
           .sessionManagement()
-          .sessionCreationPolicy(SessionCreationPolicy.IF_REQUIRED)
-          .maximumSessions(10)
-          .and()
+          .sessionCreationPolicy(SessionCreationPolicy.STATELESS)
+//          .sessionCreationPolicy(SessionCreationPolicy.IF_REQUIRED)
+//          .maximumSessions(10)
+//          .and()
           .and()
           .exceptionHandling()
           .authenticationEntryPoint(restAuthenticationEntryPoint)
@@ -329,6 +334,7 @@ public class SpringConfig extends WebMvcConfigurerAdapter {
           .addFilterBefore(corsFilter, ChannelProcessingFilter.class)
           // custom JSON based authentication by POST of {"userName":"<name>","userPass":"<password>"}
           .addFilterBefore(statelessLoginFilter(), UsernamePasswordAuthenticationFilter.class)
+          .addFilterBefore(statelessAuthenticationFilter(), UsernamePasswordAuthenticationFilter.class)
           .addFilterAfter(loggingEnhancingFilter(), FilterSecurityInterceptor.class)
       ;
     }
@@ -367,5 +373,9 @@ public class SpringConfig extends WebMvcConfigurerAdapter {
           , customizedAuthenticationSuccessHandler());
     }
 
+    @Bean
+    StatelessAuthenticationFilter statelessAuthenticationFilter() {
+      return new StatelessAuthenticationFilter(tokenAuthenticationService);
+    }
   }
 }

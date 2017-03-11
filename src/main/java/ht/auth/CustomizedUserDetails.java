@@ -340,37 +340,37 @@ public class CustomizedUserDetails implements UserDetails {
     sb.append(super.toString()).append(": ");
     sb.append("Username: ").append(this.username).append("; ");
     sb.append("Password: [PROTECTED]; ");
-    sb.append("refPerson: ").append(this.refPerson).append("; ");
-    sb.append("refIndividual: ").append(this.refIndividual).append("; ");
-    sb.append("fullName: ").append(this.fullName).append("; ");
-    sb.append("Lang: ").append(this.lang).append("; ");
-    sb.append("Enabled: ").append(this.enabled).append("; ");
-    sb.append("AccountNonExpired: ").append(this.accountNonExpired).append("; ");
-    sb.append("credentialsNonExpired: ").append(this.credentialsNonExpired).append("; ");
-    sb.append("AccountNonLocked: ").append(this.accountNonLocked).append("; ");
-    sb.append("AccountblockedTo: ").append(this.blockedTo).append("; ");
-    sb.append("NumFailedLoginAttempts: ").append(this.failedAtempts).append("; ");
-    sb.append("ExtranetOnly: ").append(this.extranetOnly).append("; ");
-    sb.append("notManagingOutOfCompetence: ").append(this.notManagingOutOfCompetence).append("; ");
-    sb.append("schema: ").append(this.schema).append("; ");
-    sb.append("mgmtGroupPartNum: ").append(this.mgmtGroupPartNum).append("; ");
-    sb.append("agencyRef: ").append(this.agencyRef).append("; ");
+//    sb.append("refPerson: ").append(this.refPerson).append("; ");
+//    sb.append("refIndividual: ").append(this.refIndividual).append("; ");
+//    sb.append("fullName: ").append(this.fullName).append("; ");
+//    sb.append("Lang: ").append(this.lang).append("; ");
+//    sb.append("Enabled: ").append(this.enabled).append("; ");
+//    sb.append("AccountNonExpired: ").append(this.accountNonExpired).append("; ");
+//    sb.append("credentialsNonExpired: ").append(this.credentialsNonExpired).append("; ");
+//    sb.append("AccountNonLocked: ").append(this.accountNonLocked).append("; ");
+//    sb.append("AccountblockedTo: ").append(this.blockedTo).append("; ");
+//    sb.append("NumFailedLoginAttempts: ").append(this.failedAtempts).append("; ");
+//    sb.append("ExtranetOnly: ").append(this.extranetOnly).append("; ");
+//    sb.append("notManagingOutOfCompetence: ").append(this.notManagingOutOfCompetence).append("; ");
+//    sb.append("schema: ").append(this.schema).append("; ");
+//    sb.append("mgmtGroupPartNum: ").append(this.mgmtGroupPartNum).append("; ");
+//    sb.append("agencyRef: ").append(this.agencyRef).append("; ");
 
-    if (!authorities.isEmpty()) {
-      sb.append("Granted Authorities: ");
-
-      boolean first = true;
-      for (GrantedAuthority auth : authorities) {
-        if (!first) {
-          sb.append(",");
-        }
-        first = false;
-
-        sb.append(auth);
-      }
-    } else {
-      sb.append("Not granted any authorities");
-    }
+//    if (!authorities.isEmpty()) {
+//      sb.append("Granted Authorities: ");
+//
+//      boolean first = true;
+//      for (GrantedAuthority auth : authorities) {
+//        if (!first) {
+//          sb.append(",");
+//        }
+//        first = false;
+//
+//        sb.append(auth);
+//      }
+//    } else {
+//      sb.append("Not granted any authorities");
+//    }
 
     return sb.toString();
   }

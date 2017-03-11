@@ -4,6 +4,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import ht.auth.Credentials;
 import oracle.net.ano.AuthenticationService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.http.MediaType;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.web.WebAppConfiguration;
@@ -24,8 +25,14 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
     })
 public class LoginResourceTest extends DocumentationBase {
 
-//  @Autowired
-//  private IAuthTokenService authTokenService;
+//  public final String authToken;
+
+  @Autowired
+  @Qualifier("authTokenService")
+  private IAuthTokenService authTokenService;
+
+  public LoginResourceTest() {
+  }
 
   @Test
   public void testLogin() throws Exception {
@@ -50,10 +57,10 @@ public class LoginResourceTest extends DocumentationBase {
 
   @Test
   public void testHello() throws Exception {
-    // in the branch
     mockMvc
         .perform(post("/svc/hello")
             .header("Accept-Language", "en")
+            .header("X-AUTH-TOKEN", authTokenService.getAuthToken())
         )
         .andExpect(status().is(200))
     ;
