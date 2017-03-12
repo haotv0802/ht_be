@@ -45,7 +45,7 @@ public class AuthTokenService implements IAuthTokenService {
         .alwaysDo(print(printWriter))
         .build();
 
-    authToken = TestUtils.performLogin(mockMvc, "admin", "admin");
+    authToken = TestUtils.performLogin(mockMvc, "haho", "hoanhhao");
   }
 
   @Override

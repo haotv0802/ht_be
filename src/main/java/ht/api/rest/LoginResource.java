@@ -5,7 +5,11 @@ import io.jsonwebtoken.lang.Assert;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletRequest;
@@ -27,20 +31,26 @@ public class LoginResource {
   private LoginDao loginDao;
 
   @PostMapping("/login")
-  public void login(@RequestBody Credentials credentials, HttpServletRequest request, HttpServletResponse response) {
+  public ResponseEntity login(@RequestBody Credentials credentials, HttpServletRequest request, HttpServletResponse response) {
     Assert.notNull(credentials);
     logger.info("In Resource");
-    CredentialsResult result = loginDao.checkCredentials(credentials);
+    try {
+      CredentialsResult result = loginDao.checkCredentials(credentials);
+    } catch (Exception e) {
+      return new ResponseEntity(HttpStatus.UNAUTHORIZED);
+    }
 
     UserDetailsImpl userDetails = loginDao.findOneByUsername(credentials.getUserName());
     UsernamePasswordAuthenticationToken authentication =
         new UsernamePasswordAuthenticationToken(userDetails, userDetails.getPassword(), null);
 
     tokenAuthenticationService.addAuthentication(response, authentication);
+    return new ResponseEntity(HttpStatus.OK);
   }
 
   @PostMapping("/hello")
-  public void hello() {
+  @PreAuthorize("hasAuthority('ADMIN')")
+  public void hello(@AuthenticationPrincipal UserDetailsImpl userDetails) {
     logger.info("In Hello");
   }
 }

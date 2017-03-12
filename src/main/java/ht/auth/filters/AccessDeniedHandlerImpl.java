@@ -27,7 +27,7 @@ public class AccessDeniedHandlerImpl implements AccessDeniedHandler {
     response.setContentType(MediaType.APPLICATION_JSON_UTF8_VALUE);
     response.sendError(HttpServletResponse.SC_FORBIDDEN, "Forbidden");
 
-    ServiceFault sf = new ServiceFault("authorization.not.enough.privileges", messageSource.getMessage("login.blocked.hardlimit", null, locale));
+    ServiceFault serviceFault = new ServiceFault("authorization.not.enough.privileges", messageSource.getMessage("login.blocked.hardlimit", null, locale));
 
   }
 }

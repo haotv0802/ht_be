@@ -11,6 +11,7 @@ import org.springframework.jdbc.core.RowMapper;
 import org.springframework.jdbc.core.namedparam.MapSqlParameterSource;
 import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate;
 import org.springframework.jdbc.core.support.SqlLobValue;
+import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Repository;
 import org.springframework.util.SerializationUtils;
@@ -19,7 +20,9 @@ import java.sql.Blob;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Types;
+import java.util.Collection;
 import java.util.Date;
+import java.util.List;
 
 @Repository
 public class LoginDao {
@@ -34,19 +37,23 @@ public class LoginDao {
   @Autowired
   JdbcTemplate jdbcTemplate;
 
-  public CredentialsResult checkCredentials(Credentials credentials) {
+  public CredentialsResult checkCredentials(Credentials credentials) throws Exception {
     final String sql =
         "SELECT user_name, password FROM security_db.user_table where user_name = :username and password = :password";
 
     final MapSqlParameterSource paramsMap = new MapSqlParameterSource()
         .addValue("username", credentials.getUserName())
         .addValue("password", credentials.getUserPass());
-    CredentialsResult result = namedTemplate.queryForObject(sql, paramsMap, (resultSet, i) -> {
-      CredentialsResult result1 = new CredentialsResult();
-      result1.setUserLang(resultSet.getString("user_name"));
-      return result1;
-    });
-
+    CredentialsResult result = null;
+    try {
+      result = namedTemplate.queryForObject(sql, paramsMap, (resultSet, i) -> {
+        CredentialsResult result1 = new CredentialsResult();
+        result1.setUserLang(resultSet.getString("user_name"));
+        return result1;
+      });
+    } catch (EmptyResultDataAccessException ex) {
+      throw new Exception("Username or password is incorrect");
+    }
     return result;
   }
 
@@ -59,12 +66,14 @@ public class LoginDao {
 
     DaoUtils.debugQuery(log, sql, paramsMap.getValues());
 
-    UserDetailsImpl ud = null;
+    Collection<? extends GrantedAuthority> authorities = getAuthorities(username);
+
+    UserDetailsImpl userDetails = null;
     try {
-      ud = namedTemplate.queryForObject(sql, paramsMap, (rs, rowNum) -> {
+      userDetails = namedTemplate.queryForObject(sql, paramsMap, (rs, rowNum) -> {
 
         //TODO geting lang from authentication object is plain stupid. So, AN by default
-        UserDetailsImpl iud = new UserDetailsImpl(rs.getString("user_name"), rs.getString("password"), null);
+        UserDetailsImpl iud = new UserDetailsImpl(rs.getString("user_name"), rs.getString("password"), authorities);
 
         return iud;
       });
@@ -74,7 +83,31 @@ public class LoginDao {
       log.warn("Too many results");
     }
 
-    return ud;
+    return userDetails;
+  }
+
+  private Collection<? extends GrantedAuthority> getAuthorities(String username) {
+    final String sql = "SELECT                                                     "
+                     + "	r.ROLE_NAME                                              "
+                     + "FROM                                                       "
+                     + "	(user_role_table r                                       "
+                     + "	INNER JOIN user_role_details_table d ON r.id = d.role_id)"
+                     + "		INNER JOIN                                             "
+                     + "	user_table u ON u.id = d.user_id                         "
+                     + "WHERE                                                      "
+                     + "	u.user_name = :username                                  "
+        ;
+    final MapSqlParameterSource paramsMap = new MapSqlParameterSource()
+        .addValue("username", username);
+
+    DaoUtils.debugQuery(log, sql, paramsMap.getValues());
+
+    List<GrantedAuthority> authorities = namedTemplate.query(sql, paramsMap, (resultSet, i) -> {
+      AuthorityImpl authority = new AuthorityImpl(resultSet.getString("ROLE_NAME"));
+      return authority;
+    });
+
+    return authorities;
   }
 
   public Integer storeUserDetailsToToken(TokenType tokenType, UserDetails user, Date expDate) {
@@ -107,18 +140,18 @@ public class LoginDao {
 
     int id = namedTemplate.queryForObject(sql, new MapSqlParameterSource(), Integer.class);
 
-    final String sql2 = "SELECT ID, TOKEN_TYPE, AUTH_OBJECT, EXP_DATE FROM AUTH_TOKEN ORDER BY ID DESC LIMIT 1";
-    namedTemplate.queryForObject(sql2, new MapSqlParameterSource(), new RowMapper<CredentialsResult>() {
-
-      @Override
-      public CredentialsResult mapRow(ResultSet resultSet, int i) throws SQLException {
-        log.info(resultSet.getString("ID"));
-        log.info(resultSet.getString("TOKEN_TYPE"));
-        log.info(resultSet.getString("EXP_DATE"));
-        log.info(resultSet.getString("AUTH_OBJECT"));
-        return null;
-      }
-    });
+//    final String sql2 = "SELECT ID, TOKEN_TYPE, AUTH_OBJECT, EXP_DATE FROM AUTH_TOKEN ORDER BY ID DESC LIMIT 1";
+//    namedTemplate.queryForObject(sql2, new MapSqlParameterSource(), new RowMapper<CredentialsResult>() {
+//
+//      @Override
+//      public CredentialsResult mapRow(ResultSet resultSet, int i) throws SQLException {
+//        log.info(resultSet.getString("ID"));
+//        log.info(resultSet.getString("TOKEN_TYPE"));
+//        log.info(resultSet.getString("EXP_DATE"));
+//        log.info(resultSet.getString("AUTH_OBJECT"));
+//        return null;
+//      }
+//    });
     return id;
   }
 

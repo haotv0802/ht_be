@@ -333,7 +333,7 @@ public class SpringConfig extends WebMvcConfigurerAdapter {
           // custom CORS filter as the mvc cors config doesn't play well, yet, with security
           .addFilterBefore(corsFilter, ChannelProcessingFilter.class)
           // custom JSON based authentication by POST of {"userName":"<name>","userPass":"<password>"}
-          .addFilterBefore(statelessLoginFilter(), UsernamePasswordAuthenticationFilter.class)
+//          .addFilterBefore(statelessLoginFilter(), UsernamePasswordAuthenticationFilter.class)
           .addFilterBefore(statelessAuthenticationFilter(), UsernamePasswordAuthenticationFilter.class)
           .addFilterAfter(loggingEnhancingFilter(), FilterSecurityInterceptor.class)
       ;
