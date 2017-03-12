@@ -32,7 +32,7 @@ public class LoginResource {
     logger.info("In Resource");
     CredentialsResult result = loginDao.checkCredentials(credentials);
 
-    CustomizedUserDetails userDetails = loginDao.findOneByUsername(credentials.getUserName());
+    UserDetailsImpl userDetails = loginDao.findOneByUsername(credentials.getUserName());
     UsernamePasswordAuthenticationToken authentication =
         new UsernamePasswordAuthenticationToken(userDetails, userDetails.getPassword(), null);
 

@@ -13,7 +13,6 @@ import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate;
 import org.springframework.jdbc.core.support.SqlLobValue;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Repository;
-import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.SerializationUtils;
 
 import java.sql.Blob;
@@ -51,7 +50,7 @@ public class LoginDao {
     return result;
   }
 
-  public CustomizedUserDetails findOneByUsername(String username) {
+  public UserDetailsImpl findOneByUsername(String username) {
 
     final String sql = "SELECT user_name, password FROM security_db.user_table where user_name = :username";
 
@@ -60,12 +59,12 @@ public class LoginDao {
 
     DaoUtils.debugQuery(log, sql, paramsMap.getValues());
 
-    CustomizedUserDetails ud = null;
+    UserDetailsImpl ud = null;
     try {
       ud = namedTemplate.queryForObject(sql, paramsMap, (rs, rowNum) -> {
 
         //TODO geting lang from authentication object is plain stupid. So, AN by default
-        CustomizedUserDetails iud = new CustomizedUserDetails(rs.getString("user_name"), rs.getString("password"), null);
+        UserDetailsImpl iud = new UserDetailsImpl(rs.getString("user_name"), rs.getString("password"), null);
 
         return iud;
       });

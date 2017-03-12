@@ -7,7 +7,7 @@ import org.springframework.util.Assert;
 import java.io.Serializable;
 import java.util.*;
 
-public class CustomizedUserDetails implements UserDetails {
+public class UserDetailsImpl implements UserDetails {
 
   private final String username;
 
@@ -117,7 +117,7 @@ public class CustomizedUserDetails implements UserDetails {
    * @param password
    * @param authorities
    */
-  public CustomizedUserDetails(String username, String password, Collection<? extends GrantedAuthority> authorities) {
+  public UserDetailsImpl(String username, String password, Collection<? extends GrantedAuthority> authorities) {
     this(username
         , password
         , "_N/A_"
@@ -167,7 +167,7 @@ public class CustomizedUserDetails implements UserDetails {
    *                                  either as a parameter to username or password or as an element in the
    *                                  <code>GrantedAuthority</code> collection
    */
-  public CustomizedUserDetails(String username
+  public UserDetailsImpl(String username
       , String password
       , String fullName
       , String lang
@@ -320,8 +320,8 @@ public class CustomizedUserDetails implements UserDetails {
    */
   @Override
   public boolean equals(Object rhs) {
-    if (rhs instanceof CustomizedUserDetails) {
-      return username.equals(((CustomizedUserDetails) rhs).username);
+    if (rhs instanceof UserDetailsImpl) {
+      return username.equals(((UserDetailsImpl) rhs).username);
     }
     return false;
   }

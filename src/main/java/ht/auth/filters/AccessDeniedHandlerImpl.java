@@ -12,11 +12,11 @@ import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.util.Locale;
 
-public class CustomizedAccessDeniedHandler implements AccessDeniedHandler {
+public class AccessDeniedHandlerImpl implements AccessDeniedHandler {
 
   private MessageSource messageSource;
 
-  public CustomizedAccessDeniedHandler(MessageSource messageSource) {
+  public AccessDeniedHandlerImpl(MessageSource messageSource) {
     this.messageSource = messageSource;
   }
 

@@ -26,12 +26,12 @@ import java.util.Locale;
  * Created by vtodorov
  * Date:  25/03/2016 Time: 2:51 PM
  */
-public class CustomizedAuthenticationFailureHandler implements AuthenticationFailureHandler
+public class AuthenticationFailureHandlerImpl implements AuthenticationFailureHandler
 {
 
   private MessageSource messageSource;
 
-  public CustomizedAuthenticationFailureHandler(MessageSource messageSource)
+  public AuthenticationFailureHandlerImpl(MessageSource messageSource)
   {
     this.messageSource = messageSource;
   }

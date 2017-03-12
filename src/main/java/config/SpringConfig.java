@@ -272,7 +272,7 @@ public class SpringConfig extends WebMvcConfigurerAdapter {
     private CorsFilter corsFilter;
 
     @Autowired
-    private CustomizedAccessDeniedHandler customizedAccessDeniedHandler;
+    private AccessDeniedHandlerImpl accessDeniedHandlerImpl;
 
     @Bean(name = "messageSource")
     public MessageSource messageSource() {
@@ -285,13 +285,13 @@ public class SpringConfig extends WebMvcConfigurerAdapter {
     }
 
     @Bean
-    public CustomizedAuthenticationFailureHandler customizedAuthenticationFailureHandler() {
-      return new CustomizedAuthenticationFailureHandler(messageSource());
+    public AuthenticationFailureHandlerImpl customizedAuthenticationFailureHandler() {
+      return new AuthenticationFailureHandlerImpl(messageSource());
     }
 
     @Bean
-    public CustomizedAuthenticationSuccessHandler customizedAuthenticationSuccessHandler() {
-      return new CustomizedAuthenticationSuccessHandler();
+    public AuthenticationSuccessHandlerImpl customizedAuthenticationSuccessHandler() {
+      return new AuthenticationSuccessHandlerImpl();
     }
 
     @Override
@@ -300,8 +300,8 @@ public class SpringConfig extends WebMvcConfigurerAdapter {
     }
 
     @Bean
-    public CustomizedAccessDeniedHandler customizedAccessDeniedHandler() {
-      return new CustomizedAccessDeniedHandler(messageSource());
+    public AccessDeniedHandlerImpl customizedAccessDeniedHandler() {
+      return new AccessDeniedHandlerImpl(messageSource());
     }
 
 
@@ -316,7 +316,7 @@ public class SpringConfig extends WebMvcConfigurerAdapter {
           .and()
           .exceptionHandling()
           .authenticationEntryPoint(restAuthenticationEntryPoint)
-          .accessDeniedHandler(customizedAccessDeniedHandler)
+          .accessDeniedHandler(accessDeniedHandlerImpl)
           .and()
           .csrf().disable()
           .authorizeRequests()

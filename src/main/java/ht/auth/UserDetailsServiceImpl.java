@@ -14,11 +14,11 @@ public class UserDetailsServiceImpl implements UserDetailsService {
 
   @Override
   public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
-    CustomizedUserDetails user = loginDao.findOneByUsername(username);
+    UserDetailsImpl user = loginDao.findOneByUsername(username);
     if (user == null) {
       throw new UsernameNotFoundException("username " + username + " not found");
     }
-    CustomizedUserDetails userDetails = new CustomizedUserDetails("haho", "haho", null);
+    UserDetailsImpl userDetails = new UserDetailsImpl("haho", "haho", null);
     return userDetails;
   }
 

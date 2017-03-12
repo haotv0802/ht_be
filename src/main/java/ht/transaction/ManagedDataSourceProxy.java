@@ -1,6 +1,6 @@
 package ht.transaction;
 
-import ht.auth.CustomizedUserDetails;
+import ht.auth.UserDetailsImpl;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.springframework.security.core.Authentication;
@@ -87,7 +87,7 @@ public class ManagedDataSourceProxy implements DataSource {
   }
 
   private void setDbmsSessionParams(Connection conn, UserDetails principal) {
-    CustomizedUserDetails p = (CustomizedUserDetails) principal;
+    UserDetailsImpl p = (UserDetailsImpl) principal;
     setClientInfo(conn, p);
 //    setImxSessionRefPerson(conn, p);
 //    setImxSessionCurrentUser(conn, p);
@@ -95,7 +95,7 @@ public class ManagedDataSourceProxy implements DataSource {
     setImxSessionDetails(conn, p);
   }
 
-  private void setImxSessionDetails(Connection conn, CustomizedUserDetails p) {
+  private void setImxSessionDetails(Connection conn, UserDetailsImpl p) {
     CallableStatement cs = null;
     try {
       String sql = "{ call imx_session_params.setSessionDetails(?, ?, ?, ?)}";
@@ -128,7 +128,7 @@ public class ManagedDataSourceProxy implements DataSource {
     }
   }
 
-  private void setImxCurrentUserLang(Connection conn, CustomizedUserDetails p) {
+  private void setImxCurrentUserLang(Connection conn, UserDetailsImpl p) {
     CallableStatement cs = null;
     try {
       String sql = "{ call imx_session_params.setCurrentLanguage(?)}";
@@ -149,7 +149,7 @@ public class ManagedDataSourceProxy implements DataSource {
     }
   }
 
-  private void startXa(Connection conn, CustomizedUserDetails p) {
+  private void startXa(Connection conn, UserDetailsImpl p) {
     if (p == null) {
       //todo: replace when the package is fixed
       return;
@@ -174,7 +174,7 @@ public class ManagedDataSourceProxy implements DataSource {
     }
   }
 
-  private void setImxSessionCurrentUser(Connection conn, CustomizedUserDetails p) {
+  private void setImxSessionCurrentUser(Connection conn, UserDetailsImpl p) {
     if (p == null) {
       //todo: replace when the package is fixed
       return;
@@ -200,7 +200,7 @@ public class ManagedDataSourceProxy implements DataSource {
     }
   }
 
-  private void setImxSessionRefPerson(Connection conn, CustomizedUserDetails p) {
+  private void setImxSessionRefPerson(Connection conn, UserDetailsImpl p) {
     if (p == null) {
       //todo: replace when the package is fixed
       return;
@@ -232,7 +232,7 @@ public class ManagedDataSourceProxy implements DataSource {
     }
   }
 
-  private void setClientInfo(Connection conn, CustomizedUserDetails principal) {
+  private void setClientInfo(Connection conn, UserDetailsImpl principal) {
 
     CallableStatement pstm = null;
     final String sql = "{ call dbms_application_info.set_client_info(?)}";

@@ -17,7 +17,7 @@ import java.io.IOException;
  * Created by vtodorov
  * Date:  22/03/2016 Time: 9:07 PM
  */
-public class CustomizedAuthenticationSuccessHandler extends SimpleUrlAuthenticationSuccessHandler {
+public class AuthenticationSuccessHandlerImpl extends SimpleUrlAuthenticationSuccessHandler {
 
   private RequestCache requestCache = new HttpSessionRequestCache();
 
