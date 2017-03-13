@@ -10,11 +10,6 @@ import org.springframework.test.web.servlet.MockMvc;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
-/**
- * Property of CODIX Bulgaria EAD
- * Created by vtodorov
- * Date:  27/01/2016 Time: 3:27 PM
- */
 public final class TestUtils {
 
   private TestUtils() {

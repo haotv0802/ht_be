@@ -14,13 +14,6 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 import java.io.IOException;
 
-/**
- * Property of CODIX Bulgaria EAD
- * Created by vtodorov
- * Filter which enhances the log system with useful context
- *
- * Date:  11/01/2017 Time: 2:31 PM
- */
 public class LoggingEnhancingFilter extends GenericFilterBean
 {
 

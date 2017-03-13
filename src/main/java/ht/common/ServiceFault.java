@@ -1,11 +1,5 @@
 package ht.common;
 
-/**
- * Property of CODIX Bulgaria EAD
- * Created by vtodorov
- *
- * Class representing an fault
- */
 public class ServiceFault extends FaultBase
 {
   private String incidentId;

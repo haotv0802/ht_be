@@ -52,7 +52,9 @@ public class LoginResource {
 
   @PostMapping("/hello")
   @PreAuthorize("hasAuthority('ADMIN')")
-  public void hello(@AuthenticationPrincipal UserDetailsImpl userDetails, @HeaderLang String lang) {
+  public void hello(
+       @AuthenticationPrincipal UserDetailsImpl userDetails
+      ,@HeaderLang String lang) {
     logger.info("In Hello");
   }
 }

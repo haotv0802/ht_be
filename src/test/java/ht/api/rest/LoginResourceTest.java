@@ -2,7 +2,6 @@ package ht.api.rest;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import ht.auth.Credentials;
-import oracle.net.ano.AuthenticationService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.http.MediaType;
@@ -23,7 +22,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
          "/config/spring-mvc.xml"
         ,"/config/spring-mvc-test.xml"
     })
-public class LoginResourceTest extends DocumentationBase {
+public class LoginResourceTest extends BaseDocumentation {
 
 //  public final String authToken;
 

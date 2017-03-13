@@ -8,11 +8,6 @@ import org.springframework.web.context.request.NativeWebRequest;
 import org.springframework.web.method.support.HandlerMethodArgumentResolver;
 import org.springframework.web.method.support.ModelAndViewContainer;
 
-/**
- * Property of CODIX Bulgaria EAD
- * Created by vtodorov
- * Date:  02/04/2016 Time: 2:43 PM
- */
 public final class HeaderLangHandlerMethodArgumentResolver implements HandlerMethodArgumentResolver {
   private final String defaultLang = "EN";
 

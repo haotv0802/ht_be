@@ -9,7 +9,12 @@ import com.hazelcast.core.Hazelcast;
 import com.hazelcast.core.HazelcastInstance;
 import com.mysql.cj.jdbc.MysqlDataSource;
 import ht.auth.LoggingEnhancingFilter;
+import ht.auth.PasswordEncoderImpl;
 import ht.auth.TokenAuthenticationService;
+import ht.auth.encoders.DefaultPasswordEncoder;
+import ht.auth.encoders.MD5HalfPasswordEncoder;
+import ht.auth.encoders.MD5PasswordEncoder;
+import ht.auth.encoders.SHA1PasswordEncoder;
 import ht.auth.filters.*;
 import ht.common.HeaderLangHandlerMethodArgumentResolver;
 import ht.transaction.ConnectionsWatchdog;
@@ -18,6 +23,7 @@ import ht.transaction.TransactionsList;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.context.MessageSource;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
@@ -34,12 +40,16 @@ import org.springframework.http.converter.json.MappingJackson2HttpMessageConvert
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate;
 import org.springframework.jdbc.datasource.DataSourceTransactionManager;
+import org.springframework.security.authentication.AuthenticationProvider;
+import org.springframework.security.authentication.dao.DaoAuthenticationProvider;
+import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.config.annotation.method.configuration.EnableGlobalMethodSecurity;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
 import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.core.userdetails.UserDetailsService;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.access.channel.ChannelProcessingFilter;
 import org.springframework.security.web.access.intercept.FilterSecurityInterceptor;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
@@ -275,6 +285,15 @@ public class SpringConfig extends WebMvcConfigurerAdapter {
     @Autowired
     private AccessDeniedHandlerImpl accessDeniedHandlerImpl;
 
+//    @Autowired
+//    @Qualifier("authenticationProvider")
+//    DaoAuthenticationProvider authenticationProvider;
+//
+//    @Override
+//    protected void configure(AuthenticationManagerBuilder auth) throws Exception {
+//      auth.authenticationProvider(authenticationProvider);
+//    }
+
     @Bean(name = "messageSource")
     public MessageSource messageSource() {
       ResourceBundleMessageSource b = new ResourceBundleMessageSource();
@@ -334,7 +353,7 @@ public class SpringConfig extends WebMvcConfigurerAdapter {
           // custom CORS filter as the mvc cors config doesn't play well, yet, with security
           .addFilterBefore(corsFilter, ChannelProcessingFilter.class)
           // custom JSON based authentication by POST of {"userName":"<name>","userPass":"<password>"}
-//          .addFilterBefore(statelessLoginFilter(), UsernamePasswordAuthenticationFilter.class)
+          .addFilterBefore(statelessLoginFilter(), UsernamePasswordAuthenticationFilter.class)
           .addFilterBefore(statelessAuthenticationFilter(), UsernamePasswordAuthenticationFilter.class)
           .addFilterAfter(loggingEnhancingFilter(), FilterSecurityInterceptor.class)
       ;
@@ -378,5 +397,39 @@ public class SpringConfig extends WebMvcConfigurerAdapter {
     StatelessAuthenticationFilter statelessAuthenticationFilter() {
       return new StatelessAuthenticationFilter(tokenAuthenticationService);
     }
+
+    //TODO split mvc and security config
+    @Bean
+    public Object pwdEncoder() {
+      PasswordEncoder passwordEncoder = null;
+      // (SHA1) Used when connect to UDAL for testing e_transact
+      // String passHashAlg = "SHA1";
+      String passHashAlg = "DEFAULT";
+      switch (passHashAlg) {
+        case "MD5/0.5":
+          passwordEncoder = new MD5HalfPasswordEncoder();
+          break;
+        case "MD5":
+          passwordEncoder = new MD5PasswordEncoder();
+          break;
+        case "SHA1":
+          passwordEncoder = new SHA1PasswordEncoder();
+          break;
+        case "DEFAULT":
+          passwordEncoder = new DefaultPasswordEncoder();
+          break;
+        default:
+          throw new IllegalArgumentException("Unknown password hash type");
+      }
+
+      return new PasswordEncoderImpl(passwordEncoder) {
+      };
+    }
+
+    @Bean
+    public Boolean hideUserNotFound() {
+      return false;
+    }
+
   }
 }

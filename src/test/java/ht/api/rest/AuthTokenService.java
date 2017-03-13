@@ -16,11 +16,6 @@ import java.io.PrintWriter;
 import static org.springframework.security.test.web.servlet.setup.SecurityMockMvcConfigurers.springSecurity;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 
-/**
- * Property of CODIX Bulgaria EAD
- * Created by vtodorov
- * Date:  10/09/2016 Time: 12:54 PM
- */
 @Service("authTokenService")
 public class AuthTokenService implements IAuthTokenService {
 

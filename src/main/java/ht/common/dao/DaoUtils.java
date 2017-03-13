@@ -23,11 +23,6 @@ import java.util.stream.Stream;
 
 import static java.util.Arrays.asList;
 
-/**
- * Property of CODIX Bulgaria EAD
- * Created by vtodorov
- * Date:  29/01/2016 Time: 6:10 PM
- */
 public final class DaoUtils {
 
   private DaoUtils() {

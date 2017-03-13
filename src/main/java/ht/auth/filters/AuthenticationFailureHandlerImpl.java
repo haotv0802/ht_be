@@ -21,24 +21,16 @@ import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.util.Locale;
 
-/**
- * Property of CODIX Bulgaria EAD
- * Created by vtodorov
- * Date:  25/03/2016 Time: 2:51 PM
- */
-public class AuthenticationFailureHandlerImpl implements AuthenticationFailureHandler
-{
+public class  AuthenticationFailureHandlerImpl implements AuthenticationFailureHandler {
 
   private MessageSource messageSource;
 
-  public AuthenticationFailureHandlerImpl(MessageSource messageSource)
-  {
+  public AuthenticationFailureHandlerImpl(MessageSource messageSource) {
     this.messageSource = messageSource;
   }
 
   @Override
-  public void onAuthenticationFailure(HttpServletRequest request, HttpServletResponse response, AuthenticationException exception) throws IOException, ServletException
-  {
+  public void onAuthenticationFailure(HttpServletRequest request, HttpServletResponse response, AuthenticationException exception) throws IOException, ServletException {
     Locale locale = new Locale("en");
     if ("fr".equalsIgnoreCase(request.getHeader(HttpHeaders.ACCEPT_LANGUAGE))) {
       locale = new Locale("fr");

@@ -56,7 +56,7 @@ import static org.springframework.util.StringUtils.collectionToDelimitedString;
     locations = {
         "/config/spring-mvc.xml"
     })
-public abstract class DocumentationBase extends AbstractTransactionalTestNGSpringContextTests
+public abstract class BaseDocumentation extends AbstractTransactionalTestNGSpringContextTests
 {
   protected Logger logger = LogManager.getLogger(getClass());
 

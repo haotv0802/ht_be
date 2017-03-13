@@ -20,8 +20,14 @@ import java.io.IOException;
 
 public class StatelessLoginFilter extends AbstractAuthenticationProcessingFilter {
 
-  public StatelessLoginFilter(String urlMapping, AuthenticationManager authManager, AuthenticationFailureHandler failureHandler, AuthenticationSuccessHandler successHandler) {
+  public StatelessLoginFilter(
+       String urlMapping
+      ,AuthenticationManager authManager
+      ,AuthenticationFailureHandler failureHandler
+      ,AuthenticationSuccessHandler successHandler
+  ) {
     super(new AntPathRequestMatcher(urlMapping));
+
     setAuthenticationManager(authManager);
     setAuthenticationFailureHandler(failureHandler);
     setAuthenticationSuccessHandler(successHandler);
@@ -34,10 +40,11 @@ public class StatelessLoginFilter extends AbstractAuthenticationProcessingFilter
     try {
       user = new ObjectMapper().readValue(request.getInputStream(), Credentials.class);
     } catch (IOException e) {
-      throw new BadLoginPayloadException("Invalid login paylod");
+      throw new BadLoginPayloadException("Invalid login payload");
     }
 
-    final UsernamePasswordAuthenticationToken loginToken = new UsernamePasswordAuthenticationToken(user.getUserName(), user.getUserPass());
+    final UsernamePasswordAuthenticationToken loginToken =
+        new UsernamePasswordAuthenticationToken(user.getUserName(), user.getUserPass());
     loginToken.setDetails(new UserTokenDetails(request));
 
     return getAuthenticationManager().authenticate(loginToken);
