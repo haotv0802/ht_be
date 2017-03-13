@@ -51,9 +51,11 @@ public class TokenAuthenticationService {
       try {
         final Integer tokenId = tokenHandler.getAuthId(token);
 
-        final UserDetails userDetails = loginDao.readUserDetailsForToken(tokenId);
-        if (userDetails != null) {
-          return new UsernamePasswordAuthenticationToken(userDetails, userDetails.getPassword(), userDetails.getAuthorities());
+        if (null != tokenId) {
+          final UserDetails userDetails = loginDao.readUserDetailsForToken(tokenId);
+          if (userDetails != null) {
+            return new UsernamePasswordAuthenticationToken(userDetails, userDetails.getPassword(), userDetails.getAuthorities());
+          }
         }
       } catch (DataAccessException e) {
         logger.debug(e.getMessage(), e);

@@ -24,8 +24,6 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
     })
 public class LoginResourceTest extends BaseDocumentation {
 
-//  public final String authToken;
-
   @Autowired
   @Qualifier("authTokenService")
   private IAuthTokenService authTokenService;
