@@ -11,6 +11,7 @@ import com.mysql.cj.jdbc.MysqlDataSource;
 import ht.auth.LoggingEnhancingFilter;
 import ht.auth.TokenAuthenticationService;
 import ht.auth.filters.*;
+import ht.common.HeaderLangHandlerMethodArgumentResolver;
 import ht.transaction.ConnectionsWatchdog;
 import ht.transaction.TransactionFilter;
 import ht.transaction.TransactionsList;
@@ -198,7 +199,7 @@ public class SpringConfig extends WebMvcConfigurerAdapter {
     argumentResolvers.add(resolver);
 
     argumentResolvers.add(new SortHandlerMethodArgumentResolver());
-//    argumentResolvers.add(new ImxLangHandlerMethodArgumentResolver());
+    argumentResolvers.add(new HeaderLangHandlerMethodArgumentResolver());
 
     super.addArgumentResolvers(argumentResolvers);
   }

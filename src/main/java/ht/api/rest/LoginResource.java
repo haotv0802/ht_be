@@ -1,6 +1,7 @@
 package ht.api.rest;
 
 import ht.auth.*;
+import ht.common.beans.HeaderLang;
 import io.jsonwebtoken.lang.Assert;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -35,14 +36,15 @@ public class LoginResource {
     Assert.notNull(credentials);
     logger.info("In Resource");
     try {
-      CredentialsResult result = loginDao.checkCredentials(credentials);
+//      CredentialsResult result =
+          loginDao.checkCredentials(credentials);
     } catch (Exception e) {
       return new ResponseEntity(HttpStatus.UNAUTHORIZED);
     }
 
     UserDetailsImpl userDetails = loginDao.findOneByUsername(credentials.getUserName());
     UsernamePasswordAuthenticationToken authentication =
-        new UsernamePasswordAuthenticationToken(userDetails, userDetails.getPassword(), null);
+        new UsernamePasswordAuthenticationToken(userDetails, userDetails.getPassword(), userDetails.getAuthorities());
 
     tokenAuthenticationService.addAuthentication(response, authentication);
     return new ResponseEntity(HttpStatus.OK);
@@ -50,7 +52,7 @@ public class LoginResource {
 
   @PostMapping("/hello")
   @PreAuthorize("hasAuthority('ADMIN')")
-  public void hello(@AuthenticationPrincipal UserDetailsImpl userDetails) {
+  public void hello(@AuthenticationPrincipal UserDetailsImpl userDetails, @HeaderLang String lang) {
     logger.info("In Hello");
   }
 }

@@ -59,7 +59,7 @@ public class LoginResourceTest extends DocumentationBase {
   public void testHello() throws Exception {
     mockMvc
         .perform(post("/svc/hello")
-            .header("Accept-Language", "en")
+            .header("Accept-Language", "fr")
             .header("X-AUTH-TOKEN", authTokenService.getAuthToken())
         )
         .andExpect(status().is(200))
