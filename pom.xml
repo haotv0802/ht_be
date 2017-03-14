@@ -11,11 +11,6 @@
 
     <properties>
         <jdk.version>1.8</jdk.version>
-        <repository.rush>http://lemon.codixfr.private:6002/v9_be/</repository.rush>
-        <repository.type>hg</repository.type>
-        <!-- overriding bootstrap connectionUrl for Hg instead of CVS -->
-        <connectionUrl>scm:${repository.type}:${repository.rush}</connectionUrl>
-
         <spring.version>4.3.2.RELEASE</spring.version>
         <spring.security.version>4.1.3.RELEASE</spring.security.version>
         <spring-data.version>Hopper-SR2</spring-data.version>
@@ -26,7 +21,6 @@
         <skipTests>true</skipTests>
         <snippetsDirectory>${project.build.directory}/generated-snippets</snippetsDirectory>
     </properties>
-
 
     <dependencyManagement>
         <dependencies>
@@ -406,6 +400,7 @@
                 <!-- Each developer is to register in theirs own settings.xml a server with id LocalTomcat and a variable $tomcat8.manager.url-->
                 <configuration>
                     <url>${tomcat8.manager.url}</url>
+                    <port>8880</port>
                     <server>LocalTomcat8</server>
                     <path>/${project.build.finalName}</path>
                 </configuration>
