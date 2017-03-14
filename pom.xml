@@ -7,6 +7,7 @@
     <groupId>ht</groupId>
     <artifactId>ht_be</artifactId>
     <version>1.0-SNAPSHOT</version>
+    <packaging>war</packaging>
 
     <properties>
         <jdk.version>1.8</jdk.version>
