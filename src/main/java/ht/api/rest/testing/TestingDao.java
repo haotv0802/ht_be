@@ -4,13 +4,10 @@ import ht.common.dao.DaoUtils;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.jdbc.core.RowMapper;
 import org.springframework.jdbc.core.namedparam.MapSqlParameterSource;
 import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate;
 import org.springframework.stereotype.Repository;
 
-import java.sql.ResultSet;
-import java.sql.SQLException;
 import java.util.List;
 
 /**
@@ -26,7 +23,7 @@ public class TestingDao {
 
   public List<AuthorityBean> getAuthorities() {
 
-    final String sql = "SELECT ID, ROLE_NAME FROM user_role_table";
+    final String sql = "SELECT ID, ROLE_NAME FROM user_role";
 
     final MapSqlParameterSource paramsMap = new MapSqlParameterSource();
 

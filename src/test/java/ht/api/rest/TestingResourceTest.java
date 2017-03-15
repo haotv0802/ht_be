@@ -30,7 +30,7 @@ public class TestingResourceTest extends BaseDocumentation {
   @Test
   public void testGetAuthorities() throws Exception {
     mockMvc
-        .perform(get("/svc/testing")
+        .perform(get("/svc/staff/testing")
             .header("Accept-Language", "en")
             .header("X-AUTH-TOKEN", authTokenService.getAuthToken())
         )

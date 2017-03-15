@@ -117,7 +117,7 @@ public class SpringConfig extends WebMvcConfigurerAdapter {
 //    final String usr = "imxdb";
 //    final String pass = "manager";
 
-    final String databaseUrl = "jdbc:mysql://localhost:3306/security_db";
+    final String databaseUrl = "jdbc:mysql://localhost:3306/ht_db";
     final String usr = "haho";
     final String pass = "hoanhhao";
 

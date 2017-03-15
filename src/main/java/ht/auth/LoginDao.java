@@ -7,7 +7,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.dao.IncorrectResultSizeDataAccessException;
 import org.springframework.jdbc.core.JdbcTemplate;
-import org.springframework.jdbc.core.RowMapper;
 import org.springframework.jdbc.core.namedparam.MapSqlParameterSource;
 import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate;
 import org.springframework.jdbc.core.support.SqlLobValue;
@@ -17,8 +16,6 @@ import org.springframework.stereotype.Repository;
 import org.springframework.util.SerializationUtils;
 
 import java.sql.Blob;
-import java.sql.ResultSet;
-import java.sql.SQLException;
 import java.sql.Types;
 import java.util.Collection;
 import java.util.Date;
@@ -39,7 +36,7 @@ public class LoginDao {
 
   public CredentialsResult checkCredentials(Credentials credentials) throws Exception {
     final String sql =
-        "SELECT user_name, password FROM security_db.user_table where user_name = :username and password = :password";
+        "SELECT user_name, password FROM user_table where user_name = :username and password = :password";
 
     final MapSqlParameterSource paramsMap = new MapSqlParameterSource()
         .addValue("username", credentials.getUserName())
@@ -59,7 +56,7 @@ public class LoginDao {
 
   public UserDetailsImpl findOneByUsername(String username) {
 
-    final String sql = "SELECT user_name, password FROM security_db.user_table where user_name = :username";
+    final String sql = "SELECT user_name, password FROM user_table where user_name = :username";
 
     final MapSqlParameterSource paramsMap = new MapSqlParameterSource()
         .addValue("username", username);
@@ -90,8 +87,8 @@ public class LoginDao {
     final String sql = "SELECT                                                     "
                      + "	r.ROLE_NAME                                              "
                      + "FROM                                                       "
-                     + "	(user_role r                                       "
-                     + "	INNER JOIN user_role_details d ON r.id = d.role_id)"
+                     + "	(user_role r                                             "
+                     + "	INNER JOIN user_role_details d ON r.id = d.role_id)      "
                      + "		INNER JOIN                                             "
                      + "	user_table u ON u.id = d.user_id                         "
                      + "WHERE                                                      "

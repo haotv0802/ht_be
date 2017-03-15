@@ -1,5 +1,6 @@
-CREATE DATABASE  IF NOT EXISTS `security_db`;
-USE `security_db`;
+DROP DATABASE IF EXISTS `ht_db`;
+CREATE DATABASE  IF NOT EXISTS `ht_db`;
+USE `ht_db`;
 
 --
 -- Table structure for table `user_role`
@@ -7,10 +8,10 @@ USE `security_db`;
 DROP TABLE IF EXISTS `user_role`;
 CREATE TABLE `user_role` (
   `id` BIGINT NOT NULL,
-  `role_name` varchar(45) NOT NULL,
+  `role_name` VARCHAR(45) NOT NULL,
   PRIMARY KEY (`id`),
-  UNIQUE KEY `id_unique` (`id`),
-  UNIQUE KEY `role_name_unique` (`role_name`)
+  UNIQUE KEY `user_role_id_unique` (`id`),
+  UNIQUE KEY `user_role_role_name_unique` (`role_name`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 INSERT INTO `user_role` VALUES (1,'ADMIN'),(3,'DIRECTOR'),(2,'MANAGER'),(4,'USER');
@@ -20,15 +21,16 @@ INSERT INTO `user_role` VALUES (1,'ADMIN'),(3,'DIRECTOR'),(2,'MANAGER'),(4,'USER
 DROP TABLE IF EXISTS `user_table`;
 CREATE TABLE `user_table` (
   `id` BIGINT NOT NULL,
-  `user_name` varchar(45) NOT NULL,
-  `password` varchar(45) NOT NULL,
+  `user_name` VARCHAR(45) NOT NULL,
+  `password` VARCHAR(45) NOT NULL,
   PRIMARY KEY (`id`),
-  UNIQUE KEY `id_unique` (`id`),
-  UNIQUE KEY `user_name_unique` (`user_name`)
+  UNIQUE KEY `_user_tableid_unique` (`id`),
+  UNIQUE KEY `user_table_user_name_unique` (`user_name`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 INSERT INTO `user_table`
-VALUES (1,'admin','admin'),(2,'haho','hoanhhao'),(3,'hao','hiep'),(4,'sd','hiep'),
+VALUES
+  (1,'admin','admin'),(2,'haho','hoanhhao'),(3,'hao','hiep'),(4,'sd','hiep'),
   (6,'admin1','admin'),(7,'admin2','admin'),(8,'admin3','admin'),
   (9,'admin4','admin'),(12,'haho1','hoanhhao'),(13,'haho13','hoanhhao'),
   (14,'haho14','hoanhhao'),(15,'haho15','hoanhhao'),(16,'haho16','hoanhhao'),
@@ -51,8 +53,8 @@ CREATE TABLE `user_role_details` (
   PRIMARY KEY (`id`),
   UNIQUE KEY `user_role_unique` (`user_id`,`role_id`),
   KEY `role_id` (`role_id`),
-  CONSTRAINT `role_id` FOREIGN KEY (`role_id`) REFERENCES `user_role` (`id`),
-  CONSTRAINT `user_id` FOREIGN KEY (`user_id`) REFERENCES `user_table` (`id`)
+  CONSTRAINT `user_role_details_role_id` FOREIGN KEY (`role_id`) REFERENCES `user_role` (`id`),
+  CONSTRAINT `user_role_details_user_id` FOREIGN KEY (`user_id`) REFERENCES `user_table` (`id`)
 ) ENGINE=InnoDB AUTO_INCREMENT=11 DEFAULT CHARSET=utf8;
 
 INSERT INTO `user_role_details` VALUES (1,1,1),(10,2,1),(2,2,2),(3,2,3),(4,2,4),(9,3,1),(6,4,1);
@@ -63,11 +65,11 @@ INSERT INTO `user_role_details` VALUES (1,1,1),(10,2,1),(2,2,2),(3,2,3),(4,2,4),
 DROP TABLE IF EXISTS `auth_token`;
 CREATE TABLE `auth_token` (
   `id` BIGINT AUTO_INCREMENT,
-  `token_type` varchar(45) NOT NULL,
+  `token_type` VARCHAR(45) NOT NULL,
   `auth_object` BLOB NOT NULL,
   `exp_date` DATETIME NOT NULL,
   PRIMARY KEY (`id`),
-  UNIQUE KEY `id_unique` (`id`)
+  UNIQUE KEY `auth_token_id_unique` (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 --
@@ -76,10 +78,10 @@ CREATE TABLE `auth_token` (
 DROP TABLE IF EXISTS `image`;
 CREATE TABLE `image` (
   `id` BIGINT AUTO_INCREMENT,
-  `room_id` varchar(45) NOT NULL,
-  `image_url` varchar(45) NOT NULL,
+  `room_id` VARCHAR(45) NOT NULL,
+  `image_url` VARCHAR(45) NOT NULL,
   PRIMARY KEY (`id`),
-  UNIQUE KEY `id_unique` (`id`)
+  UNIQUE KEY `image_id_unique` (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 --
@@ -88,9 +90,9 @@ CREATE TABLE `image` (
 DROP TABLE IF EXISTS `room_type`;
 CREATE TABLE `room_type` (
   `id` BIGINT AUTO_INCREMENT,
-  `name` varchar(45) NOT NULL,
+  `name` VARCHAR(45) NOT NULL,
   PRIMARY KEY (`id`),
-  UNIQUE KEY `id_unique` (`id`)
+  UNIQUE KEY `room_type_id_unique` (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 --
@@ -105,27 +107,57 @@ CREATE TABLE `room` (
   `image_id` BIGINT NOT NULL,
   `room_type_id` BIGINT NOT NULL,
   PRIMARY KEY (`id`),
-  UNIQUE KEY `id_unique` (`id`),
-  CONSTRAINT `image_id` FOREIGN KEY (`image_id`) REFERENCES `image` (`id`),
-  CONSTRAINT `room_type_id` FOREIGN KEY (`room_type_id`) REFERENCES `room_type` (`id`)
+  UNIQUE KEY `room_id_unique` (`id`),
+  CONSTRAINT `room_image_id` FOREIGN KEY (`image_id`) REFERENCES `image` (`id`),
+  CONSTRAINT `room_room_type_id` FOREIGN KEY (`room_type_id`) REFERENCES `room_type` (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 --
--- Table structure for table `customer`
+-- Table structure for table `individual`
 --
-DROP TABLE IF EXISTS `customer`;
-CREATE TABLE `customer` (
+DROP TABLE IF EXISTS `individual`;
+CREATE TABLE `individual` (
   `id` BIGINT AUTO_INCREMENT,
   `first_name` VARCHAR(45) NOT NULL,
   `last_name` VARCHAR(45) NOT NULL,
-  `middle_name` VARCHAR(45) NULL,
-  `age` TINYINT NULL,
+  `middle_name` VARCHAR(45),
+  `age` TINYINT,
   `gender` VARCHAR(10) NOT NULL,
   `email` VARCHAR(50) NOT NULL,
-  `phone_number` VARCHAR(50) NULL,
-  `image` BLOB NULL,
+  `phone_number` VARCHAR(50),
+  `image` BLOB,
   `user_id` BIGINT NOT NULL,
   PRIMARY KEY (`id`),
-  UNIQUE KEY `id_unique` (`id`),
-  CONSTRAINT `user_id` FOREIGN KEY (`user_id`) REFERENCES `user_table` (`id`)
+  UNIQUE KEY `individual_id_unique` (`id`),
+  CONSTRAINT `individual_user_id` FOREIGN KEY (`user_id`) REFERENCES `user_table` (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+--
+-- Table structure for table `booking_history`
+--
+DROP TABLE IF EXISTS `booking_history`;
+CREATE TABLE `booking_history` (
+  `id` BIGINT AUTO_INCREMENT,
+  `room_id` BIGINT NOT NULL,
+  `user_id` BIGINT NOT NULL,
+  `cost` DOUBLE,
+  `date` DATETIME,
+  PRIMARY KEY (`id`),
+  UNIQUE KEY `booking_history_id_unique` (`id`),
+  CONSTRAINT `booking_history_room_id` FOREIGN KEY (`room_id`) REFERENCES `room` (`id`),
+  CONSTRAINT `booking_history_user_id` FOREIGN KEY (`user_id`) REFERENCES `user_table` (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+--
+-- Table structure for table `payment_history`
+--
+DROP TABLE IF EXISTS `payment_history`;
+CREATE TABLE `payment_history` (
+  `id` BIGINT AUTO_INCREMENT,
+  `user_id` BIGINT NOT NULL,
+  `date` DATETIME,
+  PRIMARY KEY (`id`),
+  UNIQUE KEY `booking_history_id_unique` (`id`),
+  CONSTRAINT `booking_history_room_id` FOREIGN KEY (`room_id`) REFERENCES `room` (`id`),
+  CONSTRAINT `booking_history_user_id` FOREIGN KEY (`user_id`) REFERENCES `user_table` (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
