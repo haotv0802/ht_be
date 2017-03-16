@@ -171,19 +171,20 @@ CREATE TABLE `expense_type` (
   DEFAULT CHARSET = utf8;
 
 --
--- Table structure for table `other_expense`
+-- Table structure for table `payment_history`
 --
-DROP TABLE IF EXISTS `other_expense`;
-CREATE TABLE `other_expense` (
-  `id`              BIGINT AUTO_INCREMENT,
-  `expense_type_id` BIGINT       NULL, # in case type id is 'other' or NULL, name should be put #this case happens when there's a new expense.
-  `quantity`        TINYINT      NOT NULL,
-  `name`            VARCHAR(200) NOT NULL,
-  `cost`            DOUBLE, # total cost is calculated by quantity and cost of specific expense.
-  `date`            DATETIME,
+DROP TABLE IF EXISTS `payment_history`;
+CREATE TABLE `payment_history` (
+  `id`                  BIGINT AUTO_INCREMENT,
+  `user_id`             BIGINT NOT NULL,
+  `date`                DATETIME,
+  `status`              VARCHAR(45), #Staying, Not arrived yet, Finished
+  `booking_method`      VARCHAR(45), #Phone contact with receptionist, website, booking info, etc
+  `staff_id`            BIGINT NULL, #user_id is stored in case receptionist supports and books for customer. Staff can earn commission.
+  `payment_in_advanced` DOUBLE, #by default, NULL. Customer paying in advanced will be served better.
   PRIMARY KEY (`id`),
-  UNIQUE KEY `other_expense_id_unique` (`id`),
-  CONSTRAINT `other_expense_expense_type_id` FOREIGN KEY (`expense_type_id`) REFERENCES `expense_type` (`id`)
+  UNIQUE KEY `booking_history_id_unique` (`id`),
+  CONSTRAINT `booking_history_user_id` FOREIGN KEY (`user_id`) REFERENCES `user_table` (`id`)
 )
   ENGINE = InnoDB
   DEFAULT CHARSET = utf8;
@@ -193,47 +194,57 @@ CREATE TABLE `other_expense` (
 --
 DROP TABLE IF EXISTS `expense_history`;
 CREATE TABLE `expense_history` (
-  `id`               BIGINT AUTO_INCREMENT,
-  `room_id`          BIGINT NOT NULL,
-  `user_id`          BIGINT NOT NULL,
-  `other_expense_id` BIGINT NOT NULL,
-  `cost`             DOUBLE,
-  `date`             DATETIME,
+  `id`                 BIGINT AUTO_INCREMENT,
+  `room_id`            BIGINT NOT NULL,
+  #   `other_expense_id` BIGINT NOT NULL,
+  `cost`               DOUBLE,
+  `arrival`            DATETIME,
+  `leave`              DATETIME,
+  `payment_history_id` BIGINT NOT NULL,
   PRIMARY KEY (`id`),
   UNIQUE KEY `expense_history_id_unique` (`id`),
   CONSTRAINT `expense_history_room_id` FOREIGN KEY (`room_id`) REFERENCES `room` (`id`),
-  CONSTRAINT `expense_history_user_id` FOREIGN KEY (`user_id`) REFERENCES `user_table` (`id`),
-  CONSTRAINT `expense_history_other_expense_id` FOREIGN KEY (`other_expense_id`) REFERENCES `other_expense` (`id`)
+  CONSTRAINT `expense_history_payment_history_id` FOREIGN KEY (`payment_history_id`) REFERENCES `payment_history` (`id`)
+  #   CONSTRAINT `expense_history_other_expense_id` FOREIGN KEY (`other_expense_id`) REFERENCES `other_expense` (`id`)
 )
   ENGINE = InnoDB
   DEFAULT CHARSET = utf8;
 
-# --
-# -- Table structure for table `payment_history`
-# --
-# DROP TABLE IF EXISTS `payment_history`;
-# CREATE TABLE `payment_history` (
-#   `id` BIGINT AUTO_INCREMENT,
-#   `user_id` BIGINT NOT NULL,
-#   `date` DATETIME,
-#   PRIMARY KEY (`id`),
-#   UNIQUE KEY `booking_history_id_unique` (`id`),
-#   CONSTRAINT `booking_history_room_id` FOREIGN KEY (`room_id`) REFERENCES `room` (`id`),
-#   CONSTRAINT `booking_history_user_id` FOREIGN KEY (`user_id`) REFERENCES `user_table` (`id`)
-# ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+--
+-- Table structure for table `other_expense`
+--
+DROP TABLE IF EXISTS `other_expense`;
+CREATE TABLE `other_expense` (
+  `id`                 BIGINT AUTO_INCREMENT,
+  `expense_type_id`    BIGINT       NULL, # in case type id is 'other' or NULL, name should be put #this case happens when there's a new expense.
+  `expense_history_id` BIGINT       NOT NULL,
+  `quantity`           TINYINT      NOT NULL,
+  `name`               VARCHAR(200) NOT NULL,
+  `cost`               DOUBLE, # total cost is calculated by quantity and cost of specific expense.
+  `date`               DATETIME,
+  PRIMARY KEY (`id`),
+  UNIQUE KEY `other_expense_id_unique` (`id`),
+  CONSTRAINT `other_expense_expense_type_id` FOREIGN KEY (`expense_type_id`) REFERENCES `expense_type` (`id`),
+  CONSTRAINT `other_expense_expense_history_id` FOREIGN KEY (`expense_history_id`) REFERENCES `expense_history` (`id`)
+)
+  ENGINE = InnoDB
+  DEFAULT CHARSET = utf8;
 
 --
 -- Table structure for table `expense_history`
 --
-# DROP TABLE IF EXISTS `promotion`;
-# CREATE TABLE `promotion` (
-#   `id` BIGINT AUTO_INCREMENT,
-#   `title` VARCHAR(100) NOT NULL,
-#   `content` TEXT NOT NULL,
-#   `image_id` BIGINT NOT NULL,
-#   `percent` DOUBLE,
-#   `date` DATETIME,
-#   PRIMARY KEY (`id`),
-#   UNIQUE KEY `expense_history_id_unique` (`id`),
-#   CONSTRAINT `promotion_image_id` FOREIGN KEY (`image_id`) REFERENCES `image` (`id`)
-# ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+DROP TABLE IF EXISTS `promotion`;
+CREATE TABLE `promotion` (
+  `id`       BIGINT AUTO_INCREMENT,
+  `title`    VARCHAR(100) NOT NULL,
+  `content`  TEXT         NOT NULL,
+  `image_id` BIGINT       NOT NULL,
+  `user_id`  BIGINT       NOT NULL,
+  `percent`  DOUBLE,
+  `date`     DATETIME,
+  PRIMARY KEY (`id`),
+  UNIQUE KEY `expense_history_id_unique` (`id`),
+  CONSTRAINT `promotion_image_id` FOREIGN KEY (`image_id`) REFERENCES `image` (`id`)
+)
+  ENGINE = InnoDB
+  DEFAULT CHARSET = utf8;
