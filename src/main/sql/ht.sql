@@ -231,7 +231,8 @@ CREATE TABLE `other_expense` (
   DEFAULT CHARSET = utf8;
 
 --
--- Table structure for table `expense_history`
+-- Table structure for table `promotion`
+--    for Customer
 --
 DROP TABLE IF EXISTS `promotion`;
 CREATE TABLE `promotion` (
@@ -241,10 +242,33 @@ CREATE TABLE `promotion` (
   `image_id` BIGINT       NOT NULL,
   `user_id`  BIGINT       NOT NULL,
   `percent`  DOUBLE,
-  `date`     DATETIME,
+  `exp_date` DATETIME,
   PRIMARY KEY (`id`),
-  UNIQUE KEY `expense_history_id_unique` (`id`),
-  CONSTRAINT `promotion_image_id` FOREIGN KEY (`image_id`) REFERENCES `image` (`id`)
+  UNIQUE KEY `promotion_id_unique` (`id`),
+  CONSTRAINT `promotion_image_id` FOREIGN KEY (`image_id`) REFERENCES `image` (`id`),
+  CONSTRAINT `promotion_user_id` FOREIGN KEY (`user_id`) REFERENCES `image` (`id`)
 )
   ENGINE = InnoDB
   DEFAULT CHARSET = utf8;
+
+--
+-- Table structure for table `commission`
+--    for Staff (earn commission)
+--
+DROP TABLE IF EXISTS `commission`;
+CREATE TABLE `commission` (
+  `id`         BIGINT AUTO_INCREMENT,
+  `name`       VARCHAR(100) NOT NULL,
+  `type`       VARCHAR(20)  NOT NULL, #Percent or Money
+  `user_id`    BIGINT       NOT NULL, #specific staff has been offered commission
+  `percent`    DOUBLE,
+  `start_date` DATETIME,
+  `exp_date`   DATETIME,
+  PRIMARY KEY (`id`),
+  UNIQUE KEY `commission_id_unique` (`user_id`, `name`),
+  CONSTRAINT `commission_user_id` FOREIGN KEY (`user_id`) REFERENCES `image` (`id`)
+)
+  ENGINE = InnoDB
+  DEFAULT CHARSET = utf8;
+
+-- 14 tables
