@@ -246,7 +246,7 @@ CREATE TABLE `promotion` (
   PRIMARY KEY (`id`),
   UNIQUE KEY `promotion_id_unique` (`id`),
   CONSTRAINT `promotion_image_id` FOREIGN KEY (`image_id`) REFERENCES `image` (`id`),
-  CONSTRAINT `promotion_user_id` FOREIGN KEY (`user_id`) REFERENCES `image` (`id`)
+  CONSTRAINT `promotion_user_id` FOREIGN KEY (`user_id`) REFERENCES `user_table` (`id`)
 )
   ENGINE = InnoDB
   DEFAULT CHARSET = utf8;
@@ -266,7 +266,7 @@ CREATE TABLE `commission` (
   `exp_date`   DATETIME,
   PRIMARY KEY (`id`),
   UNIQUE KEY `commission_id_unique` (`user_id`, `name`),
-  CONSTRAINT `commission_user_id` FOREIGN KEY (`user_id`) REFERENCES `image` (`id`)
+  CONSTRAINT `commission_user_id` FOREIGN KEY (`user_id`) REFERENCES `user_table` (`id`)
 )
   ENGINE = InnoDB
   DEFAULT CHARSET = utf8;
