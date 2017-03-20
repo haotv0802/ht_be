@@ -217,6 +217,7 @@ DROP TABLE IF EXISTS `other_expense`;
 CREATE TABLE `other_expense` (
   `id`                 BIGINT AUTO_INCREMENT,
   `expense_type_id`    BIGINT       NULL, # in case type id is 'other' or NULL, name should be put #this case happens when there's a new expense.
+                                          # case: customer buy something, and have hotel pay for it
   `expense_history_id` BIGINT       NOT NULL,
   `quantity`           TINYINT      NOT NULL,
   `name`               VARCHAR(200) NOT NULL,
@@ -271,4 +272,29 @@ CREATE TABLE `commission` (
   ENGINE = InnoDB
   DEFAULT CHARSET = utf8;
 
+--
+-- Table structure for table `email_template`
+--
+# DROP TABLE IF EXISTS `email_template`;
+# CREATE TABLE `email_template` (
+#   `id`         BIGINT AUTO_INCREMENT,
+#   `name`       VARCHAR(100) NOT NULL,
+#   `type`       VARCHAR(20)  NOT NULL, #Percent or Money
+#   `user_id`    BIGINT       NOT NULL, #specific staff has been offered commission
+#   `percent`    DOUBLE,
+#   `start_date` DATETIME,
+#   `exp_date`   DATETIME,
+#   PRIMARY KEY (`id`),
+#   UNIQUE KEY `commission_id_unique` (`user_id`, `name`),
+#   CONSTRAINT `commission_user_id` FOREIGN KEY (`user_id`) REFERENCES `user_table` (`id`)
+# )
+#   ENGINE = InnoDB
+#   DEFAULT CHARSET = utf8;
+
 -- 14 tables
+
+-- Tables for managing customer's order and expectation time of cleaning service.
+
+-- Tables for managing products, goods (beer, tissues, foods, etc).
+
+-- Tables for managing customer's searching behaviors.
