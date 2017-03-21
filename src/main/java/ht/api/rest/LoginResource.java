@@ -47,7 +47,8 @@ public class LoginResource {
         new UsernamePasswordAuthenticationToken(userDetails, userDetails.getPassword(), userDetails.getAuthorities());
 
     tokenAuthenticationService.addAuthentication(response, authentication);
-    return new ResponseEntity(HttpStatus.OK);
+//    return new ResponseEntity(HttpStatus.OK);
+    return new ResponseEntity(userDetails.getAuthorities(), HttpStatus.OK);
   }
 
   @PostMapping("/hello")

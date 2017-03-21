@@ -180,7 +180,10 @@ CREATE TABLE `payment_history` (
   `date`                DATETIME,
   `status`              VARCHAR(45), #Staying, Not arrived yet, Finished
   `booking_method`      VARCHAR(45), #Phone contact with receptionist, website, booking info, etc
-  `staff_id`            BIGINT NULL, #user_id is stored in case receptionist supports and books for customer. Staff can earn commission.
+  `staff_id`            BIGINT NULL,
+  #user_id is stored in case receptionist supports and books for customer. Staff can earn commission.
+  #user_id can be any one who register their information in the system, such as, Security guards, taxi drivers, etc.
+  #   commission will be sent to such person at the end of the month, 2 months, quarter, and so on.
   `payment_in_advanced` DOUBLE, #by default, NULL. Customer paying in advanced will be served better.
   PRIMARY KEY (`id`),
   UNIQUE KEY `booking_history_id_unique` (`id`),
