@@ -1,6 +1,5 @@
 package ht.api.rest;
 
-import com.fasterxml.jackson.annotation.JsonFilter;
 import ht.transaction.TransactionFilter;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -26,7 +25,6 @@ import org.testng.annotations.AfterMethod;
 import org.testng.annotations.BeforeClass;
 import org.testng.annotations.BeforeMethod;
 
-import javax.servlet.Filter;
 import java.io.PrintWriter;
 import java.lang.reflect.Method;
 import java.net.InetAddress;
@@ -54,12 +52,16 @@ import static org.springframework.util.StringUtils.collectionToDelimitedString;
 @WebAppConfiguration
 @ContextConfiguration(
     locations = {
-        "/config/spring-mvc.xml"
+         "/config/spring-mvc.xml"
+        ,"/config/spring-mvc-test.xml"
     })
 public abstract class BaseDocumentation extends AbstractTransactionalTestNGSpringContextTests
 {
-  protected Logger logger = LogManager.getLogger(getClass());
+  protected final Logger logger = LogManager.getLogger(getClass());
 
+  @Autowired
+  @Qualifier("authTokenService")
+  protected IAuthTokenService authTokenService;
 
   protected final String APP_BUILD_NAME = "/v9";
 
