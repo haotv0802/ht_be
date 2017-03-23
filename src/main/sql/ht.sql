@@ -141,13 +141,28 @@ CREATE TABLE `room_type_image` (
   DEFAULT CHARSET = utf8;
 
 INSERT INTO `room_type_image` (`room_type_id`, `image_url`, `image_info`, `date`)
-VALUES (1, 'http://openclipart.org/image/300px/svg_to_png/73/rejon_Hammer.png', 'info 1', sysdate());
+VALUES (1, './app/assets/Room1_01.jpg', 'info 1', sysdate());
 INSERT INTO `room_type_image` (`room_type_id`, `image_url`, `image_info`, `date`)
-VALUES (2, 'http://openclipart.org/image/300px/svg_to_png/27070/egore911_saw.png', 'info 2', sysdate());
+VALUES (1, './app/assets/Room1_02.jpg', 'info 1', sysdate());
+
 INSERT INTO `room_type_image` (`room_type_id`, `image_url`, `image_info`, `date`)
-VALUES (3, 'http://openclipart.org/image/300px/svg_to_png/120337/xbox-controller_01.png', 'info 3', sysdate());
+VALUES (2, './app/assets/Room2_01.jpg', 'info 2', sysdate());
 INSERT INTO `room_type_image` (`room_type_id`, `image_url`, `image_info`, `date`)
-VALUES (4, 'http://openclipart.org/image/300px/svg_to_png/26215/Anonymous_Leaf_Rake.png', 'info 4', sysdate());
+VALUES (2, './app/assets/Room2_02.jpg', 'info 2', sysdate());
+
+INSERT INTO `room_type_image` (`room_type_id`, `image_url`, `image_info`, `date`)
+VALUES (3, './app/assets/Room3_01.jpg', 'info 3', sysdate());
+INSERT INTO `room_type_image` (`room_type_id`, `image_url`, `image_info`, `date`)
+VALUES (3, './app/assets/Room3_02.jpg', 'info 3', sysdate());
+INSERT INTO `room_type_image` (`room_type_id`, `image_url`, `image_info`, `date`)
+VALUES (3, './app/assets/Room3_03.jpg', 'info 3', sysdate());
+INSERT INTO `room_type_image` (`room_type_id`, `image_url`, `image_info`, `date`)
+VALUES (3, './app/assets/Room3_04.jpg', 'info 3', sysdate());
+
+INSERT INTO `room_type_image` (`room_type_id`, `image_url`, `image_info`, `date`)
+VALUES (4, './app/assets/Room3_03.jpg', 'info 4', sysdate());
+INSERT INTO `room_type_image` (`room_type_id`, `image_url`, `image_info`, `date`)
+VALUES (4, './app/assets/Room3_04.jpg', 'info 4', sysdate());
 
 --
 -- Table structure for table `room`
