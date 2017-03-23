@@ -113,8 +113,7 @@ CREATE TABLE `room_type` (
   `name`     VARCHAR(45) NOT NULL,
   `image_id` BIGINT,
   PRIMARY KEY (`id`),
-  UNIQUE KEY `room_type_id_unique` (`id`),
-  CONSTRAINT `room_type_image_id` FOREIGN KEY (`image_id`) REFERENCES `image` (`id`)
+  UNIQUE KEY `room_type_id_unique` (`id`)
 )
   ENGINE = InnoDB
   DEFAULT CHARSET = utf8;
@@ -123,6 +122,33 @@ INSERT INTO `room_type` VALUES (1, 'Balcony room', NULL);
 INSERT INTO `room_type` VALUES (2, 'Near-elevator room', NULL);
 INSERT INTO `room_type` VALUES (3, 'Room 3', NULL);
 INSERT INTO `room_type` VALUES (4, 'Family or big room', NULL);
+
+--
+-- Table structure for table `image`
+--
+DROP TABLE IF EXISTS `room_type_image`;
+CREATE TABLE `room_type_image` (
+  `id`           BIGINT AUTO_INCREMENT,
+  `room_type_id` BIGINT(45)   NOT NULL,
+  `image_url`    VARCHAR(200) NOT NULL,
+  `image_info`   VARCHAR(100) NULL,
+  `description`  VARCHAR(100),
+  `date`         DATETIME     NOT NULL,
+  PRIMARY KEY (`id`),
+  UNIQUE KEY `room_type_image_id_unique` (`id`),
+  CONSTRAINT `room_type_image_image_id` FOREIGN KEY (`room_type_id`) REFERENCES `room_type` (`id`)
+)
+  ENGINE = InnoDB
+  DEFAULT CHARSET = utf8;
+
+INSERT INTO `room_type_image` (`room_type_id`, `image_url`, `date`)
+VALUES (1, 'http://openclipart.org/image/300px/svg_to_png/73/rejon_Hammer.png', sysdate());
+INSERT INTO `room_type_image` (`room_type_id`, `image_url`, `date`)
+VALUES (2, 'http://openclipart.org/image/300px/svg_to_png/27070/egore911_saw.png', sysdate());
+INSERT INTO `room_type_image` (`room_type_id`, `image_url`, `date`)
+VALUES (3, 'http://openclipart.org/image/300px/svg_to_png/120337/xbox-controller_01.png', sysdate());
+INSERT INTO `room_type_image` (`room_type_id`, `image_url`, `date`)
+VALUES (4, 'http://openclipart.org/image/300px/svg_to_png/26215/Anonymous_Leaf_Rake.png', sysdate());
 
 --
 -- Table structure for table `room`
