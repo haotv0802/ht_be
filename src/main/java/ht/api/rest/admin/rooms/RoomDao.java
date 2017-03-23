@@ -1,7 +1,6 @@
 package ht.api.rest.admin.rooms;
 
-import ht.api.rest.admin.users.UserBean;
-import ht.api.rest.admin.users.intefaces.IUserDao;
+import ht.api.rest.admin.rooms.interfaces.IRoomDao;
 import ht.common.dao.DaoUtils;
 import io.jsonwebtoken.lang.Assert;
 import org.apache.logging.log4j.LogManager;
@@ -17,7 +16,7 @@ import java.util.List;
  * Created by haho on 3/22/2017.
  */
 @Repository("adminRoomDao")
-public class RoomDao {
+public class RoomDao implements IRoomDao {
   private static final Logger LOGGER = LogManager.getLogger(RoomDao.class);
 
   private final NamedParameterJdbcTemplate namedTemplate;
@@ -28,30 +27,29 @@ public class RoomDao {
     this.namedTemplate = namedTemplate;
   }
 
-//  @Override
-//  public List<RoomTypeBean> getRoomTypes() {
-//    final String sql = "SELECT                                               "
-//                     + "	u.id, u.user_name, r.role_name                     "
-//                     + "FROM                                                 "
-//                     + "	(user_role r                                       "
-//                     + "	INNER JOIN user_role_details d ON r.id = d.role_id)"
-//                     + "		INNER JOIN                                       "
-//                     + "	user_table u ON u.id = d.user_id                   "
-//                     + "ORDER BY r.id                                        "
-//        ;
-//
-//    final MapSqlParameterSource paramsMap = new MapSqlParameterSource();
-//
-//    DaoUtils.debugQuery(LOGGER, sql, paramsMap.getValues());
-//
-//    List<UserBean> users = namedTemplate.query(sql, paramsMap, (rs, rowNum) -> {
-//      UserBean user = new UserBean();
-//      user.setId(rs.getInt("id"));
-//      user.setName(rs.getString("user_name"));
-//      user.setRole(rs.getString("role_name"));
-//      return user;
-//    });
-//
-//    return users;
-//  }
+  @Override
+  public List<RoomTypeBean> getRoomTypes() {
+    final String sql = "SELECT                                             "
+                     + "    r.name, i.image_url, i.image_info, i.id imageId"
+                     + " FROM                                              "
+                     + "    room_type r                                    "
+                     + "        INNER JOIN                                 "
+                     + "    room_type_image i ON r.id = i.room_type_id     "
+        ;
+
+    final MapSqlParameterSource paramsMap = new MapSqlParameterSource();
+
+    DaoUtils.debugQuery(LOGGER, sql, paramsMap.getValues());
+
+    List<RoomTypeBean> roomTypes = namedTemplate.query(sql, paramsMap, (rs, rowNum) -> {
+      RoomTypeBean roomType = new RoomTypeBean();
+      roomType.setName(rs.getString("name"));
+      roomType.setImageURL(rs.getString("image_url"));
+      roomType.setImageInfo(rs.getString("image_info"));
+      roomType.setImageId(rs.getString("imageId"));
+      return roomType;
+    });
+
+    return roomTypes;
+  }
 }

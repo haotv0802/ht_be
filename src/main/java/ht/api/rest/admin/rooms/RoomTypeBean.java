@@ -4,17 +4,10 @@ package ht.api.rest.admin.rooms;
  * Created by haho on 3/22/2017.
  */
 public class RoomTypeBean {
-  private int id;
   private String name;
   private String imageURL;
-
-  public int getId() {
-    return id;
-  }
-
-  public void setId(int id) {
-    this.id = id;
-  }
+  private String imageInfo;
+  private String imageId;
 
   public String getName() {
     return name;
@@ -30,5 +23,21 @@ public class RoomTypeBean {
 
   public void setImageURL(String imageURL) {
     this.imageURL = imageURL;
+  }
+
+  public String getImageId() {
+    return imageId;
+  }
+
+  public void setImageId(String imageId) {
+    this.imageId = imageId;
+  }
+
+  public String getImageInfo() {
+    return imageInfo;
+  }
+
+  public void setImageInfo(String imageInfo) {
+    this.imageInfo = imageInfo;
   }
 }
