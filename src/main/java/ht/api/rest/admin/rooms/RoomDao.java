@@ -6,10 +6,13 @@ import io.jsonwebtoken.lang.Assert;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.jdbc.core.RowMapper;
 import org.springframework.jdbc.core.namedparam.MapSqlParameterSource;
 import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate;
 import org.springframework.stereotype.Repository;
 
+import java.sql.ResultSet;
+import java.sql.SQLException;
 import java.util.List;
 
 /**
@@ -29,12 +32,7 @@ public class RoomDao implements IRoomDao {
 
   @Override
   public List<RoomTypeBean> getRoomTypes() {
-    final String sql = "SELECT                                             "
-                     + "    r.name, i.image_url, i.image_info, i.id imageId"
-                     + " FROM                                              "
-                     + "    room_type r                                    "
-                     + "        INNER JOIN                                 "
-                     + "    room_type_image i ON r.id = i.room_type_id     "
+    final String sql = "SELECT  id, name FROM room_type"
         ;
 
     final MapSqlParameterSource paramsMap = new MapSqlParameterSource();
@@ -43,13 +41,39 @@ public class RoomDao implements IRoomDao {
 
     List<RoomTypeBean> roomTypes = namedTemplate.query(sql, paramsMap, (rs, rowNum) -> {
       RoomTypeBean roomType = new RoomTypeBean();
+      roomType.setId(rs.getInt("id"));
       roomType.setName(rs.getString("name"));
-      roomType.setImageURL(rs.getString("image_url"));
-      roomType.setImageInfo(rs.getString("image_info"));
-      roomType.setImageId(rs.getString("imageId"));
       return roomType;
     });
 
+    for (RoomTypeBean room : roomTypes) {
+      List<RoomTypeImageBean> images = this.getImages(room.getId());
+      room.setImages(images);
+    }
     return roomTypes;
+  }
+
+  private List<RoomTypeImageBean> getImages(int roomTypeId) {
+    final String sql =  "SELECT                     "
+                      + "	id, image_url, image_info "
+                      + "FROM                       "
+                      + "	room_type_image           "
+                      + "WHERE                      "
+                      + "	room_type_id = :roomTypeId"
+        ;
+    final MapSqlParameterSource paramsMap = new MapSqlParameterSource();
+    paramsMap.addValue("roomTypeId", roomTypeId);
+
+    DaoUtils.debugQuery(LOGGER, sql, paramsMap.getValues());
+
+    List<RoomTypeImageBean> images = namedTemplate.query(sql, paramsMap, (rs, rowNum) -> {
+      RoomTypeImageBean image = new RoomTypeImageBean();
+      image.setId(rs.getInt("id"));
+      image.setImageURL(rs.getString("image_url"));
+      image.setImageInfo(rs.getString("image_info"));
+      return image;
+    });
+
+    return images;
   }
 }

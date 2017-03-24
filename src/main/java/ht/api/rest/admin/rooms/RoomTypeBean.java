@@ -1,13 +1,22 @@
 package ht.api.rest.admin.rooms;
 
+import java.util.List;
+
 /**
  * Created by haho on 3/22/2017.
  */
 public class RoomTypeBean {
+  private int id;
   private String name;
-  private String imageURL;
-  private String imageInfo;
-  private String imageId;
+  private List<RoomTypeImageBean> images;
+
+  public int getId() {
+    return id;
+  }
+
+  public void setId(int id) {
+    this.id = id;
+  }
 
   public String getName() {
     return name;
@@ -17,27 +26,11 @@ public class RoomTypeBean {
     this.name = name;
   }
 
-  public String getImageURL() {
-    return imageURL;
+  public List<RoomTypeImageBean> getImages() {
+    return images;
   }
 
-  public void setImageURL(String imageURL) {
-    this.imageURL = imageURL;
-  }
-
-  public String getImageId() {
-    return imageId;
-  }
-
-  public void setImageId(String imageId) {
-    this.imageId = imageId;
-  }
-
-  public String getImageInfo() {
-    return imageInfo;
-  }
-
-  public void setImageInfo(String imageInfo) {
-    this.imageInfo = imageInfo;
+  public void setImages(List<RoomTypeImageBean> images) {
+    this.images = images;
   }
 }
