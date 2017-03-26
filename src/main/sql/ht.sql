@@ -169,13 +169,14 @@ VALUES (4, './app/assets/Room3_04.jpg', 'info 4', sysdate());
 --
 DROP TABLE IF EXISTS `room`;
 CREATE TABLE `room` (
-  `id`               BIGINT AUTO_INCREMENT,
+  `id`               BIGINT  AUTO_INCREMENT,
   `name`             VARCHAR(45) NOT NULL,
   `floor_number`     TINYINT     NOT NULL,
   `number_of_people` TINYINT     NOT NULL,
   #   `is_occupied` BOOLEAN,
   #   `image_id`         BIGINT      NOT NULL,
   `room_type_id`     BIGINT      NOT NULL,
+  `isOccupied`       BOOLEAN DEFAULT FALSE,
   PRIMARY KEY (`id`),
   UNIQUE KEY `room_id_unique` (`id`),
   #   CONSTRAINT `room_image_id` FOREIGN KEY (`image_id`) REFERENCES `image` (`id`),
@@ -218,6 +219,12 @@ INSERT INTO `room` (`name`, `floor_number`, `number_of_people`, `room_type_id`)
 VALUES ('Room 601', 6, 4, 4);
 INSERT INTO `room` (`name`, `floor_number`, `number_of_people`, `room_type_id`)
 VALUES ('Room 602', 6, 2, 4);
+
+--
+-- Table structure for table `room_price`
+--    set price for each room_type.
+--    price of weekdays can be different from weekend's
+--
 
 --
 -- Table structure for table `individual`
@@ -381,6 +388,8 @@ CREATE TABLE `commission` (
 #   DEFAULT CHARSET = utf8;
 
 -- 14 tables
+
+-- Table: Notification (sending email, let customer keep track of all notifications of promotions, wishes, etc)
 
 -- Tables for managing customer's order and expectation time of cleaning service.
 
