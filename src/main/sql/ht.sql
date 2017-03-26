@@ -378,6 +378,7 @@ CREATE TABLE `commission` (
 #   `type`       VARCHAR(20)  NOT NULL, #Percent or Money
 #   `user_id`    BIGINT       NOT NULL, #specific staff has been offered commission
 #   `percent`    DOUBLE,
+
 #   `start_date` DATETIME,
 #   `exp_date`   DATETIME,
 #   PRIMARY KEY (`id`),
