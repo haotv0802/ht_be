@@ -114,17 +114,16 @@ CREATE TABLE `room_type` (
   `num_of_people` TINYINT     NOT NULL,
   `num_of_bed`    TINYINT     NOT NULL,
   `type_of_bed`   VARCHAR(45) NOT NULL,
-  `default_price` DOUBLE      NOT NULL,
   PRIMARY KEY (`id`),
   UNIQUE KEY `room_type_id_unique` (`id`)
 )
   ENGINE = InnoDB
   DEFAULT CHARSET = utf8;
 
-INSERT INTO `room_type` VALUES (1, 'Balcony room', 4, 2, "Double Bed & Single Bed", 400000);
-INSERT INTO `room_type` VALUES (2, 'Near-elevator room', 2, 1, "Double Bed", 300000);
-INSERT INTO `room_type` VALUES (3, 'Room 3', 2, 1, "Single Bed", 200000);
-INSERT INTO `room_type` VALUES (4, 'Family or big room', 4, 2, "2 Double Beds", 600000);
+INSERT INTO `room_type` VALUES (1, 'Balcony room', 4, 2, "Double Bed & Single Bed");
+INSERT INTO `room_type` VALUES (2, 'Near-elevator room', 2, 1, "Double Bed");
+INSERT INTO `room_type` VALUES (3, 'Room 3', 2, 1, "Single Bed");
+INSERT INTO `room_type` VALUES (4, 'Family or big room', 4, 2, "2 Double Beds");
 
 --
 -- Table structure for table `image`

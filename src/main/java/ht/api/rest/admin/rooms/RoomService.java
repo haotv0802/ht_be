@@ -1,5 +1,6 @@
 package ht.api.rest.admin.rooms;
 
+import ht.api.rest.admin.rooms.beans.RoomTypeBean;
 import ht.api.rest.admin.rooms.interfaces.IRoomDao;
 import ht.api.rest.admin.rooms.interfaces.IRoomService;
 import io.jsonwebtoken.lang.Assert;

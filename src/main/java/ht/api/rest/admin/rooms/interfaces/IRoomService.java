@@ -1,6 +1,6 @@
 package ht.api.rest.admin.rooms.interfaces;
 
-import ht.api.rest.admin.rooms.RoomTypeBean;
+import ht.api.rest.admin.rooms.beans.RoomTypeBean;
 
 import java.util.List;
 

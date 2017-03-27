@@ -1,4 +1,4 @@
-package ht.api.rest.admin.rooms;
+package ht.api.rest.admin.rooms.beans;
 
 /**
  * Created by haho on 3/24/2017.

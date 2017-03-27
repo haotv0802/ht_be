@@ -1,6 +1,7 @@
 package ht.api.rest.admin.rooms;
 
 import ht.api.rest.admin.BaseAdminResource;
+import ht.api.rest.admin.rooms.beans.RoomTypeBean;
 import ht.api.rest.admin.rooms.interfaces.IRoomService;
 import ht.auth.UserDetailsImpl;
 import ht.common.beans.HeaderLang;
