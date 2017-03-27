@@ -109,18 +109,22 @@ CREATE TABLE `image` (
 --
 DROP TABLE IF EXISTS `room_type`;
 CREATE TABLE `room_type` (
-  `id`       BIGINT      NOT NULL,
-  `name`     VARCHAR(45) NOT NULL,
+  `id`            BIGINT      NOT NULL,
+  `name`          VARCHAR(45) NOT NULL,
+  `num_of_people` TINYINT     NOT NULL,
+  `num_of_bed`    TINYINT     NOT NULL,
+  `type_of_bed`   VARCHAR(45) NOT NULL,
+  `default_price` DOUBLE      NOT NULL,
   PRIMARY KEY (`id`),
   UNIQUE KEY `room_type_id_unique` (`id`)
 )
   ENGINE = InnoDB
   DEFAULT CHARSET = utf8;
 
-INSERT INTO `room_type` VALUES (1, 'Balcony room');
-INSERT INTO `room_type` VALUES (2, 'Near-elevator room');
-INSERT INTO `room_type` VALUES (3, 'Room 3');
-INSERT INTO `room_type` VALUES (4, 'Family or big room');
+INSERT INTO `room_type` VALUES (1, 'Balcony room', 4, 2, "Double Bed & Single Bed", 400000);
+INSERT INTO `room_type` VALUES (2, 'Near-elevator room', 2, 1, "Double Bed", 300000);
+INSERT INTO `room_type` VALUES (3, 'Room 3', 2, 1, "Single Bed", 200000);
+INSERT INTO `room_type` VALUES (4, 'Family or big room', 4, 2, "2 Double Beds", 600000);
 
 --
 -- Table structure for table `image`
@@ -225,6 +229,21 @@ VALUES ('Room 602', 6, 2, 4);
 --    set price for each room_type.
 --    price of weekdays can be different from weekend's
 --
+DROP TABLE IF EXISTS `room_price`;
+CREATE TABLE `room_price` (
+  `id`           BIGINT      NOT NULL,
+  `name`         VARCHAR(45) NOT NULL,
+  `price`        TINYINT     NOT NULL,
+  `room_type_id` BIGINT      NOT NULL,
+  `is_active`    BOOLEAN DEFAULT FALSE,
+  `start_date`   DATETIME    NOT NULL,
+  `end_date`     DATETIME    NOT NULL,
+  PRIMARY KEY (`id`),
+  UNIQUE KEY `room_price_id_unique` (`id`),
+  CONSTRAINT `room_price_room_type_id` FOREIGN KEY (`room_type_id`) REFERENCES `room_type` (`id`)
+)
+  ENGINE = InnoDB
+  DEFAULT CHARSET = utf8;
 
 --
 -- Table structure for table `individual`
@@ -265,22 +284,27 @@ CREATE TABLE `expense_type` (
 
 --
 -- Table structure for table `payment_history`
+--   data of this table and expense_history will be added when customer successfully book a room.
 --
 DROP TABLE IF EXISTS `payment_history`;
 CREATE TABLE `payment_history` (
-  `id`                  BIGINT AUTO_INCREMENT,
-  `user_id`             BIGINT NOT NULL,
-  `date`                DATETIME,
-  `status`              VARCHAR(45), #Staying, Not arrived yet, Finished
-  `booking_method`      VARCHAR(45), #Phone contact with receptionist, website, booking info, etc
-  `staff_id`            BIGINT NULL,
+  `id`                       BIGINT            AUTO_INCREMENT,
+  `user_id`                  BIGINT   NOT NULL,
+  `date`                     DATETIME,
+  `status`                   VARCHAR(45), #Staying, Not arrived yet, Finished
+  `booking_method`           VARCHAR(45), #Phone contact with receptionist, website, booking info, etc
+  `staff_id`                 BIGINT   NULL,
   #user_id is stored in case receptionist supports and books for customer. Staff can earn commission.
   #user_id can be any one who register their information in the system, such as, Security guards, taxi drivers, etc.
   #   commission will be sent to such person at the end of the month, 2 months, quarter, and so on.
-  `payment_in_advanced` DOUBLE, #by default, NULL. Customer paying in advanced will be served better.
+  `payment_in_advanced`      DOUBLE, #by default, NULL. Customer paying in advanced will be served better.
+  `payment_in_advanced_date` DATETIME NOT NULL DEFAULT now(),
+  `payment`                  DOUBLE,
+  `payment_date`             DATETIME,
   PRIMARY KEY (`id`),
   UNIQUE KEY `booking_history_id_unique` (`id`),
   CONSTRAINT `booking_history_user_id` FOREIGN KEY (`user_id`) REFERENCES `user_table` (`id`)
+#   CONSTRAINT `booking_history_staff_id` FOREIGN KEY (`staff_id`) REFERENCES `user_table` (`id`)
 )
   ENGINE = InnoDB
   DEFAULT CHARSET = utf8;
@@ -342,8 +366,25 @@ CREATE TABLE `promotion` (
   `exp_date` DATETIME,
   PRIMARY KEY (`id`),
   UNIQUE KEY `promotion_id_unique` (`id`),
-  CONSTRAINT `promotion_image_id` FOREIGN KEY (`image_id`) REFERENCES `image` (`id`),
-  CONSTRAINT `promotion_user_id` FOREIGN KEY (`user_id`) REFERENCES `user_table` (`id`)
+  CONSTRAINT `promotion_image_id` FOREIGN KEY (`image_id`) REFERENCES `image` (`id`)
+#   CONSTRAINT `promotion_user_id` FOREIGN KEY (`user_id`) REFERENCES `user_table` (`id`)
+)
+  ENGINE = InnoDB
+  DEFAULT CHARSET = utf8;
+
+--
+-- Table structure for table `promotion_details`
+--    for Customer
+--
+DROP TABLE IF EXISTS `promotion_details`;
+CREATE TABLE `promotion_details` (
+  `id`           BIGINT AUTO_INCREMENT,
+  `promotion_id` BIGINT NOT NULL,
+  `user_id`      BIGINT NOT NULL,
+  PRIMARY KEY (`id`),
+  UNIQUE KEY `promotion_details_id_unique` (`id`),
+  CONSTRAINT `promotion_details_user_id` FOREIGN KEY (`user_id`) REFERENCES `user_table` (`id`),
+  CONSTRAINT `promotion_details_promotion_id` FOREIGN KEY (`promotion_id`) REFERENCES `promotion` (`id`)
 )
   ENGINE = InnoDB
   DEFAULT CHARSET = utf8;
@@ -378,7 +419,6 @@ CREATE TABLE `commission` (
 #   `type`       VARCHAR(20)  NOT NULL, #Percent or Money
 #   `user_id`    BIGINT       NOT NULL, #specific staff has been offered commission
 #   `percent`    DOUBLE,
-
 #   `start_date` DATETIME,
 #   `exp_date`   DATETIME,
 #   PRIMARY KEY (`id`),
@@ -403,3 +443,6 @@ CREATE TABLE `commission` (
 --        Once, customer pay for a bottle, the quantity will be deduct by 1
 --        This helps predict when we should buy new stuff.
 --    In addition, there should be a table storing a scan of bill.
+
+-- Tables for add bonus for Staff from customer's support.
+--            For example: CommisstionDetails keep tracks what staff have been done
