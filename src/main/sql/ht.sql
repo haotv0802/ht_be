@@ -231,19 +231,113 @@ VALUES ('Room 602', 6, 2, 4);
 --
 DROP TABLE IF EXISTS `room_price`;
 CREATE TABLE `room_price` (
-  `id`           BIGINT      NOT NULL,
+  `id`           BIGINT   AUTO_INCREMENT,
   `name`         VARCHAR(45) NOT NULL,
-  `price`        TINYINT     NOT NULL,
+  `price`        DOUBLE      NOT NULL,
   `room_type_id` BIGINT      NOT NULL,
-  `is_active`    BOOLEAN DEFAULT FALSE,
-  `start_date`   DATETIME    NOT NULL,
-  `end_date`     DATETIME    NOT NULL,
+  `day`          TINYINT     NOT NULL,
+  `date`         DATETIME DEFAULT now(),
+  #   `end_date`     DATETIME    NOT NULL,
   PRIMARY KEY (`id`),
   UNIQUE KEY `room_price_id_unique` (`id`),
+  UNIQUE KEY `room_price_room_type_id_day_unique` (`room_type_id`, `day`),
   CONSTRAINT `room_price_room_type_id` FOREIGN KEY (`room_type_id`) REFERENCES `room_type` (`id`)
 )
   ENGINE = InnoDB
   DEFAULT CHARSET = utf8;
+
+INSERT INTO `room_price` (`name`, `price`, `room_type_id`, `day`)
+VALUES ('Price set for room type 1', 500000, 1, 1);
+INSERT INTO `room_price` (`name`, `price`, `room_type_id`, `day`)
+VALUES ('Price set for room type 1', 300000, 1, 2);
+INSERT INTO `room_price` (`name`, `price`, `room_type_id`, `day`)
+VALUES ('Price set for room type 1', 300000, 1, 3);
+INSERT INTO `room_price` (`name`, `price`, `room_type_id`, `day`)
+VALUES ('Price set for room type 1', 300000, 1, 4);
+INSERT INTO `room_price` (`name`, `price`, `room_type_id`, `day`)
+VALUES ('Price set for room type 1', 300000, 1, 5);
+INSERT INTO `room_price` (`name`, `price`, `room_type_id`, `day`)
+VALUES ('Price set for room type 1', 500000, 1, 6);
+INSERT INTO `room_price` (`name`, `price`, `room_type_id`, `day`)
+VALUES ('Price set for room type 1', 500000, 1, 7);
+INSERT INTO `room_price` (`name`, `price`, `room_type_id`, `day`)
+VALUES ('Price set for room type 2', 400000, 2, 1);
+INSERT INTO `room_price` (`name`, `price`, `room_type_id`, `day`)
+VALUES ('Price set for room type 2', 200000, 2, 2);
+INSERT INTO `room_price` (`name`, `price`, `room_type_id`, `day`)
+VALUES ('Price set for room type 2', 200000, 2, 3);
+INSERT INTO `room_price` (`name`, `price`, `room_type_id`, `day`)
+VALUES ('Price set for room type 2', 200000, 2, 4);
+INSERT INTO `room_price` (`name`, `price`, `room_type_id`, `day`)
+VALUES ('Price set for room type 2', 200000, 2, 5);
+INSERT INTO `room_price` (`name`, `price`, `room_type_id`, `day`)
+VALUES ('Price set for room type 2', 400000, 2, 6);
+INSERT INTO `room_price` (`name`, `price`, `room_type_id`, `day`)
+VALUES ('Price set for room type 2', 400000, 2, 7);
+INSERT INTO `room_price` (`name`, `price`, `room_type_id`, `day`)
+VALUES ('Price set for room type 3', 400000, 3, 1);
+INSERT INTO `room_price` (`name`, `price`, `room_type_id`, `day`)
+VALUES ('Price set for room type 3', 200000, 3, 2);
+INSERT INTO `room_price` (`name`, `price`, `room_type_id`, `day`)
+VALUES ('Price set for room type 3', 200000, 3, 3);
+INSERT INTO `room_price` (`name`, `price`, `room_type_id`, `day`)
+VALUES ('Price set for room type 3', 200000, 3, 4);
+INSERT INTO `room_price` (`name`, `price`, `room_type_id`, `day`)
+VALUES ('Price set for room type 3', 200000, 3, 5);
+INSERT INTO `room_price` (`name`, `price`, `room_type_id`, `day`)
+VALUES ('Price set for room type 3', 400000, 3, 6);
+INSERT INTO `room_price` (`name`, `price`, `room_type_id`, `day`)
+VALUES ('Price set for room type 3', 400000, 3, 7);
+INSERT INTO `room_price` (`name`, `price`, `room_type_id`, `day`)
+VALUES ('Price set for room type 4', 600000, 4, 1);
+INSERT INTO `room_price` (`name`, `price`, `room_type_id`, `day`)
+VALUES ('Price set for room type 4', 300000, 4, 2);
+INSERT INTO `room_price` (`name`, `price`, `room_type_id`, `day`)
+VALUES ('Price set for room type 4', 300000, 4, 3);
+INSERT INTO `room_price` (`name`, `price`, `room_type_id`, `day`)
+VALUES ('Price set for room type 4', 300000, 4, 4);
+INSERT INTO `room_price` (`name`, `price`, `room_type_id`, `day`)
+VALUES ('Price set for room type 4', 300000, 4, 5);
+INSERT INTO `room_price` (`name`, `price`, `room_type_id`, `day`)
+VALUES ('Price set for room type 4', 600000, 4, 6);
+INSERT INTO `room_price` (`name`, `price`, `room_type_id`, `day`)
+VALUES ('Price set for room type 4', 600000, 4, 7);
+
+--
+-- Table structure for table `price_set`
+--
+DROP TABLE IF EXISTS `price_set`;
+CREATE TABLE `price_set` (
+  `id`           BIGINT  AUTO_INCREMENT,
+  `name`         VARCHAR(45) NOT NULL,
+  `price`        DOUBLE      NOT NULL,
+  `room_type_id` BIGINT      NOT NULL,
+  `is_active`    BOOLEAN DEFAULT FALSE,
+  `day`          TINYINT     NOT NULL, # 1: Sunday, 2: Monday, 3: Tuesday, and so on
+  `start_date`   DATE        NOT NULL,
+  `end_date`     DATE        NOT NULL,
+  PRIMARY KEY (`id`),
+  UNIQUE KEY `price_set_id_unique` (`id`),
+  CONSTRAINT `price_set_room_type_id` FOREIGN KEY (`room_type_id`) REFERENCES `room_type` (`id`)
+)
+  ENGINE = InnoDB
+  DEFAULT CHARSET = utf8;
+
+
+INSERT INTO `price_set` (`name`, `price`, `room_type_id`, `is_active`, `day`, `start_date`, `end_date`)
+VALUES ('Price set for room type 1', 900000, 1, TRUE, 1 ,curdate(), curdate() + INTERVAL 2 DAY);
+INSERT INTO `price_set` (`name`, `price`, `room_type_id`, `is_active`, `day`, `start_date`, `end_date`)
+VALUES ('Price set for room type 1', 500000, 1, TRUE, 2 ,curdate(), curdate() + INTERVAL 2 DAY);
+INSERT INTO `price_set` (`name`, `price`, `room_type_id`, `is_active`, `day`, `start_date`, `end_date`)
+VALUES ('Price set for room type 1', 500000, 1, TRUE, 3 ,curdate(), curdate() + INTERVAL 2 DAY);
+INSERT INTO `price_set` (`name`, `price`, `room_type_id`, `is_active`, `day`, `start_date`, `end_date`)
+VALUES ('Price set for room type 1', 500000, 1, TRUE, 4 ,curdate(), curdate() + INTERVAL 2 DAY);
+INSERT INTO `price_set` (`name`, `price`, `room_type_id`, `is_active`, `day`, `start_date`, `end_date`)
+VALUES ('Price set for room type 1', 500000, 1, TRUE, 5 ,curdate(), curdate() + INTERVAL 2 DAY);
+INSERT INTO `price_set` (`name`, `price`, `room_type_id`, `is_active`, `day`, `start_date`, `end_date`)
+VALUES ('Price set for room type 1', 900000, 1, TRUE, 6 ,curdate(), curdate() + INTERVAL 2 DAY);
+INSERT INTO `price_set` (`name`, `price`, `room_type_id`, `is_active`, `day`, `start_date`, `end_date`)
+VALUES ('Price set for room type 1', 900000, 1, TRUE, 7 ,curdate(), curdate() + INTERVAL 2 DAY);
 
 --
 -- Table structure for table `individual`
