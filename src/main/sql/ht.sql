@@ -245,8 +245,7 @@ CREATE TABLE `room_price` (
   ENGINE = InnoDB
   DEFAULT CHARSET = utf8;
 
-INSERT INTO `room_price` (`name`, `price`, `room_type_id`, `day`)
-VALUES ('Price set for room type 1', 500000, 1, 1);
+
 INSERT INTO `room_price` (`name`, `price`, `room_type_id`, `day`)
 VALUES ('Price set for room type 1', 300000, 1, 2);
 INSERT INTO `room_price` (`name`, `price`, `room_type_id`, `day`)
@@ -260,7 +259,8 @@ VALUES ('Price set for room type 1', 500000, 1, 6);
 INSERT INTO `room_price` (`name`, `price`, `room_type_id`, `day`)
 VALUES ('Price set for room type 1', 500000, 1, 7);
 INSERT INTO `room_price` (`name`, `price`, `room_type_id`, `day`)
-VALUES ('Price set for room type 2', 400000, 2, 1);
+VALUES ('Price set for room type 1', 500000, 1, 8);
+
 INSERT INTO `room_price` (`name`, `price`, `room_type_id`, `day`)
 VALUES ('Price set for room type 2', 200000, 2, 2);
 INSERT INTO `room_price` (`name`, `price`, `room_type_id`, `day`)
@@ -274,7 +274,8 @@ VALUES ('Price set for room type 2', 400000, 2, 6);
 INSERT INTO `room_price` (`name`, `price`, `room_type_id`, `day`)
 VALUES ('Price set for room type 2', 400000, 2, 7);
 INSERT INTO `room_price` (`name`, `price`, `room_type_id`, `day`)
-VALUES ('Price set for room type 3', 400000, 3, 1);
+VALUES ('Price set for room type 2', 400000, 2, 8);
+
 INSERT INTO `room_price` (`name`, `price`, `room_type_id`, `day`)
 VALUES ('Price set for room type 3', 200000, 3, 2);
 INSERT INTO `room_price` (`name`, `price`, `room_type_id`, `day`)
@@ -288,7 +289,8 @@ VALUES ('Price set for room type 3', 400000, 3, 6);
 INSERT INTO `room_price` (`name`, `price`, `room_type_id`, `day`)
 VALUES ('Price set for room type 3', 400000, 3, 7);
 INSERT INTO `room_price` (`name`, `price`, `room_type_id`, `day`)
-VALUES ('Price set for room type 4', 600000, 4, 1);
+VALUES ('Price set for room type 3', 400000, 3, 8);
+
 INSERT INTO `room_price` (`name`, `price`, `room_type_id`, `day`)
 VALUES ('Price set for room type 4', 300000, 4, 2);
 INSERT INTO `room_price` (`name`, `price`, `room_type_id`, `day`)
@@ -301,6 +303,8 @@ INSERT INTO `room_price` (`name`, `price`, `room_type_id`, `day`)
 VALUES ('Price set for room type 4', 600000, 4, 6);
 INSERT INTO `room_price` (`name`, `price`, `room_type_id`, `day`)
 VALUES ('Price set for room type 4', 600000, 4, 7);
+INSERT INTO `room_price` (`name`, `price`, `room_type_id`, `day`)
+VALUES ('Price set for room type 4', 600000, 4, 8);
 
 --
 -- Table structure for table `price_set`
@@ -324,7 +328,7 @@ CREATE TABLE `price_set` (
 
 
 INSERT INTO `price_set` (`name`, `price`, `room_type_id`, `is_active`, `day`, `start_date`, `end_date`)
-VALUES ('Price set for room type 1', 900000, 1, TRUE, 1 ,curdate(), curdate() + INTERVAL 2 DAY);
+VALUES ('Price set for room type 1', 900000, 1, TRUE, 8 ,curdate(), curdate() + INTERVAL 2 DAY);
 INSERT INTO `price_set` (`name`, `price`, `room_type_id`, `is_active`, `day`, `start_date`, `end_date`)
 VALUES ('Price set for room type 1', 500000, 1, TRUE, 2 ,curdate(), curdate() + INTERVAL 2 DAY);
 INSERT INTO `price_set` (`name`, `price`, `room_type_id`, `is_active`, `day`, `start_date`, `end_date`)

@@ -61,13 +61,13 @@ public class RoomDao implements IRoomDao {
   }
 
   private List<DayPrice> getPrices(int roomTypeId) {
-    final String sql =  "SELECT                           "
-                      + "	id, name, price, is_active, day "
-                      + "FROM                             "
-                      + "	price_set                       "
-                      + "WHERE                            "
-                      + "	room_type_id = 1                "
-                      + "ORDER BY day ASC                 "
+    final String sql =  "SELECT                         "
+                      + "    day, price                 "
+                      + "FROM                           "
+                      + "    ht_db.room_price           "
+                      + "WHERE                          "
+                      + "    room_type_id = :roomTypeId "
+                      + "ORDER BY day ASC               "
         ;
     final MapSqlParameterSource paramsMap = new MapSqlParameterSource();
     paramsMap.addValue("roomTypeId", roomTypeId);
@@ -77,9 +77,7 @@ public class RoomDao implements IRoomDao {
     List<DayPrice> images = namedTemplate.query(sql, paramsMap, (rs, rowNum) -> {
       DayPrice price = new DayPrice();
       int day = rs.getInt("day");
-      if (1 == day) {
-        price.setDay("Sunday");
-      } else if (2 == day) {
+      if (2 == day) {
         price.setDay("Monday");
       } else if (3 == day) {
         price.setDay("Tuesday");
@@ -91,6 +89,8 @@ public class RoomDao implements IRoomDao {
         price.setDay("Friday");
       } else if (7 == day) {
         price.setDay("Saturday");
+      } else if (8 == day) {
+        price.setDay("Sunday");
       }
       price.setPrice(rs.getDouble("price"));
 
