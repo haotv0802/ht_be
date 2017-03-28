@@ -91,18 +91,40 @@ CREATE TABLE `auth_token` (
 --
 DROP TABLE IF EXISTS `image`;
 CREATE TABLE `image` (
-  `id`          BIGINT       NOT NULL,
-  #   `room_id` VARCHAR(45) NOT NULL,
-  #   `entity_id` BIGINT NOT NULL, #Id of any entity in the system, entity can be a room, promotion, user.
-  `image_url`   VARCHAR(45)  NOT NULL,
+  `id`          BIGINT AUTO_INCREMENT,
+  `name`        VARCHAR(45)  NOT NULL,
+  #   Promotion and Individual tables refer to this table. Name which is input helps Admin searches faster.
+  `image_url`   VARCHAR(200) NOT NULL,
   `image_info`  VARCHAR(100) NOT NULL,
   `description` VARCHAR(100),
   `date`        DATETIME     NOT NULL,
   PRIMARY KEY (`id`),
-  UNIQUE KEY `image_id_unique` (`id`)
+  UNIQUE KEY `image_id_unique` (`id`),
+  UNIQUE KEY `image_name_unique` (`name`)
 )
   ENGINE = InnoDB
   DEFAULT CHARSET = utf8;
+
+INSERT INTO `image` (`name`, `image_url`, `image_info`, `description`, `date`)
+VALUES ('image 1', './app/assets/individuals&promotions/DSC_3997.JPG', 'info 1', 'description', sysdate());
+INSERT INTO `image` (`name`, `image_url`, `image_info`, `description`, `date`)
+VALUES ('image 2', './app/assets/individuals&promotions/DSC_4014.JPG', 'info 1', 'description', sysdate());
+INSERT INTO `image` (`name`, `image_url`, `image_info`, `description`, `date`)
+VALUES ('image 3', './app/assets/individuals&promotions/DSC_4038.JPG', 'info 1', 'description', sysdate());
+INSERT INTO `image` (`name`, `image_url`, `image_info`, `description`, `date`)
+VALUES ('image 4', './app/assets/individuals&promotions/DSC_4055.JPG', 'info 1', 'description', sysdate());
+INSERT INTO `image` (`name`, `image_url`, `image_info`, `description`, `date`)
+VALUES ('image 5', './app/assets/individuals&promotions/DSC_4108.JPG', 'info 1', 'description', sysdate());
+INSERT INTO `image` (`name`, `image_url`, `image_info`, `description`, `date`)
+VALUES ('image 6', './app/assets/individuals&promotions/DSC_4196.JPG', 'info 1', 'description', sysdate());
+INSERT INTO `image` (`name`, `image_url`, `image_info`, `description`, `date`)
+VALUES ('image 7', './app/assets/individuals&promotions/DSC_4252.JPG', 'info 1', 'description', sysdate());
+INSERT INTO `image` (`name`, `image_url`, `image_info`, `description`, `date`)
+VALUES ('image 8', './app/assets/individuals&promotions/DSC_4330.JPG', 'info 1', 'description', sysdate());
+INSERT INTO `image` (`name`, `image_url`, `image_info`, `description`, `date`)
+VALUES ('image 9', './app/assets/individuals&promotions/DSC_4336.JPG', 'info 1', 'description', sysdate());
+INSERT INTO `image` (`name`, `image_url`, `image_info`, `description`, `date`)
+VALUES ('image 10', './app/assets/individuals&promotions/DSC_4377.JPG', 'info 1', 'description', sysdate());
 
 --
 -- Table structure for table `room_type`
