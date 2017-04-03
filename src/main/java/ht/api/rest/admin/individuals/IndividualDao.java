@@ -43,7 +43,7 @@ public class IndividualDao implements ht.api.rest.admin.individuals.interfaces.I
                + "	u.user_name                     "
                + "FROM                              "
                + "	individual i                    "
-               + "INNER JOIN                        "
+               + "LEFT JOIN                         "
                + "user_table u ON i.user_id = u.id  "
         ;
 

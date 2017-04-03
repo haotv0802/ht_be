@@ -414,6 +414,30 @@ VALUES ('Chi', 'Ngo', 'Mai', '1969-04-19', 'Male', 'chingo@huongtrang.com', '+84
 INSERT INTO `individual` (`first_name`, `last_name`, `middle_name`, `birthday`, `gender`, `email`, `phone_number`, `image_id`, `user_id`)
 VALUES ('Quy', 'Pham', 'Chanh', '1996-04-19', 'Male', 'quy@huongtrang.com', '+84909909090', NULL, NULL);
 
+INSERT INTO `individual` (`first_name`, `last_name`, `middle_name`, `birthday`, `gender`, `email`, `phone_number`, `image_id`, `user_id`)
+VALUES ('Hao 1', 'Adminitrator', 'Adminitrator', '1988-04-19', 'Male', 'hao1@huongtrang.com', '+84909909090', NULL, NULL);
+INSERT INTO `individual` (`first_name`, `last_name`, `middle_name`, `birthday`, `gender`, `email`, `phone_number`, `image_id`, `user_id`)
+VALUES ('Hao 2', 'Ho', 'Anh', '1988-04-19', 'Male', 'hao2@huongtrang.com', '+84906729775', NULL, NULL);
+INSERT INTO `individual` (`first_name`, `last_name`, `middle_name`, `birthday`, `gender`, `email`, `phone_number`, `image_id`, `user_id`)
+VALUES ('Hao 3', 'Ho', 'Hoang', '1993-02-19', 'Male', 'hao3@huongtrang.com', '+84909909099', NULL, NULL);
+INSERT INTO `individual` (`first_name`, `last_name`, `middle_name`, `birthday`, `gender`, `email`, `phone_number`, `image_id`, `user_id`)
+VALUES ('Hao 4', 'Minh', 'Nguyen', '1994-04-19', 'Male', 'hao4@huongtrang.com', '+84909909090', NULL, NULL);
+INSERT INTO `individual` (`first_name`, `last_name`, `middle_name`, `birthday`, `gender`, `email`, `phone_number`, `image_id`, `user_id`)
+VALUES ('Hao 5', 'Ho', 'Thanh', '1959-04-19', 'Male', 'hao5@huongtrang.com', '+84903810551', NULL, NULL);
+INSERT INTO `individual` (`first_name`, `last_name`, `middle_name`, `birthday`, `gender`, `email`, `phone_number`, `image_id`, `user_id`)
+VALUES ('Hao 6', 'Ngo', 'Thi', '1961-04-19', 'Female', 'hao6@huongtrang.com', '+84916516697', NULL, NULL);
+INSERT INTO `individual` (`first_name`, `last_name`, `middle_name`, `birthday`, `gender`, `email`, `phone_number`, `image_id`, `user_id`)
+VALUES ('Hao 7', 'Pham', 'Ngo', '1991-04-19', 'Male', 'hao7@huongtrang.com', '+84903225588', NULL, NULL);
+INSERT INTO `individual` (`first_name`, `last_name`, `middle_name`, `birthday`, `gender`, `email`, `phone_number`, `image_id`, `user_id`)
+VALUES ('Hao 8', 'Tran', 'My', '1989-04-19', 'Female', 'hao8@huongtrang.com', '+84909456789', NULL, NULL);
+INSERT INTO `individual` (`first_name`, `last_name`, `middle_name`, `birthday`, `gender`, `email`, `phone_number`, `image_id`, `user_id`)
+VALUES ('Hao 9', 'Nguyen', 'Gia', '2016-04-19', 'Male', 'hao9@huongtrang.com', '+84987456312', NULL, NULL);
+INSERT INTO `individual` (`first_name`, `last_name`, `middle_name`, `birthday`, `gender`, `email`, `phone_number`, `image_id`, `user_id`)
+VALUES ('Hao 99', 'Pham', 'Minh', '1962-04-19', 'Male', 'hao99@huongtrang.com', '+84907896540', NULL, NULL);
+INSERT INTO `individual` (`first_name`, `last_name`, `middle_name`, `birthday`, `gender`, `email`, `phone_number`, `image_id`, `user_id`)
+VALUES ('Hiep 1', 'Ngo', 'Mai', '1969-04-19', 'Male', 'hiep1@huongtrang.com', '+84909789156', NULL, NULL);
+INSERT INTO `individual` (`first_name`, `last_name`, `middle_name`, `birthday`, `gender`, `email`, `phone_number`, `image_id`, `user_id`)
+VALUES ('Hiep 2', 'Pham', 'Chanh', '1996-04-19', 'Male', 'hiep2@huongtrang.com', '+84909909090', NULL, NULL);
 
 --
 -- Table structure for table `expense_type`
