@@ -373,19 +373,47 @@ CREATE TABLE `individual` (
   `first_name`   VARCHAR(45) NOT NULL,
   `last_name`    VARCHAR(45) NOT NULL,
   `middle_name`  VARCHAR(45),
-  `age`          TINYINT,
+  `birthday`     DATE,
   `gender`       VARCHAR(10) NOT NULL,
   `email`        VARCHAR(50) NOT NULL,
   `phone_number` VARCHAR(50),
   `image_id`     BIGINT,
-  `user_id`      BIGINT      NOT NULL,
+  `user_id`      BIGINT,
   PRIMARY KEY (`id`),
   UNIQUE KEY `individual_id_unique` (`id`),
+  UNIQUE KEY `individual_user_id_unique` (`user_id`), #  An individual has ONLY 1 user account.
+  UNIQUE KEY `individual_email_unique` (`email`), #  One email is belong to only 1 individual.
   CONSTRAINT `individual_user_id` FOREIGN KEY (`user_id`) REFERENCES `user_table` (`id`),
   CONSTRAINT `individual_image_id` FOREIGN KEY (`image_id`) REFERENCES `image` (`id`)
 )
   ENGINE = InnoDB
   DEFAULT CHARSET = utf8;
+
+INSERT INTO `individual` (`first_name`, `last_name`, `middle_name`, `birthday`, `gender`, `email`, `phone_number`, `image_id`, `user_id`)
+VALUES ('Administrator', 'Adminitrator', 'Adminitrator', '1988-04-19', 'Male', 'admin@huongtrang.com', '+84909909090', NULL, 1);
+INSERT INTO `individual` (`first_name`, `last_name`, `middle_name`, `birthday`, `gender`, `email`, `phone_number`, `image_id`, `user_id`)
+VALUES ('Hao', 'Ho', 'Anh', '1988-04-19', 'Male', 'haho@huongtrang.com', '+84906729775', NULL, 2);
+INSERT INTO `individual` (`first_name`, `last_name`, `middle_name`, `birthday`, `gender`, `email`, `phone_number`, `image_id`, `user_id`)
+VALUES ('Hiep', 'Ho', 'Hoang', '1993-02-19', 'Male', 'hiep@huongtrang.com', '+84909909099', NULL, 3);
+INSERT INTO `individual` (`first_name`, `last_name`, `middle_name`, `birthday`, `gender`, `email`, `phone_number`, `image_id`, `user_id`)
+VALUES ('Tan', 'Minh', 'Nguyen', '1994-04-19', 'Male', 'tan@huongtrang.com', '+84909909090', NULL, 4);
+INSERT INTO `individual` (`first_name`, `last_name`, `middle_name`, `birthday`, `gender`, `email`, `phone_number`, `image_id`, `user_id`)
+VALUES ('Hung', 'Ho', 'Thanh', '1959-04-19', 'Male', 'hung@huongtrang.com', '+84903810551', NULL, 6);
+INSERT INTO `individual` (`first_name`, `last_name`, `middle_name`, `birthday`, `gender`, `email`, `phone_number`, `image_id`, `user_id`)
+VALUES ('Gai', 'Ngo', 'Thi', '1961-04-19', 'Female', 'gaingo@huongtrang.com', '+84916516697', NULL, 7);
+INSERT INTO `individual` (`first_name`, `last_name`, `middle_name`, `birthday`, `gender`, `email`, `phone_number`, `image_id`, `user_id`)
+VALUES ('Quyen', 'Pham', 'Ngo', '1991-04-19', 'Male', 'quyen@huongtrang.com', '+84903225588', NULL, 8);
+INSERT INTO `individual` (`first_name`, `last_name`, `middle_name`, `birthday`, `gender`, `email`, `phone_number`, `image_id`, `user_id`)
+VALUES ('Giao', 'Tran', 'My', '1989-04-19', 'Female', 'giao@huongtrang.com', '+84909456789', NULL, 9);
+INSERT INTO `individual` (`first_name`, `last_name`, `middle_name`, `birthday`, `gender`, `email`, `phone_number`, `image_id`, `user_id`)
+VALUES ('Bao', 'Nguyen', 'Gia', '2016-04-19', 'Male', 'baonguyen@huongtrang.com', '+84987456312', NULL, NULL);
+INSERT INTO `individual` (`first_name`, `last_name`, `middle_name`, `birthday`, `gender`, `email`, `phone_number`, `image_id`, `user_id`)
+VALUES ('Giang', 'Pham', 'Minh', '1962-04-19', 'Male', 'giangpham@huongtrang.com', '+84907896540', NULL, NULL);
+INSERT INTO `individual` (`first_name`, `last_name`, `middle_name`, `birthday`, `gender`, `email`, `phone_number`, `image_id`, `user_id`)
+VALUES ('Chi', 'Ngo', 'Mai', '1969-04-19', 'Male', 'chingo@huongtrang.com', '+84909789156', NULL, NULL);
+INSERT INTO `individual` (`first_name`, `last_name`, `middle_name`, `birthday`, `gender`, `email`, `phone_number`, `image_id`, `user_id`)
+VALUES ('Quy', 'Pham', 'Chanh', '1996-04-19', 'Male', 'quy@huongtrang.com', '+84909909090', NULL, NULL);
+
 
 --
 -- Table structure for table `expense_type`
