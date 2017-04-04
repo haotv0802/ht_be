@@ -15,7 +15,8 @@ public class IndividualModel {
   private String gender;
   private String email;
   private String phoneNumber;
-  private Integer imageId;
+  private String imageURL;
+  private String imageInfo;
   private Integer userId;
   private String userName;
   private List<String> roles;
@@ -84,12 +85,20 @@ public class IndividualModel {
     this.phoneNumber = phoneNumber;
   }
 
-  public Integer getImageId() {
-    return imageId;
+  public String getImageURL() {
+    return imageURL;
   }
 
-  public void setImageId(Integer imageId) {
-    this.imageId = imageId;
+  public void setImageURL(String imageURL) {
+    this.imageURL = imageURL;
+  }
+
+  public String getImageInfo() {
+    return imageInfo;
+  }
+
+  public void setImageInfo(String imageInfo) {
+    this.imageInfo = imageInfo;
   }
 
   public Integer getUserId() {

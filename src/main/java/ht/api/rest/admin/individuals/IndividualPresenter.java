@@ -15,23 +15,24 @@ public class IndividualPresenter {
   private String gender;
   private String email;
   private String phoneNumber;
-  private Integer imageId;
-
+  private String imageURL;
+  private String imageInfo;
   private String userName;
   private List<String> roles;
 
   public IndividualPresenter(IndividualModel model) {
-    this.id = model.getId();
-    this.firstName = model.getFirstName();
-    this.middleName = model.getMiddleName();
-    this.lastName = model.getLastName();
-    this.birthday = model.getBirthday();
-    this.gender = model.getGender();
-    this.email = model.getEmail();
-    this.phoneNumber = model.getPhoneNumber();
-    this.imageId = model.getImageId();
-    this.userName = model.getUserName();
-    this.roles = model.getRoles();
+    this.setId(model.getId());
+    this.setFirstName(model.getFirstName());
+    this.setMiddleName(model.getMiddleName());
+    this.setLastName(model.getLastName());
+    this.setBirthday(model.getBirthday());
+    this.setGender(model.getGender());
+    this.setEmail(model.getEmail());
+    this.setPhoneNumber(model.getPhoneNumber());
+    this.setImageURL(model.getImageURL());
+    this.setImageInfo(model.getImageInfo());
+    this.setUserName(model.getUserName());
+    this.setRoles(model.getRoles());
   }
 
   public Integer getId() {
@@ -98,12 +99,20 @@ public class IndividualPresenter {
     this.phoneNumber = phoneNumber;
   }
 
-  public Integer getImageId() {
-    return imageId;
+  public String getImageURL() {
+    return imageURL;
   }
 
-  public void setImageId(Integer imageId) {
-    this.imageId = imageId;
+  public void setImageURL(String imageURL) {
+    this.imageURL = imageURL;
+  }
+
+  public String getImageInfo() {
+    return imageInfo;
+  }
+
+  public void setImageInfo(String imageInfo) {
+    this.imageInfo = imageInfo;
   }
 
   public String getUserName() {

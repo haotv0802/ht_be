@@ -108,23 +108,23 @@ CREATE TABLE `image` (
 INSERT INTO `image` (`name`, `image_url`, `image_info`, `description`, `date`)
 VALUES ('image 1', './app/assets/individuals&promotions/DSC_3997.JPG', 'info 1', 'description', sysdate());
 INSERT INTO `image` (`name`, `image_url`, `image_info`, `description`, `date`)
-VALUES ('image 2', './app/assets/individuals&promotions/DSC_4014.JPG', 'info 1', 'description', sysdate());
+VALUES ('image 2', './app/assets/individuals&promotions/DSC_4014.JPG', 'info 2', 'description', sysdate());
 INSERT INTO `image` (`name`, `image_url`, `image_info`, `description`, `date`)
-VALUES ('image 3', './app/assets/individuals&promotions/DSC_4038.JPG', 'info 1', 'description', sysdate());
+VALUES ('image 3', './app/assets/individuals&promotions/DSC_4038.JPG', 'info 3', 'description', sysdate());
 INSERT INTO `image` (`name`, `image_url`, `image_info`, `description`, `date`)
-VALUES ('image 4', './app/assets/individuals&promotions/DSC_4055.JPG', 'info 1', 'description', sysdate());
+VALUES ('image 4', './app/assets/individuals&promotions/DSC_4055.JPG', 'info 4', 'description', sysdate());
 INSERT INTO `image` (`name`, `image_url`, `image_info`, `description`, `date`)
-VALUES ('image 5', './app/assets/individuals&promotions/DSC_4108.JPG', 'info 1', 'description', sysdate());
+VALUES ('image 5', './app/assets/individuals&promotions/DSC_4108.JPG', 'info 5', 'description', sysdate());
 INSERT INTO `image` (`name`, `image_url`, `image_info`, `description`, `date`)
-VALUES ('image 6', './app/assets/individuals&promotions/DSC_4196.JPG', 'info 1', 'description', sysdate());
+VALUES ('image 6', './app/assets/individuals&promotions/DSC_4196.JPG', 'info 6', 'description', sysdate());
 INSERT INTO `image` (`name`, `image_url`, `image_info`, `description`, `date`)
-VALUES ('image 7', './app/assets/individuals&promotions/DSC_4252.JPG', 'info 1', 'description', sysdate());
+VALUES ('image 7', './app/assets/individuals&promotions/DSC_4252.JPG', 'info 7', 'description', sysdate());
 INSERT INTO `image` (`name`, `image_url`, `image_info`, `description`, `date`)
-VALUES ('image 8', './app/assets/individuals&promotions/DSC_4330.JPG', 'info 1', 'description', sysdate());
+VALUES ('image 8', './app/assets/individuals&promotions/DSC_4330.JPG', 'info 8', 'description', sysdate());
 INSERT INTO `image` (`name`, `image_url`, `image_info`, `description`, `date`)
-VALUES ('image 9', './app/assets/individuals&promotions/DSC_4336.JPG', 'info 1', 'description', sysdate());
+VALUES ('image 9', './app/assets/individuals&promotions/DSC_4336.JPG', 'info 9', 'description', sysdate());
 INSERT INTO `image` (`name`, `image_url`, `image_info`, `description`, `date`)
-VALUES ('image 10', './app/assets/individuals&promotions/DSC_4377.JPG', 'info 1', 'description', sysdate());
+VALUES ('image 10', './app/assets/individuals&promotions/DSC_4377.JPG', 'info 10', 'description', sysdate());
 
 --
 -- Table structure for table `room_type`
@@ -390,29 +390,29 @@ CREATE TABLE `individual` (
   DEFAULT CHARSET = utf8;
 
 INSERT INTO `individual` (`first_name`, `last_name`, `middle_name`, `birthday`, `gender`, `email`, `phone_number`, `image_id`, `user_id`)
-VALUES ('Administrator', 'Adminitrator', 'Adminitrator', '1988-04-19', 'Male', 'admin@huongtrang.com', '+84909909090', NULL, 1);
+VALUES ('Administrator', 'Adminitrator', 'Adminitrator', '1988-04-19', 'Male', 'admin@huongtrang.com', '+84909909090', 1, 1);
 INSERT INTO `individual` (`first_name`, `last_name`, `middle_name`, `birthday`, `gender`, `email`, `phone_number`, `image_id`, `user_id`)
-VALUES ('Hao', 'Ho', 'Anh', '1988-04-19', 'Male', 'haho@huongtrang.com', '+84906729775', NULL, 2);
+VALUES ('Hao', 'Ho', 'Anh', '1988-04-19', 'Male', 'haho@huongtrang.com', '+84906729775', 1, 2);
 INSERT INTO `individual` (`first_name`, `last_name`, `middle_name`, `birthday`, `gender`, `email`, `phone_number`, `image_id`, `user_id`)
-VALUES ('Hiep', 'Ho', 'Hoang', '1993-02-19', 'Male', 'hiep@huongtrang.com', '+84909909099', NULL, 3);
+VALUES ('Hiep', 'Ho', 'Hoang', '1993-02-19', 'Male', 'hiep@huongtrang.com', '+84909909099', 2, 3);
 INSERT INTO `individual` (`first_name`, `last_name`, `middle_name`, `birthday`, `gender`, `email`, `phone_number`, `image_id`, `user_id`)
-VALUES ('Tan', 'Minh', 'Nguyen', '1994-04-19', 'Male', 'tan@huongtrang.com', '+84909909090', NULL, 4);
+VALUES ('Tan', 'Minh', 'Nguyen', '1994-04-19', 'Male', 'tan@huongtrang.com', '+84909909090', 2, 4);
 INSERT INTO `individual` (`first_name`, `last_name`, `middle_name`, `birthday`, `gender`, `email`, `phone_number`, `image_id`, `user_id`)
-VALUES ('Hung', 'Ho', 'Thanh', '1959-04-19', 'Male', 'hung@huongtrang.com', '+84903810551', NULL, 6);
+VALUES ('Hung', 'Ho', 'Thanh', '1959-04-19', 'Male', 'hung@huongtrang.com', '+84903810551', 2, 6);
 INSERT INTO `individual` (`first_name`, `last_name`, `middle_name`, `birthday`, `gender`, `email`, `phone_number`, `image_id`, `user_id`)
-VALUES ('Gai', 'Ngo', 'Thi', '1961-04-19', 'Female', 'gaingo@huongtrang.com', '+84916516697', NULL, 7);
+VALUES ('Gai', 'Ngo', 'Thi', '1961-04-19', 'Female', 'gaingo@huongtrang.com', '+84916516697', 2, 7);
 INSERT INTO `individual` (`first_name`, `last_name`, `middle_name`, `birthday`, `gender`, `email`, `phone_number`, `image_id`, `user_id`)
-VALUES ('Quyen', 'Pham', 'Ngo', '1991-04-19', 'Male', 'quyen@huongtrang.com', '+84903225588', NULL, 8);
+VALUES ('Quyen', 'Pham', 'Ngo', '1991-04-19', 'Male', 'quyen@huongtrang.com', '+84903225588', 2, 8);
 INSERT INTO `individual` (`first_name`, `last_name`, `middle_name`, `birthday`, `gender`, `email`, `phone_number`, `image_id`, `user_id`)
-VALUES ('Giao', 'Tran', 'My', '1989-04-19', 'Female', 'giao@huongtrang.com', '+84909456789', NULL, 9);
+VALUES ('Giao', 'Tran', 'My', '1989-04-19', 'Female', 'giao@huongtrang.com', '+84909456789', 3, 9);
 INSERT INTO `individual` (`first_name`, `last_name`, `middle_name`, `birthday`, `gender`, `email`, `phone_number`, `image_id`, `user_id`)
-VALUES ('Bao', 'Nguyen', 'Gia', '2016-04-19', 'Male', 'baonguyen@huongtrang.com', '+84987456312', NULL, NULL);
+VALUES ('Bao', 'Nguyen', 'Gia', '2016-04-19', 'Male', 'baonguyen@huongtrang.com', '+84987456312', 3, NULL);
 INSERT INTO `individual` (`first_name`, `last_name`, `middle_name`, `birthday`, `gender`, `email`, `phone_number`, `image_id`, `user_id`)
-VALUES ('Giang', 'Pham', 'Minh', '1962-04-19', 'Male', 'giangpham@huongtrang.com', '+84907896540', NULL, NULL);
+VALUES ('Giang', 'Pham', 'Minh', '1962-04-19', 'Male', 'giangpham@huongtrang.com', '+84907896540', 3, NULL);
 INSERT INTO `individual` (`first_name`, `last_name`, `middle_name`, `birthday`, `gender`, `email`, `phone_number`, `image_id`, `user_id`)
-VALUES ('Chi', 'Ngo', 'Mai', '1969-04-19', 'Male', 'chingo@huongtrang.com', '+84909789156', NULL, NULL);
+VALUES ('Chi', 'Ngo', 'Mai', '1969-04-19', 'Male', 'chingo@huongtrang.com', '+84909789156', 4, NULL);
 INSERT INTO `individual` (`first_name`, `last_name`, `middle_name`, `birthday`, `gender`, `email`, `phone_number`, `image_id`, `user_id`)
-VALUES ('Quy', 'Pham', 'Chanh', '1996-04-19', 'Male', 'quy@huongtrang.com', '+84909909090', NULL, NULL);
+VALUES ('Quy', 'Pham', 'Chanh', '1996-04-19', 'Male', 'quy@huongtrang.com', '+84909909090', 4, NULL);
 
 INSERT INTO `individual` (`first_name`, `last_name`, `middle_name`, `birthday`, `gender`, `email`, `phone_number`, `image_id`, `user_id`)
 VALUES ('Hao 1', 'Adminitrator', 'Adminitrator', '1988-04-19', 'Male', 'hao1@huongtrang.com', '+84909909090', NULL, NULL);
