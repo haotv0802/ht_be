@@ -27,7 +27,7 @@ CREATE TABLE `user_table` (
   `user_name` VARCHAR(45) NOT NULL,
   `password`  VARCHAR(45) NOT NULL,
   PRIMARY KEY (`id`),
-  UNIQUE KEY `_user_tableid_unique` (`id`),
+  UNIQUE KEY `user_table_id_unique` (`id`),
   UNIQUE KEY `user_table_user_name_unique` (`user_name`)
 )
   ENGINE = InnoDB
@@ -35,7 +35,7 @@ CREATE TABLE `user_table` (
 
 INSERT INTO `user_table`
 VALUES
-  (1, 'admin', 'admin'), (2, 'haho', 'hoanhhao'), (3, 'hao', 'hiep'), (4, 'sd', 'hiep'),
+  (1, 'admin', 'admin'), (2, 'haho', 'hoanhhao'), (3, 'hao', 'hiep'), (4, 'hiep', 'hiep'),
   (6, 'admin1', 'admin'), (7, 'admin2', 'admin'), (8, 'admin3', 'admin'),
   (9, 'admin4', 'admin'), (12, 'haho1', 'hoanhhao'), (13, 'haho13', 'hoanhhao'),
   (14, 'haho14', 'hoanhhao'), (15, 'haho15', 'hoanhhao'), (16, 'haho16', 'hoanhhao'),
@@ -58,6 +58,7 @@ CREATE TABLE `user_role_details` (
   `role_id` BIGINT NOT NULL,
   PRIMARY KEY (`id`),
   UNIQUE KEY `user_role_unique` (`user_id`, `role_id`),
+  UNIQUE KEY `user_role_user_id_unique` (`user_id`), #  A user has just ONLY 1 role.
   KEY `role_id` (`role_id`),
   CONSTRAINT `user_role_details_role_id` FOREIGN KEY (`role_id`) REFERENCES `user_role` (`id`),
   CONSTRAINT `user_role_details_user_id` FOREIGN KEY (`user_id`) REFERENCES `user_table` (`id`)
@@ -66,8 +67,13 @@ CREATE TABLE `user_role_details` (
   AUTO_INCREMENT = 11
   DEFAULT CHARSET = utf8;
 
+# INSERT INTO `user_role_details` VALUES
+#   (1, 1, 1), (10, 2, 1), (2, 2, 2), (3, 2, 3), (4, 2, 4), (9, 3, 1), (6, 4, 1),
+#   (7, 39, 3), (8, 40, 2)
+# ;
+
 INSERT INTO `user_role_details` VALUES
-  (1, 1, 1), (10, 2, 1), (2, 2, 2), (3, 2, 3), (4, 2, 4), (9, 3, 1), (6, 4, 1),
+  (1, 1, 1), (10, 2, 1), (9, 3, 1), (6, 4, 1),
   (7, 39, 3), (8, 40, 2)
 ;
 

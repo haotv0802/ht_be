@@ -1,7 +1,7 @@
-package ht.api.rest.admin.individuals;
+package ht.api.rest.admin.roles;
 
 import ht.api.rest.admin.BaseAdminResource;
-import ht.api.rest.admin.individuals.interfaces.IIndividualService;
+import ht.api.rest.admin.roles.interfaces.IRoleService;
 import ht.auth.UserDetailsImpl;
 import ht.common.beans.HeaderLang;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -18,21 +18,21 @@ import java.util.List;
  * Created by haho on 3/22/2017.
  */
 @RestController
-public class IndividualsResource extends BaseAdminResource {
+public class RolesResource extends BaseAdminResource {
 
-  private final IIndividualService individualService;
+  private final IRoleService roleService;
 
   @Autowired
-  public IndividualsResource(@Qualifier("adminIndividualService") IIndividualService individualService) {
-    Assert.notNull(individualService);
-    this.individualService = individualService;
+  public RolesResource(@Qualifier("adminRoleService") IRoleService roleService) {
+    Assert.notNull(roleService);
+    this.roleService = roleService;
   }
 
-  @GetMapping("/individuals")
+  @GetMapping("/roles")
   @PreAuthorize("hasAuthority('ADMIN')")
-  public List<IndividualPresenter> getIndividuals(
-       @AuthenticationPrincipal UserDetailsImpl userDetails
+  public List<String> getRoles(
+      @AuthenticationPrincipal UserDetailsImpl userDetails
       ,@HeaderLang String lang) {
-    return this.individualService.getIndividuals();
+    return this.roleService.getRoles();
   }
 }
