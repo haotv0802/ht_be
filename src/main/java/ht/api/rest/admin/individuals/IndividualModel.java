@@ -19,7 +19,7 @@ public class IndividualModel {
   private String imageInfo;
   private Integer userId;
   private String userName;
-  private List<String> roles;
+  private String role;
 
   public Integer getId() {
     return id;
@@ -117,11 +117,11 @@ public class IndividualModel {
     this.userName = userName;
   }
 
-  public List<String> getRoles() {
-    return roles;
+  public String getRole() {
+    return role;
   }
 
-  public void setRoles(List<String> roles) {
-    this.roles = roles;
+  public void setRole(String role) {
+    this.role = role;
   }
 }

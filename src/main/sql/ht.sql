@@ -412,9 +412,9 @@ VALUES ('Quyen', 'Pham', 'Ngo', '1991-04-19', 'Male', 'quyen@huongtrang.com', '+
 INSERT INTO `individual` (`first_name`, `last_name`, `middle_name`, `birthday`, `gender`, `email`, `phone_number`, `image_id`, `user_id`)
 VALUES ('Giao', 'Tran', 'My', '1989-04-19', 'Female', 'giao@huongtrang.com', '+84909456789', 3, 9);
 INSERT INTO `individual` (`first_name`, `last_name`, `middle_name`, `birthday`, `gender`, `email`, `phone_number`, `image_id`, `user_id`)
-VALUES ('Bao', 'Nguyen', 'Gia', '2016-04-19', 'Male', 'baonguyen@huongtrang.com', '+84987456312', 3, NULL);
+VALUES ('Bao', 'Nguyen', 'Gia', '2016-04-19', 'Male', 'baonguyen@huongtrang.com', '+84987456312', 3, 39);
 INSERT INTO `individual` (`first_name`, `last_name`, `middle_name`, `birthday`, `gender`, `email`, `phone_number`, `image_id`, `user_id`)
-VALUES ('Giang', 'Pham', 'Minh', '1962-04-19', 'Male', 'giangpham@huongtrang.com', '+84907896540', 3, NULL);
+VALUES ('Giang', 'Pham', 'Minh', '1962-04-19', 'Male', 'giangpham@huongtrang.com', '+84907896540', 3, 40);
 INSERT INTO `individual` (`first_name`, `last_name`, `middle_name`, `birthday`, `gender`, `email`, `phone_number`, `image_id`, `user_id`)
 VALUES ('Chi', 'Ngo', 'Mai', '1969-04-19', 'Male', 'chingo@huongtrang.com', '+84909789156', 4, NULL);
 INSERT INTO `individual` (`first_name`, `last_name`, `middle_name`, `birthday`, `gender`, `email`, `phone_number`, `image_id`, `user_id`)

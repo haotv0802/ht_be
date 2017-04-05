@@ -29,32 +29,33 @@ public class IndividualDao implements ht.api.rest.admin.individuals.interfaces.I
 
   @Override
   public List<IndividualModel> getIndividuals() {
-    String sql = "SELECT                                       "
-               + "	i.id,                                      "
-               + "	i.first_name,                              "
-               + "	i.last_name,                               "
-               + "	i.middle_name,                             "
-               + "	i.birthday,                                "
-               + "	i.gender,                                  "
-               + "	i.email,                                   "
-               + "	i.phone_number,                            "
-               + "	i.image_id,                                "
-               + "	i.user_id,                                 "
-               + "	u.user_name,                               "
-               + "	m.image_url,                               "
-               + "	m.image_info                               "
-               + "FROM                                         "
-               + "	(individual i                              "
-               + "	LEFT JOIN user_table u ON i.user_id = u.id)"
-               + "		LEFT JOIN                                "
-               + "	image m ON m.id = i.image_id               "
+    String sql = "SELECT                                                "
+               + "	i.id,                                               "
+               + "	i.first_name,                                       "
+               + "	i.last_name,                                        "
+               + "	i.middle_name,                                      "
+               + "	i.birthday,                                         "
+               + "	i.gender,                                           "
+               + "	i.email,                                            "
+               + "	i.phone_number,                                     "
+               + "	i.image_id,                                         "
+               + "	i.user_id,                                          "
+               + "	u.user_name,                                        "
+               + "	m.image_url,                                        "
+               + "	m.image_info,                                       "
+               + "	r.role_name                                         "
+               + "FROM                                                  "
+               + "	(((individual i                                     "
+               + "	LEFT JOIN user_table u ON i.user_id = u.id)         "
+               + "	LEFT JOIN image m ON m.id = i.image_id)             "
+               + "	LEFT JOIN user_role_details d ON d.user_id = u.id)  "
+               + "		LEFT JOIN                                         "
+               + "	user_role r ON r.id = d.role_id                     "
         ;
 
     final MapSqlParameterSource paramsMap = new MapSqlParameterSource();
 
     DaoUtils.debugQuery(LOGGER, sql, paramsMap.getValues());
-
-    List<Integer> userIdList = new ArrayList<Integer>();
 
     List<IndividualModel> users = namedTemplate.query(sql, paramsMap, (rs, rowNum) -> {
       IndividualModel bean = new IndividualModel();
@@ -70,13 +71,10 @@ public class IndividualDao implements ht.api.rest.admin.individuals.interfaces.I
       bean.setImageInfo(rs.getString("image_info"));
       bean.setUserName(rs.getString("user_name"));
       bean.setUserId(rs.getInt("user_id"));
-
+      bean.setRole(rs.getString("role_name"));
       return bean;
     });
 
-    for (IndividualModel model : users) {
-      model.setRoles(this.getRoles(model.getUserId()));
-    }
     return users;
   }
 

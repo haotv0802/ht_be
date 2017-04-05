@@ -18,7 +18,7 @@ public class IndividualPresenter {
   private String imageURL;
   private String imageInfo;
   private String userName;
-  private List<String> roles;
+  private String role;
 
   public IndividualPresenter(IndividualModel model) {
     this.setId(model.getId());
@@ -32,7 +32,7 @@ public class IndividualPresenter {
     this.setImageURL(model.getImageURL());
     this.setImageInfo(model.getImageInfo());
     this.setUserName(model.getUserName());
-    this.setRoles(model.getRoles());
+    this.setRole(model.getRole());
   }
 
   public Integer getId() {
@@ -123,11 +123,11 @@ public class IndividualPresenter {
     this.userName = userName;
   }
 
-  public List<String> getRoles() {
-    return roles;
+  public String getRole() {
+    return role;
   }
 
-  public void setRoles(List<String> roles) {
-    this.roles = roles;
+  public void setRole(String role) {
+    this.role = role;
   }
 }
