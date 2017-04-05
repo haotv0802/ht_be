@@ -9,4 +9,6 @@ import java.util.List;
  */
 public interface IIndividualService {
   List<IndividualPresenter> getIndividuals();
+
+  Boolean isUserNameExisting(String username);
 }

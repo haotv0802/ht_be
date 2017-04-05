@@ -1,5 +1,6 @@
 package ht.api.rest.admin.individuals;
 
+import ht.api.rest.admin.individuals.interfaces.IIndividualDao;
 import ht.common.dao.DaoUtils;
 import io.jsonwebtoken.lang.Assert;
 import org.apache.logging.log4j.LogManager;
@@ -16,7 +17,7 @@ import java.util.List;
  * Created by haho on 3/22/2017.
  */
 @Repository("adminIndividualDao")
-public class IndividualDao implements ht.api.rest.admin.individuals.interfaces.IIndividualDao {
+public class IndividualDao implements IIndividualDao {
   private static final Logger LOGGER = LogManager.getLogger(IndividualDao.class);
 
   private final NamedParameterJdbcTemplate namedTemplate;
@@ -76,6 +77,18 @@ public class IndividualDao implements ht.api.rest.admin.individuals.interfaces.I
     });
 
     return users;
+  }
+
+  @Override
+  public Boolean isUserNameExisting(String username) {
+    final String sql = "SELECT COUNT(*) FROM user_table WHERE user_name = :username"
+        ;
+    final MapSqlParameterSource paramsMap = new MapSqlParameterSource();
+    paramsMap.addValue("username", username);
+
+    DaoUtils.debugQuery(LOGGER, sql, paramsMap.getValues());
+
+    return namedTemplate.queryForObject(sql, paramsMap, Integer.class) > 0 ? true : false;
   }
 
   private List<String> getRoles(int userId) {

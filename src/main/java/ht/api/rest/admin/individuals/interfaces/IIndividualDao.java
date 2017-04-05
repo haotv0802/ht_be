@@ -9,4 +9,6 @@ import java.util.List;
  */
 public interface IIndividualDao {
   List<IndividualModel> getIndividuals();
+
+  Boolean isUserNameExisting(String username);
 }

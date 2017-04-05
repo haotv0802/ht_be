@@ -12,9 +12,20 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 public class IndividualsResourceTest extends BaseDocumentation {
 
   @Test
-  public void testIndividuals() throws Exception {
+  public void testGetIndividuals() throws Exception {
     mockMvc
         .perform(get("/svc/admin/individuals")
+            .header("Accept-Language", "en")
+            .header("X-AUTH-TOKEN", authTokenService.getAuthToken())
+        )
+        .andExpect(status().is(200))
+    ;
+  }
+
+  @Test
+  public void testIsUserNameExisting() throws Exception {
+    mockMvc
+        .perform(get("/svc/admin/individuals/isUserNameExisting/haho")
             .header("Accept-Language", "en")
             .header("X-AUTH-TOKEN", authTokenService.getAuthToken())
         )

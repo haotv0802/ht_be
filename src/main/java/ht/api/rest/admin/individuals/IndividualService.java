@@ -1,6 +1,7 @@
 package ht.api.rest.admin.individuals;
 
 import ht.api.rest.admin.individuals.interfaces.IIndividualDao;
+import ht.api.rest.admin.individuals.interfaces.IIndividualService;
 import io.jsonwebtoken.lang.Assert;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
@@ -13,7 +14,7 @@ import java.util.List;
  * Created by haho on 3/22/2017.
  */
 @Service("adminIndividualService")
-public class IndividualService implements ht.api.rest.admin.individuals.interfaces.IIndividualService {
+public class IndividualService implements IIndividualService {
 
   private final IIndividualDao individualDao;
 
@@ -33,5 +34,10 @@ public class IndividualService implements ht.api.rest.admin.individuals.interfac
     }
 
     return individualList;
+  }
+
+  @Override
+  public Boolean isUserNameExisting(String username) {
+    return this.individualDao.isUserNameExisting(username);
   }
 }
