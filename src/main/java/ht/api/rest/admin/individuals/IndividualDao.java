@@ -93,14 +93,7 @@ public class IndividualDao implements IIndividualDao {
 
   @Override
   public Boolean isUserNameExisting(String oldUserName, String userName) {
-    final String sql = "SELECT COUNT(*) FROM user_table WHERE user_name = :userName AND user_name != :oldUserName";
-    final MapSqlParameterSource paramsMap = new MapSqlParameterSource();
-    paramsMap.addValue("userName", userName);
-    paramsMap.addValue("oldUserName", oldUserName);
-
-    DaoUtils.debugQuery(LOGGER, sql, paramsMap.getValues());
-
-    return namedTemplate.queryForObject(sql, paramsMap, Integer.class) > 0;
+    return null;
   }
 
   private List<String> getRoles(int userId) {

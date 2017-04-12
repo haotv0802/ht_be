@@ -13,6 +13,7 @@ import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.util.Assert;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import javax.xml.ws.Response;
@@ -53,15 +54,18 @@ public class IndividualsResource extends BaseAdminResource {
     }, HttpStatus.OK);
   }
 
-  @GetMapping("/individuals/isUserNameExisting/{oldUserName}/{userName}")
+  @GetMapping("/individuals/isUserNameExisting")
   @PreAuthorize("hasAuthority('ADMIN')")
   public ResponseEntity isUserNameExisting(
       @AuthenticationPrincipal UserDetailsImpl userDetails
       ,@HeaderLang String lang
-      ,@PathVariable(value = "oldUserName") String oldUserName
-      ,@PathVariable(value = "userName") String userName
+      ,@RequestParam(value = "oldUserName") String oldUserName
+      ,@RequestParam(value = "userName") String userName
   ) {
-    boolean value = this.individualService.isUserNameExisting(oldUserName, userName);
+    if (!this.individualService.isUserNameExisting(oldUserName)) {
+      return new ResponseEntity(HttpStatus.BAD_REQUEST);
+    }
+    final boolean value = this.individualService.isUserNameExisting(oldUserName, userName);
     return new ResponseEntity(new Object(){
       public final Boolean isUserNameExisting = value;
     }, HttpStatus.OK);

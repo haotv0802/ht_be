@@ -37,9 +37,11 @@ public class IndividualsResourceTest extends BaseDocumentation {
   @Test
   public void testIsUserNameExisting2() throws Exception {
     mockMvc
-        .perform(get("/svc/admin/individuals/isUserNameExisting/admin/haho")
+        .perform(get("/svc/admin/individuals/isUserNameExisting")
             .header("Accept-Language", "en")
             .header("X-AUTH-TOKEN", authTokenService.getAuthToken())
+            .param("oldUserName", "admin")
+            .param("userName", "admin1")
         )
         .andExpect(status().is(200))
         .andExpect(MockMvcResultMatchers.jsonPath("$.isUserNameExisting").value(true));
