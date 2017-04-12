@@ -11,4 +11,6 @@ public interface IIndividualService {
   List<IndividualPresenter> getIndividuals();
 
   Boolean isUserNameExisting(String username);
+
+  Boolean isUserNameExisting(String oldUserName, String userName);
 }

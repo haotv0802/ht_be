@@ -40,4 +40,9 @@ public class IndividualService implements IIndividualService {
   public Boolean isUserNameExisting(String username) {
     return this.individualDao.isUserNameExisting(username);
   }
+
+  @Override
+  public Boolean isUserNameExisting(String oldUserName, String userName) {
+    return this.individualDao.isUserNameExisting(oldUserName, userName);
+  }
 }

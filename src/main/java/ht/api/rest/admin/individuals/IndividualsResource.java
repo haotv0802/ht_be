@@ -52,4 +52,18 @@ public class IndividualsResource extends BaseAdminResource {
       public final Boolean isUserNameExisting = value;
     }, HttpStatus.OK);
   }
+
+  @GetMapping("/individuals/isUserNameExisting/{oldUserName}/{userName}")
+  @PreAuthorize("hasAuthority('ADMIN')")
+  public ResponseEntity isUserNameExisting(
+      @AuthenticationPrincipal UserDetailsImpl userDetails
+      ,@HeaderLang String lang
+      ,@PathVariable(value = "oldUserName") String oldUserName
+      ,@PathVariable(value = "userName") String userName
+  ) {
+    boolean value = this.individualService.isUserNameExisting(oldUserName, userName);
+    return new ResponseEntity(new Object(){
+      public final Boolean isUserNameExisting = value;
+    }, HttpStatus.OK);
+  }
 }

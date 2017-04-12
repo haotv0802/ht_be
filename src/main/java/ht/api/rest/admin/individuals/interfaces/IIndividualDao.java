@@ -11,4 +11,6 @@ public interface IIndividualDao {
   List<IndividualModel> getIndividuals();
 
   Boolean isUserNameExisting(String username);
+
+  Boolean isUserNameExisting(String oldUserName, String userName);
 }

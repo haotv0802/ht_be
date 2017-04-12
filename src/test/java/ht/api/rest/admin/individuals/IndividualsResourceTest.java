@@ -1,6 +1,7 @@
 package ht.api.rest.admin.individuals;
 
 import ht.api.rest.BaseDocumentation;
+import org.springframework.test.web.servlet.result.MockMvcResultMatchers;
 import org.testng.annotations.Test;
 
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
@@ -30,6 +31,18 @@ public class IndividualsResourceTest extends BaseDocumentation {
             .header("X-AUTH-TOKEN", authTokenService.getAuthToken())
         )
         .andExpect(status().is(200))
+    ;
+  }
+
+  @Test
+  public void testIsUserNameExisting2() throws Exception {
+    mockMvc
+        .perform(get("/svc/admin/individuals/isUserNameExisting/admin/haho")
+            .header("Accept-Language", "en")
+            .header("X-AUTH-TOKEN", authTokenService.getAuthToken())
+        )
+        .andExpect(status().is(200))
+        .andExpect(MockMvcResultMatchers.jsonPath("$.isUserNameExisting").value(true));
     ;
   }
 }
