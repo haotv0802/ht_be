@@ -33,7 +33,7 @@ public class ImagesResourceTest extends BaseDocumentation {
   @Test
   public void testGetImageById() throws Exception {
     mockMvc
-        .perform(get("/svc/admin/images/{id}", 1111)
+        .perform(get("/svc/admin/images/{id}/info", 1111)
             .header("Accept-Language", "en")
             .header("X-AUTH-TOKEN", authTokenService.getAuthToken())
         )
@@ -44,7 +44,7 @@ public class ImagesResourceTest extends BaseDocumentation {
   @Test
   public void testUpdateImage() throws Exception {
     MvcResult result = mockMvc
-        .perform(get("/svc/admin/images/{id}", 1)
+        .perform(get("/svc/admin/images/{id}/info", 1)
             .header("Accept-Language", "en")
             .header("X-AUTH-TOKEN", authTokenService.getAuthToken())
         )
@@ -56,45 +56,46 @@ public class ImagesResourceTest extends BaseDocumentation {
     JSONObject jsonObject = new JSONObject(result.getResponse().getContentAsString());
     Image image = objectMapper.readValue(result.getResponse().getContentAsString(), Image.class);
 
-    MockMultipartFile imageInfo = new MockMultipartFile("image", "", "application.json", result.getResponse().getContentAsString().getBytes());
+//    MockMultipartFile imageInfo = new MockMultipartFile("image", "", "application.json", result.getResponse().getContentAsString().getBytes());
 
-    MockMultipartFile uploadedFile = new MockMultipartFile("uploadedFile", "filename.txt", "text/plain", "some xml".getBytes());
+    MockMultipartFile uploadedFile = new MockMultipartFile("imageFile", "filename.txt", "text/plain", "some xml".getBytes());
 
     mockMvc
 //        .perform(post("/svc/admin/images/update")
-        .perform(RestDocumentationRequestBuilders.fileUpload("/svc/admin/images/update")
+        .perform(RestDocumentationRequestBuilders.fileUpload("/svc/admin/images/{id}/updateImage", image.getId())
             .file(uploadedFile)
             .header("Accept-Language", "en")
             .header("X-AUTH-TOKEN", authTokenService.getAuthToken())
+            .content(objectMapper.writeValueAsString(image))
             .contentType(MediaType.MULTIPART_FORM_DATA)
         )
         .andExpect(status().is(200))
     ;
   }
 
-  @Test
-  public void testUpdateImage2() throws Exception {
-//    MvcResult result = mockMvc
-//        .perform(get("/svc/admin/images/{id}", 1)
-//            .header("Accept-Language", "en")
-//            .header("X-AUTH-TOKEN", authTokenService.getAuthToken())
-//        )
-//        .andExpect(status().is(200))
-//        .andReturn()
-//        ;
-//
-//    ObjectMapper objectMapper = new ObjectMapper();
-//    JSONObject jsonObject = new JSONObject(result.getResponse().getContentAsString());
-//    Image image = objectMapper.readValue(result.getResponse().getContentAsString(), Image.class);
-//
-//    MockMultipartFile imageInfo = new MockMultipartFile("image", "", "application.json", result.getResponse().getContentAsString().getBytes());
-//
-//    MockMultipartFile uploadedFile = new MockMultipartFile("uploadedFile", "filename.txt", "text/plain", "some xml".getBytes());
 
-    mockMvc
-        .perform(get("/svc/admin/images/update2/update")
+  @Test
+  public void testUpdateImageInfo() throws Exception {
+    MvcResult result = mockMvc
+        .perform(get("/svc/admin/images/{id}/info", 1)
             .header("Accept-Language", "en")
             .header("X-AUTH-TOKEN", authTokenService.getAuthToken())
+        )
+        .andExpect(status().is(200))
+        .andReturn()
+        ;
+
+    ObjectMapper objectMapper = new ObjectMapper();
+    JSONObject jsonObject = new JSONObject(result.getResponse().getContentAsString());
+    Image image = objectMapper.readValue(result.getResponse().getContentAsString(), Image.class);
+
+    mockMvc
+//        .perform(post("/svc/admin/images/update")
+        .perform(post("/svc/admin/images/updateImageInfo")
+            .header("Accept-Language", "en")
+            .header("X-AUTH-TOKEN", authTokenService.getAuthToken())
+            .content(objectMapper.writeValueAsString(image))
+            .contentType(MediaType.APPLICATION_JSON)
         )
         .andExpect(status().is(200))
     ;

@@ -15,6 +15,7 @@ import org.springframework.util.Assert;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
+import javax.validation.Valid;
 import java.util.List;
 
 /**
@@ -39,7 +40,7 @@ public class ImagesResource extends BaseAdminResource {
     return imageService.getImages();
   }
 
-  @GetMapping("/images/{id}")
+  @GetMapping("/images/{id}/info")
   @PreAuthorize("hasAuthority('ADMIN')")
   public Image getImagesById(
       @AuthenticationPrincipal UserDetailsImpl userDetails,
@@ -49,25 +50,24 @@ public class ImagesResource extends BaseAdminResource {
     return imageService.getImageById(id);
   }
 
-  @PostMapping(name = "/images/update", consumes = "multipart/form-data")
+  @PostMapping(value = "/images/{id}/updateImage", consumes = "multipart/form-data")
   public ResponseEntity updateImage(
     @AuthenticationPrincipal UserDetailsImpl userDetails,
     @HeaderLang String lang,
-//    @RequestPart("image") Image image,
-    @RequestParam("uploadedFile") MultipartFile uploadedFile
+    @RequestParam("imageFile") MultipartFile imageFile,
+    @PathVariable("id") Integer id
   ){
 //    this.imageService.updateImage(image, uploadedFile);
     return new ResponseEntity(HttpStatus.NO_CONTENT);
   }
 
-  @GetMapping(name = "/images/update2/update")
-  public ResponseEntity updateImage2(
+  @PostMapping("/images/updateImageInfo")
+  public ResponseEntity updateImageInfo(
       @AuthenticationPrincipal UserDetailsImpl userDetails,
       @HeaderLang String lang,
-      @PathVariable("id") Integer id
+      @RequestBody Image image
   ){
 //    this.imageService.updateImage(image, uploadedFile);
     return new ResponseEntity(HttpStatus.NO_CONTENT);
   }
-
 }
