@@ -11,4 +11,6 @@ public interface IImageDao {
   List<Image> getImages();
 
   Image getImageById(Integer id);
+
+  void updateImage(Image image);
 }

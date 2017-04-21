@@ -7,13 +7,13 @@ import ht.auth.UserDetailsImpl;
 import ht.common.beans.HeaderLang;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.util.Assert;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
 import java.util.List;
 
@@ -48,4 +48,26 @@ public class ImagesResource extends BaseAdminResource {
   ) {
     return imageService.getImageById(id);
   }
+
+  @PostMapping(name = "/images/update", consumes = "multipart/form-data")
+  public ResponseEntity updateImage(
+    @AuthenticationPrincipal UserDetailsImpl userDetails,
+    @HeaderLang String lang,
+//    @RequestPart("image") Image image,
+    @RequestParam("uploadedFile") MultipartFile uploadedFile
+  ){
+//    this.imageService.updateImage(image, uploadedFile);
+    return new ResponseEntity(HttpStatus.NO_CONTENT);
+  }
+
+  @GetMapping(name = "/images/update2/update")
+  public ResponseEntity updateImage2(
+      @AuthenticationPrincipal UserDetailsImpl userDetails,
+      @HeaderLang String lang,
+      @PathVariable("id") Integer id
+  ){
+//    this.imageService.updateImage(image, uploadedFile);
+    return new ResponseEntity(HttpStatus.NO_CONTENT);
+  }
+
 }

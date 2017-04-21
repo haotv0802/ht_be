@@ -8,7 +8,6 @@ import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.EmptyResultDataAccessException;
-import org.springframework.jdbc.core.RowMapper;
 import org.springframework.jdbc.core.namedparam.MapSqlParameterSource;
 import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate;
 import org.springframework.stereotype.Repository;
@@ -44,19 +43,20 @@ public class ImageDao implements IImageDao {
 
     DaoUtils.debugQuery(LOGGER, sql, paramsMap.getValues());
 
-    List<Image> images = namedTemplate.query(sql, paramsMap, (rs, rowNum) -> {
-      Image image = new Image();
-      image.setId(rs.getInt("id"));
-      image.setName(rs.getString("name"));
-      image.setImageURL(rs.getString("image_url"));
-      image.setImageInfo(rs.getString("image_info"));
-      image.setDescription(rs.getString("description"));
-      image.setCreatedOn(rs.getDate("created_on"));
-
-      return image;
-    });
+    List<Image> images = namedTemplate.query(sql, paramsMap, (rs, rowNum) -> buildImage(rs));
 
     return images;
+  }
+
+  private Image buildImage(ResultSet rs) throws SQLException {
+    Image img = new Image();
+    img.setId(rs.getInt("id"));
+    img.setName(rs.getString("name"));
+    img.setImageURL(rs.getString("image_url"));
+    img.setImageInfo(rs.getString("image_info"));
+    img.setDescription(rs.getString("description"));
+    img.setCreatedOn(rs.getDate("created_on"));
+    return img;
   }
 
   @Override
@@ -74,21 +74,35 @@ public class ImageDao implements IImageDao {
 
     Image image = null;
     try {
-      image = namedTemplate.queryForObject(sql, paramsMap, (rs, rowNum) -> {
-        Image img = new Image();
-        img.setId(rs.getInt("id"));
-        img.setName(rs.getString("name"));
-        img.setImageURL(rs.getString("image_url"));
-        img.setImageInfo(rs.getString("image_info"));
-        img.setDescription(rs.getString("description"));
-        img.setCreatedOn(rs.getDate("created_on"));
-
-        return img;
-      });
+      image = namedTemplate.queryForObject(sql, paramsMap, (rs, rowNum) -> buildImage(rs));
     } catch (EmptyResultDataAccessException ex) {
       this.LOGGER.info(ex);
     }
     return image;
+  }
+
+  @Override
+  public void updateImage(Image image) {
+    final String sql = "UPDATE image                 "
+                     + "SET                          "
+                     + "	name = :name,              "
+                     + "	image_url = :imageURL,     "
+                     + "	image_info = :imageInfo,   "
+                     + "	description = :description,"
+                     + "	updated_on = NOW()         "
+                     + "WHERE                        "
+                     + "	id = :id                   "
+        ;
+    final MapSqlParameterSource paramsMap = new MapSqlParameterSource();
+    paramsMap.addValue("id", image.getId());
+    paramsMap.addValue("name", image.getName());
+    paramsMap.addValue("imageURL", image.getImageURL());
+    paramsMap.addValue("imageInfo", image.getImageInfo());
+    paramsMap.addValue("description", image.getDescription());
+
+    DaoUtils.debugQuery(LOGGER, sql, paramsMap.getValues());
+
+    namedTemplate.update(sql, paramsMap);
   }
 
 }

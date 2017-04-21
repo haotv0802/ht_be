@@ -7,6 +7,7 @@ import io.jsonwebtoken.lang.Assert;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Service;
+import org.springframework.web.multipart.MultipartFile;
 
 import java.util.List;
 
@@ -32,5 +33,12 @@ public class ImageService implements IImageService {
   @Override
   public Image getImageById(Integer id) {
     return imageDao.getImageById(id);
+  }
+
+  @Override
+  public void updateImage(Image image, MultipartFile multipartFile) {
+    // TODO save the file to folder.
+
+    this.imageDao.updateImage(image);
   }
 }
