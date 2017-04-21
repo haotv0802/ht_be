@@ -28,4 +28,9 @@ public class ImageService implements IImageService {
   public List<Image> getImages() {
     return imageDao.getImages();
   }
+
+  @Override
+  public Image getImageById(Integer id) {
+    return imageDao.getImageById(id);
+  }
 }

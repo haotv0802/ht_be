@@ -12,7 +12,7 @@ public class Image {
   private String imageURL;
   private String imageInfo;
   private String description;
-  private Date creationDate;
+  private Date createdOn;
 
   public int getId() {
     return id;
@@ -54,11 +54,11 @@ public class Image {
     this.description = description;
   }
 
-  public Date getCreationDate() {
-    return creationDate;
+  public Date getCreatedOn() {
+    return createdOn;
   }
 
-  public void setCreationDate(Date creationDate) {
-    this.creationDate = creationDate;
+  public void setCreatedOn(Date createdOn) {
+    this.createdOn = createdOn;
   }
 }

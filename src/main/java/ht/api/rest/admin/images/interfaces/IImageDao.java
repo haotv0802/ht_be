@@ -9,4 +9,6 @@ import java.util.List;
  */
 public interface IImageDao {
   List<Image> getImages();
+
+  Image getImageById(Integer id);
 }

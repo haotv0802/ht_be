@@ -21,4 +21,14 @@ public class ImagesResourceTest extends BaseDocumentation {
         .andExpect(status().is(200))
     ;
   }
+  @Test
+  public void testGetImageById() throws Exception {
+    mockMvc
+        .perform(get("/svc/admin/images/{id}", 1111)
+            .header("Accept-Language", "en")
+            .header("X-AUTH-TOKEN", authTokenService.getAuthToken())
+        )
+        .andExpect(status().is(200))
+    ;
+  }
 }

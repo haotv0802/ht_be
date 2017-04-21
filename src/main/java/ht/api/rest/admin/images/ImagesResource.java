@@ -11,6 +11,8 @@ import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.util.Assert;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import java.util.List;
@@ -32,8 +34,18 @@ public class ImagesResource extends BaseAdminResource {
   @GetMapping("/images")
   @PreAuthorize("hasAuthority('ADMIN')")
   public List<Image> getImages(
-       @AuthenticationPrincipal UserDetailsImpl userDetails
-      ,@HeaderLang String lang) {
+      @AuthenticationPrincipal UserDetailsImpl userDetails,
+      @HeaderLang String lang) {
     return imageService.getImages();
+  }
+
+  @GetMapping("/images/{id}")
+  @PreAuthorize("hasAuthority('ADMIN')")
+  public Image getImagesById(
+      @AuthenticationPrincipal UserDetailsImpl userDetails,
+      @HeaderLang String lang,
+      @PathVariable("id") Integer id
+  ) {
+    return imageService.getImageById(id);
   }
 }

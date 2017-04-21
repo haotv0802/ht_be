@@ -9,4 +9,6 @@ import java.util.List;
  */
 public interface IImageService {
   List<Image> getImages();
+
+  Image getImageById(Integer id);
 }

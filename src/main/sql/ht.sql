@@ -97,13 +97,14 @@ CREATE TABLE `auth_token` (
 --
 DROP TABLE IF EXISTS `image`;
 CREATE TABLE `image` (
-  `id`          BIGINT AUTO_INCREMENT,
+  `id`          BIGINT                AUTO_INCREMENT,
   `name`        VARCHAR(45)  NOT NULL,
   #   Promotion and Individual tables refer to this table. Name which is input helps Admin searches faster.
   `image_url`   VARCHAR(200) NOT NULL,
   `image_info`  VARCHAR(100) NOT NULL,
   `description` VARCHAR(100),
-  `date`        DATETIME     NOT NULL,
+  `created_on`  DATETIME     NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  `updated_on`  DATETIME     NULL,
   PRIMARY KEY (`id`),
   UNIQUE KEY `image_id_unique` (`id`),
   UNIQUE KEY `image_name_unique` (`name`)
@@ -111,25 +112,25 @@ CREATE TABLE `image` (
   ENGINE = InnoDB
   DEFAULT CHARSET = utf8;
 
-INSERT INTO `image` (`name`, `image_url`, `image_info`, `description`, `date`)
+INSERT INTO `image` (`name`, `image_url`, `image_info`, `description`, `updated_on`)
 VALUES ('image 1', './app/assets/individuals&promotions/DSC_3997.JPG', 'info 1', 'description', sysdate());
-INSERT INTO `image` (`name`, `image_url`, `image_info`, `description`, `date`)
+INSERT INTO `image` (`name`, `image_url`, `image_info`, `description`, `updated_on`)
 VALUES ('image 2', './app/assets/individuals&promotions/DSC_4014.JPG', 'info 2', 'description', sysdate());
-INSERT INTO `image` (`name`, `image_url`, `image_info`, `description`, `date`)
+INSERT INTO `image` (`name`, `image_url`, `image_info`, `description`, `updated_on`)
 VALUES ('image 3', './app/assets/individuals&promotions/DSC_4038.JPG', 'info 3', 'description', sysdate());
-INSERT INTO `image` (`name`, `image_url`, `image_info`, `description`, `date`)
+INSERT INTO `image` (`name`, `image_url`, `image_info`, `description`, `updated_on`)
 VALUES ('image 4', './app/assets/individuals&promotions/DSC_4055.JPG', 'info 4', 'description', sysdate());
-INSERT INTO `image` (`name`, `image_url`, `image_info`, `description`, `date`)
+INSERT INTO `image` (`name`, `image_url`, `image_info`, `description`, `updated_on`)
 VALUES ('image 5', './app/assets/individuals&promotions/DSC_4108.JPG', 'info 5', 'description', sysdate());
-INSERT INTO `image` (`name`, `image_url`, `image_info`, `description`, `date`)
+INSERT INTO `image` (`name`, `image_url`, `image_info`, `description`, `updated_on`)
 VALUES ('image 6', './app/assets/individuals&promotions/DSC_4196.JPG', 'info 6', 'description', sysdate());
-INSERT INTO `image` (`name`, `image_url`, `image_info`, `description`, `date`)
+INSERT INTO `image` (`name`, `image_url`, `image_info`, `description`, `updated_on`)
 VALUES ('image 7', './app/assets/individuals&promotions/DSC_4252.JPG', 'info 7', 'description', sysdate());
-INSERT INTO `image` (`name`, `image_url`, `image_info`, `description`, `date`)
+INSERT INTO `image` (`name`, `image_url`, `image_info`, `description`, `updated_on`)
 VALUES ('image 8', './app/assets/individuals&promotions/DSC_4330.JPG', 'info 8', 'description', sysdate());
-INSERT INTO `image` (`name`, `image_url`, `image_info`, `description`, `date`)
+INSERT INTO `image` (`name`, `image_url`, `image_info`, `description`, `updated_on`)
 VALUES ('image 9', './app/assets/individuals&promotions/DSC_4336.JPG', 'info 9', 'description', sysdate());
-INSERT INTO `image` (`name`, `image_url`, `image_info`, `description`, `date`)
+INSERT INTO `image` (`name`, `image_url`, `image_info`, `description`, `updated_on`)
 VALUES ('image 10', './app/assets/individuals&promotions/DSC_4377.JPG', 'info 10', 'description', sysdate());
 
 --
@@ -158,12 +159,12 @@ INSERT INTO `room_type` VALUES (4, 'Family or big room', 4, 2, "2 Double Beds");
 --
 DROP TABLE IF EXISTS `room_type_image`;
 CREATE TABLE `room_type_image` (
-  `id`           BIGINT AUTO_INCREMENT,
+  `id`           BIGINT   AUTO_INCREMENT,
   `room_type_id` BIGINT(45)   NOT NULL,
   `image_url`    VARCHAR(200) NOT NULL,
   `image_info`   VARCHAR(100) NULL,
   `description`  VARCHAR(100),
-  `date`         DATETIME     NOT NULL,
+  `created_on`   DATETIME DEFAULT CURRENT_TIMESTAMP,
   PRIMARY KEY (`id`),
   UNIQUE KEY `room_type_image_id_unique` (`id`),
   CONSTRAINT `room_type_image_image_id` FOREIGN KEY (`room_type_id`) REFERENCES `room_type` (`id`)
@@ -171,29 +172,29 @@ CREATE TABLE `room_type_image` (
   ENGINE = InnoDB
   DEFAULT CHARSET = utf8;
 
-INSERT INTO `room_type_image` (`room_type_id`, `image_url`, `image_info`, `date`)
-VALUES (1, './app/assets/Room1_01.jpg', 'info 1', sysdate());
-INSERT INTO `room_type_image` (`room_type_id`, `image_url`, `image_info`, `date`)
-VALUES (1, './app/assets/Room1_02.jpg', 'info 1', sysdate());
+INSERT INTO `room_type_image` (`room_type_id`, `image_url`, `image_info`)
+VALUES (1, './app/assets/Room1_01.jpg', 'Type 1, image 1');
+INSERT INTO `room_type_image` (`room_type_id`, `image_url`, `image_info`)
+VALUES (1, './app/assets/Room1_02.jpg', 'Type 1, image 2');
 
-INSERT INTO `room_type_image` (`room_type_id`, `image_url`, `image_info`, `date`)
-VALUES (2, './app/assets/Room2_01.jpg', 'info 2', sysdate());
-INSERT INTO `room_type_image` (`room_type_id`, `image_url`, `image_info`, `date`)
-VALUES (2, './app/assets/Room2_02.jpg', 'info 2', sysdate());
+INSERT INTO `room_type_image` (`room_type_id`, `image_url`, `image_info`)
+VALUES (2, './app/assets/Room2_01.jpg', 'Type 2, image 1');
+INSERT INTO `room_type_image` (`room_type_id`, `image_url`, `image_info`)
+VALUES (2, './app/assets/Room2_02.jpg', 'Type 2, image 2');
 
-INSERT INTO `room_type_image` (`room_type_id`, `image_url`, `image_info`, `date`)
-VALUES (3, './app/assets/Room3_01.jpg', 'info 3', sysdate());
-INSERT INTO `room_type_image` (`room_type_id`, `image_url`, `image_info`, `date`)
-VALUES (3, './app/assets/Room3_02.jpg', 'info 3', sysdate());
-INSERT INTO `room_type_image` (`room_type_id`, `image_url`, `image_info`, `date`)
-VALUES (3, './app/assets/Room3_03.jpg', 'info 3', sysdate());
-INSERT INTO `room_type_image` (`room_type_id`, `image_url`, `image_info`, `date`)
-VALUES (3, './app/assets/Room3_04.jpg', 'info 3', sysdate());
+INSERT INTO `room_type_image` (`room_type_id`, `image_url`, `image_info`)
+VALUES (3, './app/assets/Room3_01.jpg', 'Type 3, image 1');
+INSERT INTO `room_type_image` (`room_type_id`, `image_url`, `image_info`)
+VALUES (3, './app/assets/Room3_02.jpg', 'Type 3, image 2');
+INSERT INTO `room_type_image` (`room_type_id`, `image_url`, `image_info`)
+VALUES (3, './app/assets/Room3_03.jpg', 'Type 3, image 3');
+INSERT INTO `room_type_image` (`room_type_id`, `image_url`, `image_info`)
+VALUES (3, './app/assets/Room3_04.jpg', 'Type 3, image 4');
 
-INSERT INTO `room_type_image` (`room_type_id`, `image_url`, `image_info`, `date`)
-VALUES (4, './app/assets/Room3_03.jpg', 'info 4', sysdate());
-INSERT INTO `room_type_image` (`room_type_id`, `image_url`, `image_info`, `date`)
-VALUES (4, './app/assets/Room3_04.jpg', 'info 4', sysdate());
+INSERT INTO `room_type_image` (`room_type_id`, `image_url`, `image_info`)
+VALUES (4, './app/assets/Room3_03.jpg', 'Type 4, image 1');
+INSERT INTO `room_type_image` (`room_type_id`, `image_url`, `image_info`)
+VALUES (4, './app/assets/Room3_04.jpg', 'Type 4, image 2');
 
 --
 -- Table structure for table `room`
@@ -263,7 +264,7 @@ CREATE TABLE `room_price` (
   `price`        DOUBLE      NOT NULL,
   `room_type_id` BIGINT      NOT NULL,
   `day`          TINYINT     NOT NULL,
-  `date`         DATETIME DEFAULT now(),
+  `created_on`   DATETIME DEFAULT now(),
   #   `end_date`     DATETIME    NOT NULL,
   PRIMARY KEY (`id`),
   UNIQUE KEY `room_price_id_unique` (`id`),
