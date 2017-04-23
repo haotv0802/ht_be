@@ -12,7 +12,6 @@ import java.util.concurrent.TimeUnit;
  * <p>
  * NOTE: When the thread is terminated, then will close all connections
  *
- * @author rpaskalev
  */
 public class ConnectionsWatchdog implements Runnable {
   private Logger log = LogManager.getLogger(getClass());

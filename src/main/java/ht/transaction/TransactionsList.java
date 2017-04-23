@@ -24,9 +24,9 @@ public class TransactionsList {
   private static final TransactionsList instance = new TransactionsList();
 
   /**
-   * For now make it a real singleton, untill i find a better solution
+   * For now make it a real singleton, until i find a better solution
    */
-  private TransactionsList() {
+  public TransactionsList() {
   }
 
   public static TransactionsList getInstance() {
