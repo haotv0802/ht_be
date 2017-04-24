@@ -24,7 +24,6 @@ import ht.transaction.TransactionsList;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.context.MessageSource;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
@@ -42,7 +41,6 @@ import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate;
 import org.springframework.jdbc.datasource.DataSourceTransactionManager;
 import org.springframework.security.authentication.AuthenticationManager;
-import org.springframework.security.authentication.dao.DaoAuthenticationProvider;
 import org.springframework.security.config.annotation.method.configuration.EnableGlobalMethodSecurity;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
@@ -155,7 +153,6 @@ public class SpringConfig extends WebMvcConfigurerAdapter {
     return new TransactionTemplate(txManager());
   }
 
-
   @Override
   public void configureContentNegotiation(ContentNegotiationConfigurer configurer) {
     configurer.defaultContentType(MediaType.APPLICATION_JSON);
@@ -191,7 +188,6 @@ public class SpringConfig extends WebMvcConfigurerAdapter {
     super.addInterceptors(registry);
   }
 
-
   @Bean(name = "multipartResolver")
   public CommonsMultipartResolver createMultipartResolver() {
     CommonsMultipartResolver resolver = new CommonsMultipartResolver();
@@ -219,7 +215,6 @@ public class SpringConfig extends WebMvcConfigurerAdapter {
 
     super.addArgumentResolvers(argumentResolvers);
   }
-
 
   @Bean
   public TransactionFilter txFilter() {
@@ -287,9 +282,6 @@ public class SpringConfig extends WebMvcConfigurerAdapter {
     @Autowired
     private CorsFilter corsFilter;
 
-    @Autowired
-    private AccessDeniedHandlerImpl accessDeniedHandlerImpl;
-
     @Resource(name = "authService")
     private UserDetailsService userDetailsService;
 //    @Autowired
@@ -301,25 +293,10 @@ public class SpringConfig extends WebMvcConfigurerAdapter {
 //      auth.authenticationProvider(authenticationProvider);
 //    }
 
-    @Bean(name = "messageSource")
-    public MessageSource messageSource() {
-      ResourceBundleMessageSource b = new ResourceBundleMessageSource();
-      b.setBasenames(
-          "i18n.LoginResource"
-      );
-      b.setUseCodeAsDefaultMessage(true);
-      return b;
-    }
-
-
-
-
-
     @Bean
     public AccessDeniedHandlerImpl customizedAccessDeniedHandler() {
       return new AccessDeniedHandlerImpl(messageSource());
     }
-
 
     @Override
     protected void configure(HttpSecurity http) throws Exception {
@@ -373,21 +350,20 @@ public class SpringConfig extends WebMvcConfigurerAdapter {
     @Override
     public AuthenticationManager authenticationManagerBean() throws Exception {
       return super.authenticationManagerBean();
-
-
-    }
-
-    @Bean
-
-
-    public AuthenticationFailureHandlerImpl customizedAuthenticationFailureHandler() {
-      return new AuthenticationFailureHandlerImpl(messageSource());
     }
 
     @Bean
     public AuthenticationSuccessHandlerImpl customizedAuthenticationSuccessHandler() {
       return new AuthenticationSuccessHandlerImpl();
     }
+
+    @Bean
+    public AuthenticationFailureHandlerImpl customizedAuthenticationFailureHandler() {
+      return new AuthenticationFailureHandlerImpl(messageSource());
+    }
+
+    @Autowired
+    private AccessDeniedHandlerImpl accessDeniedHandlerImpl;
 
     @Bean
     StatelessAuthenticationFilter statelessAuthenticationFilter() {
@@ -425,6 +401,16 @@ public class SpringConfig extends WebMvcConfigurerAdapter {
 
       return new PasswordEncoderImpl(passwordEncoder) {
       };
+    }
+
+    @Bean(name = "messageSource")
+    public MessageSource messageSource() {
+      ResourceBundleMessageSource b = new ResourceBundleMessageSource();
+      b.setBasenames(
+          "i18n.LoginResource"
+      );
+      b.setUseCodeAsDefaultMessage(true);
+      return b;
     }
 
     @Override
