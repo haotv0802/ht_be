@@ -24,29 +24,29 @@ public class ImagesResourceTest extends BaseDocumentation {
 
   private String txId;
 
-  @BeforeMethod
-  public void beforeTest() throws Exception {
-    //start transaction
-    txId = objectMapper
-        .readValue(mockMvc
-            .perform(RestDocumentationRequestBuilders.post("/svc/transactions").header("X-AUTH-TOKEN", authTokenService.getAuthToken()))
-            .andExpect(status().isCreated())
-            .andReturn()
-            .getResponse()
-            .getContentAsString(), Transaction.class)
-        .getTxId();
-
-  }
-
-  @AfterMethod(alwaysRun = true)
-  public void afterTest() throws Exception {
-    //"rollback" transaction
-    mockMvc
-        .perform(delete("/svc/transactions")
-            .header("X-AUTH-TOKEN", authTokenService.getAuthToken())
-            .header("txId", txId))
-        .andExpect(status().isOk());
-  }
+//  @BeforeMethod
+//  public void beforeTest() throws Exception {
+//    //start transaction
+//    txId = objectMapper
+//        .readValue(mockMvc
+//            .perform(RestDocumentationRequestBuilders.post("/svc/transactions").header("X-AUTH-TOKEN", authTokenService.getAuthToken()))
+//            .andExpect(status().isCreated())
+//            .andReturn()
+//            .getResponse()
+//            .getContentAsString(), Transaction.class)
+//        .getTxId();
+//
+//  }
+//
+//  @AfterMethod
+//  public void afterTest() throws Exception {
+//    //"rollback" transaction
+//    mockMvc
+//        .perform(delete("/svc/transactions")
+//            .header("X-AUTH-TOKEN", authTokenService.getAuthToken())
+//            .header("txId", txId))
+//        .andExpect(status().isOk());
+//  }
 
   @Test
   public void testGetImages() throws Exception {

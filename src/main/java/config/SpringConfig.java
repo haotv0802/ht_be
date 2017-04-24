@@ -18,6 +18,7 @@ import ht.auth.encoders.SHA1PasswordEncoder;
 import ht.auth.filters.*;
 import ht.common.HeaderLangHandlerMethodArgumentResolver;
 import ht.transaction.ConnectionsWatchdog;
+import ht.transaction.ManagedDataSourceProxy;
 import ht.transaction.TransactionFilter;
 import ht.transaction.TransactionsList;
 import org.apache.logging.log4j.LogManager;
@@ -137,8 +138,8 @@ public class SpringConfig extends WebMvcConfigurerAdapter {
     ds.setUser(usr);
     ds.setPassword(pass);
 
-    return ds;
-//    return new ManagedDataSourceProxy(ds);
+//    return ds;
+    return new ManagedDataSourceProxy(ds);
   }
 
   @Bean(name = "txManager")
