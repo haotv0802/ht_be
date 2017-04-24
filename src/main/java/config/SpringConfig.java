@@ -164,6 +164,7 @@ public class SpringConfig extends WebMvcConfigurerAdapter {
   public TransactionsList transactionsList() {
     return TransactionsList.getInstance();
   }
+
  /*
  @Bean
   public GlobalExceptionHandler createGlobalExceptionHandler() {
