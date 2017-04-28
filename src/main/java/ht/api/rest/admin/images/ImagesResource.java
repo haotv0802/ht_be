@@ -3,6 +3,7 @@ package ht.api.rest.admin.images;
 import ht.api.rest.admin.BaseAdminResource;
 import ht.api.rest.admin.images.beans.Image;
 import ht.api.rest.admin.images.interfaces.IImageService;
+import ht.auth.AuthConstants;
 import ht.auth.UserDetailsImpl;
 import ht.common.beans.HeaderLang;
 import ht.transaction.ImxTransactionCommit;
@@ -80,7 +81,7 @@ public class ImagesResource extends BaseAdminResource {
       HttpSession httpSession
   ){
     this.imageService.updateImageInfo(image);
-    imxTransactionCommit.permitCommit(httpSession);
+    imxTransactionCommit.permitCommit(request.getHeader(AuthConstants.AUTH_HEADER_NAME));
     return new ResponseEntity(HttpStatus.NO_CONTENT);
   }
 }

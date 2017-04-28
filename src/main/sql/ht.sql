@@ -97,10 +97,10 @@ CREATE TABLE `auth_token` (
 --
 DROP TABLE IF EXISTS `tx_token`;
 CREATE TABLE `tx_token` (
-  `id`                 BIGINT               AUTO_INCREMENT,
-  `auth_token`         VARCHAR(45) NOT NULL,
-  `possible_to_commit` BOOLEAN     NOT NULL DEFAULT FALSE,
-  `exp_date`           DATETIME    NOT NULL,
+  `id`                 BIGINT                AUTO_INCREMENT,
+  `auth_token`         VARCHAR(200) NOT NULL,
+  `possible_to_commit` BOOLEAN      NOT NULL DEFAULT FALSE,
+  `exp_date`           DATETIME     NOT NULL,
   PRIMARY KEY (`id`),
   UNIQUE KEY `auth_token_id_unique` (`id`)
 )

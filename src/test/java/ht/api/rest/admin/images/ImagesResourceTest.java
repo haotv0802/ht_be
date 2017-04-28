@@ -109,7 +109,7 @@ public class ImagesResourceTest extends BaseDocumentation {
     MvcResult result = mockMvc
         .perform(get("/svc/admin/images/{id}/info", 1)
             .header("Accept-Language", "en")
-//            .header("txId", txId)
+            .header("txId", txId)
             .header("X-AUTH-TOKEN", authTokenService.getAuthToken())
         )
         .andExpect(status().is(200))
