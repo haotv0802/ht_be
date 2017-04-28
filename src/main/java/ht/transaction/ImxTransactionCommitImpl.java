@@ -1,12 +1,18 @@
 package ht.transaction;
 
+import ht.transaction.beans.TransactionCommit;
+import ht.transaction.interfaces.ITransactionDao;
+import org.apache.commons.lang3.time.DateUtils;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Service;
 import org.springframework.util.Assert;
 import org.springframework.web.context.request.RequestContextHolder;
 
 import javax.servlet.http.HttpSession;
+
+import java.util.Calendar;
 
 import static org.springframework.web.context.request.RequestAttributes.SCOPE_SESSION;
 
@@ -19,6 +25,22 @@ import static org.springframework.web.context.request.RequestAttributes.SCOPE_SE
 public class ImxTransactionCommitImpl implements ImxTransactionCommit {
 
   private Logger logger = LogManager.getLogger(getClass());
+
+  private final ITransactionDao transactionDao;
+
+  public ImxTransactionCommitImpl(@Qualifier("transactionDao") ITransactionDao transactionDao) {
+    this.transactionDao = transactionDao;
+  }
+
+  @Override
+  public void createCommit(String authToken) {
+    TransactionCommit commit = new TransactionCommit();
+    commit.setAuthToken(authToken);
+    commit.setPossibleToCommit(false);
+    commit.setExpDate(DateUtils.addHours(Calendar.getInstance().getTime(), 1 / 2));
+
+    this.transactionDao.createTransaction(commit);
+  }
 
   @Override
   public void permitCommit() {
@@ -71,12 +93,31 @@ public class ImxTransactionCommitImpl implements ImxTransactionCommit {
   }
 
   @Override
+  public void permitCommit(String authToken) {
+    Assert.notNull(authToken);
+
+    this.transactionDao.updateCommit(authToken, true);
+
+    logger.debug("Commit is set to permitted for txId {}", authToken);
+  }
+
+  @Override
   public void forbidCommit(HttpSession session) {
     Assert.notNull(session);
 
     session.setAttribute(commitAttribute, false);
 
     logger.debug("Commit is set to forbidden for session {}", session.getId());
+  }
+
+  @Override
+  public void forbidCommit(String authToken) {
+    Assert.notNull(authToken);
+
+    this.transactionDao.updateCommit(authToken, false);
+//    session.setAttribute(commitAttribute, false);
+
+    logger.debug("Commit is set to forbidden for txId {}", authToken);
   }
 
   @Override
@@ -93,6 +134,20 @@ public class ImxTransactionCommitImpl implements ImxTransactionCommit {
       logger.debug("Commit is set to permitted for session {}", session.getId());
     else
       logger.debug("Commit is set to forbidden for session {}", session.getId());
+
+    return isCommitPermited;
+  }
+
+  @Override
+  public boolean isCommitPermitted(String authToken) {
+    Assert.notNull(authToken);
+
+    boolean isCommitPermited = this.transactionDao.getTransaction(authToken).getPossibleToCommit();
+
+    if (isCommitPermited)
+      logger.debug("Commit is set to permitted for txId {}", authToken);
+    else
+      logger.debug("Commit is set to forbidden for txId {}", authToken);
 
     return isCommitPermited;
   }

@@ -93,6 +93,21 @@ CREATE TABLE `auth_token` (
   DEFAULT CHARSET = utf8;
 
 --
+-- Table structure for table `tx_token`
+--
+DROP TABLE IF EXISTS `tx_token`;
+CREATE TABLE `tx_token` (
+  `id`                 BIGINT               AUTO_INCREMENT,
+  `auth_token`         VARCHAR(45) NOT NULL,
+  `possible_to_commit` BOOLEAN     NOT NULL DEFAULT FALSE,
+  `exp_date`           DATETIME    NOT NULL,
+  PRIMARY KEY (`id`),
+  UNIQUE KEY `auth_token_id_unique` (`id`)
+)
+  ENGINE = InnoDB
+  DEFAULT CHARSET = utf8;
+
+--
 -- Table structure for table `image`
 --
 DROP TABLE IF EXISTS `image`;

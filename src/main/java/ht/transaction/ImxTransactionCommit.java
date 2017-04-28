@@ -11,6 +11,8 @@ public interface ImxTransactionCommit {
 
   String commitAttribute = "isPossibleToCommit";
 
+  void createCommit(String authToken);
+
   void permitCommit();
 
   void forbidCommit();
@@ -19,7 +21,13 @@ public interface ImxTransactionCommit {
 
   void permitCommit(HttpSession session);
 
+  void permitCommit(String authToken);
+
   void forbidCommit(HttpSession session);
 
+  void forbidCommit(String authToken);
+
   boolean isCommitPermitted(HttpSession session);
+
+  boolean isCommitPermitted(String authToken);
 }
