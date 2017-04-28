@@ -14,4 +14,6 @@ public interface IImageService {
   Image getImageById(Integer id);
 
   void updateImage(Image image, MultipartFile multipartFile);
+
+  void updateImageInfo(Image image);
 }

@@ -139,8 +139,8 @@ public class SpringConfig extends WebMvcConfigurerAdapter {
     ds.setUser(usr);
     ds.setPassword(pass);
 
-//    return ds;
-    return new ManagedDataSourceProxy(ds);
+    return ds;
+//    return new ManagedDataSourceProxy(ds);
   }
 
   @Bean(name = "txManager")

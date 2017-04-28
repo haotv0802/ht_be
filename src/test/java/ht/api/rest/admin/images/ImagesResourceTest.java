@@ -15,6 +15,7 @@ import org.testng.annotations.Test;
 import static org.springframework.restdocs.mockmvc.RestDocumentationRequestBuilders.delete;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.put;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 /**
@@ -24,29 +25,29 @@ public class ImagesResourceTest extends BaseDocumentation {
 
   private String txId;
 
-//  @BeforeMethod
-//  public void beforeTest() throws Exception {
-//    //start transaction
-//    txId = objectMapper
-//        .readValue(mockMvc
-//            .perform(RestDocumentationRequestBuilders.post("/svc/transactions").header("X-AUTH-TOKEN", authTokenService.getAuthToken()))
-//            .andExpect(status().isCreated())
-//            .andReturn()
-//            .getResponse()
-//            .getContentAsString(), Transaction.class)
-//        .getTxId();
-//
-//  }
-//
-//  @AfterMethod
-//  public void afterTest() throws Exception {
-//    //"rollback" transaction
-//    mockMvc
-//        .perform(delete("/svc/transactions")
-//            .header("X-AUTH-TOKEN", authTokenService.getAuthToken())
-//            .header("txId", txId))
-//        .andExpect(status().isOk());
-//  }
+  @BeforeMethod
+  public void beforeTest() throws Exception {
+    //start transaction
+    txId = objectMapper
+        .readValue(mockMvc
+            .perform(RestDocumentationRequestBuilders.post("/svc/transactions").header("X-AUTH-TOKEN", authTokenService.getAuthToken()))
+            .andExpect(status().isCreated())
+            .andReturn()
+            .getResponse()
+            .getContentAsString(), Transaction.class)
+        .getTxId();
+
+  }
+
+  @AfterMethod
+  public void afterTest() throws Exception {
+    //"rollback" transaction
+    mockMvc
+        .perform(put("/svc/transactions")
+            .header("X-AUTH-TOKEN", authTokenService.getAuthToken())
+            .header("txId", txId))
+        .andExpect(status().isOk());
+  }
 
   @Test
   public void testGetImages() throws Exception {
@@ -64,7 +65,7 @@ public class ImagesResourceTest extends BaseDocumentation {
     mockMvc
         .perform(get("/svc/admin/images/{id}/info", 1111)
             .header("Accept-Language", "en")
-//            .header("txId", txId)
+            .header("txId", txId)
             .header("X-AUTH-TOKEN", authTokenService.getAuthToken())
         )
         .andExpect(status().is(200))
@@ -76,6 +77,7 @@ public class ImagesResourceTest extends BaseDocumentation {
     MvcResult result = mockMvc
         .perform(get("/svc/admin/images/{id}/info", 1)
             .header("Accept-Language", "en")
+            .header("txId", txId)
             .header("X-AUTH-TOKEN", authTokenService.getAuthToken())
         )
         .andExpect(status().is(200))
@@ -107,6 +109,7 @@ public class ImagesResourceTest extends BaseDocumentation {
     MvcResult result = mockMvc
         .perform(get("/svc/admin/images/{id}/info", 1)
             .header("Accept-Language", "en")
+//            .header("txId", txId)
             .header("X-AUTH-TOKEN", authTokenService.getAuthToken())
         )
         .andExpect(status().is(200))
@@ -115,16 +118,33 @@ public class ImagesResourceTest extends BaseDocumentation {
 
     JSONObject jsonObject = new JSONObject(result.getResponse().getContentAsString());
     Image image = objectMapper.readValue(result.getResponse().getContentAsString(), Image.class);
+    image.setDescription("Hello Hao");
 
     mockMvc
-//        .perform(post("/svc/admin/images/update")
         .perform(post("/svc/admin/images/updateImageInfo")
             .header("Accept-Language", "en")
             .header("X-AUTH-TOKEN", authTokenService.getAuthToken())
             .content(objectMapper.writeValueAsString(image))
             .contentType(MediaType.APPLICATION_JSON)
         )
-        .andExpect(status().is(200))
+        .andExpect(status().is(204))
     ;
+
+//    mockMvc
+//        .perform(get("/svc/admin/images/{id}/info", 1)
+//            .header("Accept-Language", "en")
+//            .header("txId", txId)
+//            .header("X-AUTH-TOKEN", authTokenService.getAuthToken())
+//        )
+//        .andExpect(status().is(200))
+    ;
+    mockMvc
+        .perform(get("/svc/admin/images/{id}/info", image.getId())
+                .header("Accept-Language", "en")
+//            .header("txId", txId)
+                .header("X-AUTH-TOKEN", authTokenService.getAuthToken())
+        )
+        .andExpect(status().is(200))
+        ;
   }
 }

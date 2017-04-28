@@ -5,6 +5,7 @@ import ht.api.rest.admin.images.beans.Image;
 import ht.api.rest.admin.images.interfaces.IImageService;
 import ht.auth.UserDetailsImpl;
 import ht.common.beans.HeaderLang;
+import ht.transaction.ImxTransactionCommit;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.http.HttpStatus;
@@ -15,6 +16,7 @@ import org.springframework.util.Assert;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
+import javax.servlet.http.HttpSession;
 import javax.validation.Valid;
 import java.util.List;
 
@@ -26,10 +28,17 @@ public class ImagesResource extends BaseAdminResource {
 
   private final IImageService imageService;
 
+  private final ImxTransactionCommit imxTransactionCommit;
+
   @Autowired
-  public ImagesResource(@Qualifier("adminImageService") IImageService imageService) {
+  public ImagesResource(
+      @Qualifier("adminImageService") IImageService imageService,
+      ImxTransactionCommit imxTransactionCommit
+  ) {
     Assert.notNull(imageService);
+    Assert.notNull(imxTransactionCommit);
     this.imageService = imageService;
+    this.imxTransactionCommit = imxTransactionCommit;
   }
 
   @GetMapping("/images")
@@ -65,9 +74,11 @@ public class ImagesResource extends BaseAdminResource {
   public ResponseEntity updateImageInfo(
       @AuthenticationPrincipal UserDetailsImpl userDetails,
       @HeaderLang String lang,
-      @RequestBody Image image
+      @RequestBody Image image,
+      HttpSession httpSession
   ){
-//    this.imageService.updateImage(image, uploadedFile);
+    this.imageService.updateImageInfo(image);
+    imxTransactionCommit.permitCommit(httpSession);
     return new ResponseEntity(HttpStatus.NO_CONTENT);
   }
 }

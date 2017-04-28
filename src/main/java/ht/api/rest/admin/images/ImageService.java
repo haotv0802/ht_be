@@ -41,4 +41,9 @@ public class ImageService implements IImageService {
 
     this.imageDao.updateImage(image);
   }
+
+  @Override
+  public void updateImageInfo(Image image) {
+    this.imageDao.updateImage(image);
+  }
 }

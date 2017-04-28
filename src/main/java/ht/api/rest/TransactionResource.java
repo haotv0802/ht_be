@@ -34,8 +34,9 @@ public class TransactionResource {
   @ResponseStatus(HttpStatus.CREATED)
   public Transaction create(HttpSession httpSession) throws SQLException {
     String id = UUID.randomUUID().toString();
-    TrackingConnectionWrapper trackingConnection = ((ManagedDataSourceProxy) dataSource).getWrappedConnection();
-    transactions.add(trackingConnection, id);
+    TrackingConnectionWrapper connectionWrapper = new TrackingConnectionWrapper(dataSource.getConnection());
+//    TrackingConnectionWrapper trackingConnection = ((ManagedDataSourceProxy) dataSource).getWrappedConnection();
+    transactions.add(connectionWrapper, id);
 
     log.debug(transactions.findTransaction(id));
 
@@ -83,7 +84,7 @@ public class TransactionResource {
     // don't catch as i want to send the error to the customer, so it can be aware of the error
     JdbcUtils.tryRoll(conn.getConnection());
 
-    ((ManagedDataSourceProxy) dataSource).bindCurrentConnection(null);
+//    ((ManagedDataSourceProxy) dataSource).bindCurrentConnection(null);
 
     imxTransactionCommit.forbidCommit(httpSession);
     // closeTransaction(id);
