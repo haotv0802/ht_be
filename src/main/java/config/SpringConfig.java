@@ -25,10 +25,7 @@ import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.MessageSource;
-import org.springframework.context.annotation.Bean;
-import org.springframework.context.annotation.ComponentScan;
-import org.springframework.context.annotation.Configuration;
-import org.springframework.context.annotation.EnableAspectJAutoProxy;
+import org.springframework.context.annotation.*;
 import org.springframework.context.support.ResourceBundleMessageSource;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.web.PageableHandlerMethodArgumentResolver;
@@ -161,8 +158,10 @@ public class SpringConfig extends WebMvcConfigurerAdapter {
   }
 
   @Bean(name = "transactionsList")
+  @Scope(value = "singleton")
   public TransactionsList transactionsList() {
-    return TransactionsList.getInstance();
+//    return TransactionsList.getInstance();
+    return new TransactionsList();
   }
 
  /*
@@ -224,7 +223,7 @@ public class SpringConfig extends WebMvcConfigurerAdapter {
 
   @Bean(destroyMethod = "stop")
   public ConnectionsWatchdog connectionsWatchdog() {
-    TransactionsList transactions = TransactionsList.getInstance();
+    TransactionsList transactions = transactionsList();
     ConnectionsWatchdog watcher = new ConnectionsWatchdog(TimeUnit.SECONDS.toMillis(10), transactions);
     Thread watcherThread = new Thread(watcher);
     watcherThread.setDaemon(true);

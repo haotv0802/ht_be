@@ -39,15 +39,15 @@ public class ImagesResourceTest extends BaseDocumentation {
 
   }
 
-  @AfterMethod
-  public void afterTest() throws Exception {
-    //"rollback" transaction
-    mockMvc
-        .perform(put("/svc/transactions")
-            .header("X-AUTH-TOKEN", authTokenService.getAuthToken())
-            .header("txId", txId))
-        .andExpect(status().isOk());
-  }
+//  @AfterMethod
+//  public void afterTest() throws Exception {
+//    //"rollback" transaction
+//    mockMvc
+//        .perform(put("/svc/transactions")
+//            .header("X-AUTH-TOKEN", authTokenService.getAuthToken())
+//            .header("txId", txId))
+//        .andExpect(status().isOk());
+//  }
 
   @Test
   public void testGetImages() throws Exception {
@@ -138,6 +138,11 @@ public class ImagesResourceTest extends BaseDocumentation {
 //        )
 //        .andExpect(status().is(200))
     ;
+    mockMvc
+        .perform(delete("/svc/transactions")
+            .header("X-AUTH-TOKEN", authTokenService.getAuthToken())
+            .header("txId", txId))
+        .andExpect(status().isOk());
     mockMvc
         .perform(get("/svc/admin/images/{id}/info", image.getId())
                 .header("Accept-Language", "en")

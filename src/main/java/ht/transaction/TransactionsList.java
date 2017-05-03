@@ -29,12 +29,12 @@ public class TransactionsList {
   public TransactionsList() {
   }
 
-  public static TransactionsList getInstance() {
-    return instance;
-  }
+//  public static TransactionsList getInstance() {
+//    return instance;
+//  }
 
   public TrackingConnectionWrapper findTransaction(String id) {
-    synchronized (transactions) {
+//    synchronized (transactions) {
       for (int i = 0; i < transactions.size(); i++) {
         TrackingConnectionWrapper conn = transactions.get(i);
 
@@ -47,13 +47,13 @@ public class TransactionsList {
           conn.markAccessTime();
           return conn;
         }
-      }
+//      }
     }
     return null;
   }
 
   public void add(TrackingConnectionWrapper connection, String transactionId) {
-    synchronized (transactions) {
+//    synchronized (transactions) {
       // check that there is not already a connection with that transaction id
       if (findTransaction(transactionId) != null) {
         log.warn("There is already existing transaction with id '" + transactionId + "'");
@@ -61,7 +61,7 @@ public class TransactionsList {
       }
       connection.setTransactionId(transactionId);
       transactions.add(connection);
-    }
+//    }
   }
 
   public long checkConnections(ConnectionsWatchdog watcher) {

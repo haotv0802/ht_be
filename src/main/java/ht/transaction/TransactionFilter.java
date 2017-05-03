@@ -3,6 +3,7 @@ package ht.transaction;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
 
 import javax.servlet.*;
 import javax.servlet.http.HttpServletRequest;
@@ -15,7 +16,11 @@ public class TransactionFilter implements Filter {
   private Logger log = LogManager.getLogger(getClass());
 
   private ServletContext ctx;
-  private TransactionsList transactions = TransactionsList.getInstance();
+//  private TransactionsList transactions = TransactionsList.getInstance();
+
+  @Qualifier("transactionsList")
+  @Autowired
+  private TransactionsList transactions;
 
   @Autowired
   private ImxTransactionCommit imxTransactionCommit;
