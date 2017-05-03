@@ -1,11 +1,9 @@
 package ht.api.rest;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
 import ht.transaction.TransactionFilter;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.apache.logging.log4j.io.IoBuilder;
-import org.mockito.MockitoAnnotations;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.context.MessageSource;
@@ -19,7 +17,6 @@ import org.springframework.session.web.http.SessionRepositoryFilter;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.testng.AbstractTransactionalTestNGSpringContextTests;
 import org.springframework.test.context.web.WebAppConfiguration;
-import org.springframework.test.util.ReflectionTestUtils;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 import org.springframework.util.StringUtils;
@@ -40,14 +37,11 @@ import static org.springframework.restdocs.cli.CliDocumentation.curlRequest;
 import static org.springframework.restdocs.http.HttpDocumentation.httpRequest;
 import static org.springframework.restdocs.http.HttpDocumentation.httpResponse;
 import static org.springframework.restdocs.mockmvc.MockMvcRestDocumentation.documentationConfiguration;
-import static org.springframework.restdocs.mockmvc.RestDocumentationRequestBuilders.delete;
-import static org.springframework.restdocs.mockmvc.RestDocumentationRequestBuilders.post;
 import static org.springframework.restdocs.payload.PayloadDocumentation.fieldWithPath;
 import static org.springframework.restdocs.snippet.Attributes.attributes;
 import static org.springframework.restdocs.snippet.Attributes.key;
 import static org.springframework.security.test.web.servlet.setup.SecurityMockMvcConfigurers.springSecurity;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 import static org.springframework.util.StringUtils.collectionToDelimitedString;
 
 /**
@@ -58,10 +52,11 @@ import static org.springframework.util.StringUtils.collectionToDelimitedString;
 @WebAppConfiguration
 @ContextConfiguration(
     locations = {
-        "/config/spring-mvc.xml",
-        "/config/spring-mvc-test.xml"
+         "/config/spring-mvc.xml"
+        ,"/config/spring-mvc-test.xml"
     })
-public abstract class BaseDocumentation extends AbstractTransactionalTestNGSpringContextTests {
+public abstract class BaseDocumentation extends AbstractTransactionalTestNGSpringContextTests
+{
   protected final Logger logger = LogManager.getLogger(getClass());
 
   @Autowired
@@ -77,17 +72,16 @@ public abstract class BaseDocumentation extends AbstractTransactionalTestNGSprin
   protected MockMvc mockMvc;
 
   @Autowired
-  @Qualifier("testObjectMapper")
-  protected ObjectMapper objectMapper;
-
-  @Autowired
   private WebApplicationContext wac;
+
+//  @Autowired
+//  private TransactionFilter txFilter;
 
   @Autowired
   @Qualifier("tstMsgSource")
   private MessageSource messageSource;
 
-  public final ManualRestDocumentation restDocumentation = new ManualRestDocumentation("target/generated-snippets");
+  public final ManualRestDocumentation restDocumentation = new ManualRestDocumentation( "target/generated-snippets");
 
   @Autowired
   private SessionRepositoryFilter<? extends ExpiringSession> sessionRepositoryFilter;
@@ -104,7 +98,8 @@ public abstract class BaseDocumentation extends AbstractTransactionalTestNGSprin
 //  protected static class ImxClientsMixIn{}
 
   @BeforeClass
-  public void setup() throws UnknownHostException {
+  public void setup() throws UnknownHostException
+  {
     final PrintWriter printWriter = IoBuilder.forLogger(logger).buildPrintWriter();
 
     mockMvc =
@@ -114,24 +109,24 @@ public abstract class BaseDocumentation extends AbstractTransactionalTestNGSprin
             .addFilter(txFilter)
             .apply(springSecurity())
             .apply(documentationConfiguration(this.restDocumentation)
-                .uris()
-                .withScheme("http")
-                .withHost(InetAddress.getLocalHost().getHostName())
-                .withPort(8080)
-                .and()
-                .snippets()
-                .withDefaults(
-                    curlRequest(getCurlRequestAttributes())
-                    , httpRequest(getHttpRequestAttributes())
-                    , httpResponse(getHttpResponseAttributes())
-                )
+                          .uris()
+                          .withScheme("http")
+                          .withHost(InetAddress.getLocalHost().getHostName())
+                          .withPort(8080)
+                          .and()
+                          .snippets()
+                          .withDefaults(
+                             curlRequest(getCurlRequestAttributes())
+                            ,httpRequest(getHttpRequestAttributes())
+                            ,httpResponse(getHttpResponseAttributes())
+                          )
             )
             .alwaysDo(print(printWriter))
             .build();
   }
 
   @BeforeMethod
-  public void setUp(Method method) {
+  public void setUp(Method method){
     this.restDocumentation.beforeTest(getClass(), method.getName());
   }
 
@@ -153,6 +148,7 @@ public abstract class BaseDocumentation extends AbstractTransactionalTestNGSprin
   }
 
 
+
 //  protected RestDocumentationResultHandler documentPrettyPrintReqResp(String useCase) {
 //    return document(useCase,
 //                    preprocessRequest(prettyPrint()),
@@ -162,7 +158,7 @@ public abstract class BaseDocumentation extends AbstractTransactionalTestNGSprin
 //    return documentPrettyPrintReqResp(SNIPPET_NAME_PATTERN);
 //  }
 
-  //  protected Snippet getRequestHeaders() {
+//  protected Snippet getRequestHeaders() {
 //    return requestHeaders(
 //        getRequestHeadersAttributes()
 //        ,headerWithName("X-AUTH-TOKEN").description(msgI18n(MessageProperties.X_AUTH_TOKEN))

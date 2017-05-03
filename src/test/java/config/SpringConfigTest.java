@@ -1,7 +1,5 @@
 package config;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
-import com.fasterxml.jackson.databind.ser.impl.SimpleFilterProvider;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.MessageSource;
 import org.springframework.context.annotation.Bean;
@@ -10,25 +8,21 @@ import org.springframework.context.support.ResourceBundleMessageSource;
 import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate;
 
 @Configuration
-public class SpringConfigTest {
+public class SpringConfigTest
+{
 
   @Autowired
   private NamedParameterJdbcTemplate namedTemplate;
 
   @Bean(name = "tstMsgSource")
-  public MessageSource messageSource() {
+  public MessageSource messageSource()
+  {
     ResourceBundleMessageSource ms = new ResourceBundleMessageSource();
     ms.setBasenames(
-        "i18n.LoginResource"
+      "i18n.LoginResource"
     );
     ms.setUseCodeAsDefaultMessage(true);
     return ms;
-  }
-
-  @Bean(name = "testObjectMapper")
-  public ObjectMapper testObjectMapper() {
-    return new ObjectMapper();
-//    return new ObjectMapper().setFilterProvider(new SimpleFilterProvider().addFilter("iMXClients", imxClientsBeanPropertyFilter));
   }
 
   /*

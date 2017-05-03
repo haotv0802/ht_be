@@ -26,7 +26,7 @@ public class TransactionsList {
   /**
    * For now make it a real singleton, until i find a better solution
    */
-  public TransactionsList() {
+  private TransactionsList() {
   }
 
   public static TransactionsList getInstance() {

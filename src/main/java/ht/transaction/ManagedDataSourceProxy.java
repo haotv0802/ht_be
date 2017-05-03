@@ -25,6 +25,11 @@ public class ManagedDataSourceProxy implements DataSource {
    */
   private static final ThreadLocal<TrackingConnectionWrapper> currentConnection = new ThreadLocal<TrackingConnectionWrapper>();
 
+  private Connection getBoundConnection() {
+    TrackingConnectionWrapper connection = currentConnection.get();
+    return connection;
+  }
+
   /**
    * Bind the connection to the current thread, so it will be used
    *
@@ -35,6 +40,7 @@ public class ManagedDataSourceProxy implements DataSource {
   }
 
   public ManagedDataSourceProxy(DataSource ds) {
+    super();
     this.ds = ds;
   }
 
@@ -62,11 +68,10 @@ public class ManagedDataSourceProxy implements DataSource {
   public Connection getConnection() throws SQLException {
     Connection conn = getBoundConnection();
     if (conn != null) {
-      log.debug("Providing bound connection: {}", conn);
+      log.debug("Providing bound connection: " + conn);
     } else {
       conn = ds.getConnection();
-      conn.setAutoCommit(false);
-      log.debug("Providing unbound connection: {}", conn);
+      log.debug("Providing unbound connection: " + conn);
     }
 
     UserDetails principal = null;
@@ -79,41 +84,6 @@ public class ManagedDataSourceProxy implements DataSource {
 
     return conn;
 
-  }
-
-  @Override
-  public void setLoginTimeout(int seconds) throws SQLException {
-    ds.setLoginTimeout(seconds);
-  }
-
-  @Override
-  public Connection getConnection(String username, String password) throws SQLException {
-    Connection conn = getBoundConnection();
-    if (conn != null) {
-      return conn;
-    }
-    conn = ds.getConnection(username, password);
-    conn.setAutoCommit(false);
-    return conn;
-  }
-
-  @Override
-  public int getLoginTimeout() throws SQLException {
-    return ds.getLoginTimeout();
-  }
-
-  @Override
-  public java.util.logging.Logger getParentLogger() throws SQLFeatureNotSupportedException {
-    return ds.getParentLogger();
-  }
-
-  public TrackingConnectionWrapper getWrappedConnection() throws SQLException {
-    return new TrackingConnectionWrapper(getConnection());
-  }
-
-  private Connection getBoundConnection() {
-    TrackingConnectionWrapper connection = currentConnection.get();
-    return connection;
   }
 
   private void setDbmsSessionParams(Connection conn, UserDetails principal) {
@@ -284,4 +254,33 @@ public class ManagedDataSourceProxy implements DataSource {
 
   }
 
+  @Override
+  public void setLoginTimeout(int seconds) throws SQLException {
+    ds.setLoginTimeout(seconds);
+  }
+
+  @Override
+  public Connection getConnection(String username, String password) throws SQLException {
+    Connection conn = getBoundConnection();
+    if (conn != null) {
+      return conn;
+    }
+    conn = ds.getConnection(username, password);
+    conn.setAutoCommit(false);
+    return conn;
+  }
+
+  @Override
+  public int getLoginTimeout() throws SQLException {
+    return ds.getLoginTimeout();
+  }
+
+  @Override
+  public java.util.logging.Logger getParentLogger() throws SQLFeatureNotSupportedException {
+    return ds.getParentLogger();
+  }
+
+  public TrackingConnectionWrapper getWrappedConnection() throws SQLException {
+    return new TrackingConnectionWrapper(getConnection());
+  }
 }

@@ -18,12 +18,12 @@ import ht.auth.encoders.SHA1PasswordEncoder;
 import ht.auth.filters.*;
 import ht.common.HeaderLangHandlerMethodArgumentResolver;
 import ht.transaction.ConnectionsWatchdog;
-import ht.transaction.ManagedDataSourceProxy;
 import ht.transaction.TransactionFilter;
 import ht.transaction.TransactionsList;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.context.MessageSource;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
@@ -40,7 +40,9 @@ import org.springframework.http.converter.json.MappingJackson2HttpMessageConvert
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate;
 import org.springframework.jdbc.datasource.DataSourceTransactionManager;
-import org.springframework.security.authentication.AuthenticationManager;
+import org.springframework.security.authentication.AuthenticationProvider;
+import org.springframework.security.authentication.dao.DaoAuthenticationProvider;
+import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.config.annotation.method.configuration.EnableGlobalMethodSecurity;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
@@ -139,8 +141,8 @@ public class SpringConfig extends WebMvcConfigurerAdapter {
     ds.setUser(usr);
     ds.setPassword(pass);
 
-//    return ds;
-    return new ManagedDataSourceProxy(ds);
+    return ds;
+//    return new ManagedDataSourceProxy(ds);
   }
 
   @Bean(name = "txManager")
@@ -158,11 +160,6 @@ public class SpringConfig extends WebMvcConfigurerAdapter {
     configurer.defaultContentType(MediaType.APPLICATION_JSON);
     // configurer.favorPathExtension(true);
     // configurer.mediaType("html", MediaType.APPLICATION_JSON);
-  }
-
-  @Bean(name = "transactionsList")
-  public TransactionsList transactionsList() {
-    return TransactionsList.getInstance();
   }
 
  /*
@@ -188,6 +185,7 @@ public class SpringConfig extends WebMvcConfigurerAdapter {
   public void addInterceptors(InterceptorRegistry registry) {
     super.addInterceptors(registry);
   }
+
 
   @Bean(name = "multipartResolver")
   public CommonsMultipartResolver createMultipartResolver() {
@@ -217,22 +215,6 @@ public class SpringConfig extends WebMvcConfigurerAdapter {
     super.addArgumentResolvers(argumentResolvers);
   }
 
-  @Bean
-  public TransactionFilter txFilter() {
-    return new TransactionFilter();
-  }
-
-  @Bean(destroyMethod = "stop")
-  public ConnectionsWatchdog connectionsWatchdog() {
-    TransactionsList transactions = TransactionsList.getInstance();
-    ConnectionsWatchdog watcher = new ConnectionsWatchdog(TimeUnit.SECONDS.toMillis(10), transactions);
-    Thread watcherThread = new Thread(watcher);
-    watcherThread.setDaemon(true);
-    watcherThread.start();
-
-    return watcher;
-  }
-
   @Configuration
   @EnableHazelcastHttpSession(maxInactiveIntervalInSeconds = (int) sessionTimeoutInSec, sessionMapName = "spring:session:sessions")
   protected static class SessionConfig {
@@ -254,6 +236,21 @@ public class SpringConfig extends WebMvcConfigurerAdapter {
 
   }
 
+  @Bean
+  public TransactionFilter txFilter() {
+    return new TransactionFilter();
+  }
+
+  @Bean(destroyMethod = "stop")
+  public ConnectionsWatchdog connectionsWatchdog() {
+    TransactionsList transactions = TransactionsList.getInstance();
+    ConnectionsWatchdog watcher = new ConnectionsWatchdog(TimeUnit.SECONDS.toMillis(sessionTimeoutInSec), transactions);
+    Thread watcherThread = new Thread(watcher);
+    watcherThread.setDaemon(true);
+    watcherThread.start();
+
+    return watcher;
+  }
 
   @Bean(name = "jdbcTemplate")
   public JdbcTemplate jdbcTemplate()
@@ -274,6 +271,9 @@ public class SpringConfig extends WebMvcConfigurerAdapter {
     @Autowired
     PlatformTransactionManager txManager;
 
+    @Resource(name = "authService")
+    private UserDetailsService userDetailsService;
+
     @Autowired
     private RestAuthenticationEntryPoint restAuthenticationEntryPoint;
 
@@ -283,8 +283,9 @@ public class SpringConfig extends WebMvcConfigurerAdapter {
     @Autowired
     private CorsFilter corsFilter;
 
-    @Resource(name = "authService")
-    private UserDetailsService userDetailsService;
+    @Autowired
+    private AccessDeniedHandlerImpl accessDeniedHandlerImpl;
+
 //    @Autowired
 //    @Qualifier("authenticationProvider")
 //    DaoAuthenticationProvider authenticationProvider;
@@ -294,10 +295,36 @@ public class SpringConfig extends WebMvcConfigurerAdapter {
 //      auth.authenticationProvider(authenticationProvider);
 //    }
 
+    @Bean(name = "messageSource")
+    public MessageSource messageSource() {
+      ResourceBundleMessageSource b = new ResourceBundleMessageSource();
+      b.setBasenames(
+          "i18n.LoginResource"
+      );
+      b.setUseCodeAsDefaultMessage(true);
+      return b;
+    }
+
+    @Bean
+    public AuthenticationFailureHandlerImpl customizedAuthenticationFailureHandler() {
+      return new AuthenticationFailureHandlerImpl(messageSource());
+    }
+
+    @Bean
+    public AuthenticationSuccessHandlerImpl customizedAuthenticationSuccessHandler() {
+      return new AuthenticationSuccessHandlerImpl();
+    }
+
+    @Override
+    protected UserDetailsService userDetailsService() {
+      return userDetailsService;
+    }
+
     @Bean
     public AccessDeniedHandlerImpl customizedAccessDeniedHandler() {
       return new AccessDeniedHandlerImpl(messageSource());
     }
+
 
     @Override
     protected void configure(HttpSecurity http) throws Exception {
@@ -334,12 +361,23 @@ public class SpringConfig extends WebMvcConfigurerAdapter {
     }
 
     @Bean
-    StatelessLoginFilter statelessLoginFilter() throws Exception {
-      return new StatelessLoginFilter(
-          "/login",
-          authenticationManagerBean(),
-          customizedAuthenticationFailureHandler(),
-          customizedAuthenticationSuccessHandler());
+    public CorsFilter corsFilter() {
+      UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
+      CorsConfiguration config = new CorsConfiguration();
+      config.setAllowCredentials(true); // you USUALLY want this
+      config.addAllowedOrigin("*");
+      config.addAllowedHeader("*");
+      config.addAllowedMethod("GET");
+      config.addAllowedMethod("HEAD");
+      config.addAllowedMethod("POST");
+      config.addAllowedMethod("DELETE");
+      config.addAllowedMethod("PATCH");
+      config.addAllowedMethod("PUT");
+
+      config.addExposedHeader("Location");
+      config.addExposedHeader("X-AUTH-TOKEN");
+      source.registerCorsConfiguration("/**", config);
+      return new CorsFilter(source);
     }
 
     @Bean
@@ -348,32 +386,17 @@ public class SpringConfig extends WebMvcConfigurerAdapter {
     }
 
     @Bean
-    @Override
-    public AuthenticationManager authenticationManagerBean() throws Exception {
-      return super.authenticationManagerBean();
+    StatelessLoginFilter statelessLoginFilter() throws Exception {
+      return new StatelessLoginFilter(
+          "/login"
+          , authenticationManagerBean()
+          , customizedAuthenticationFailureHandler()
+          , customizedAuthenticationSuccessHandler());
     }
-
-    @Bean
-    public AuthenticationSuccessHandlerImpl customizedAuthenticationSuccessHandler() {
-      return new AuthenticationSuccessHandlerImpl();
-    }
-
-    @Bean
-    public AuthenticationFailureHandlerImpl customizedAuthenticationFailureHandler() {
-      return new AuthenticationFailureHandlerImpl(messageSource());
-    }
-
-    @Autowired
-    private AccessDeniedHandlerImpl accessDeniedHandlerImpl;
 
     @Bean
     StatelessAuthenticationFilter statelessAuthenticationFilter() {
       return new StatelessAuthenticationFilter(tokenAuthenticationService);
-    }
-
-    @Bean
-    public Boolean hideUserNotFound() {
-      return false;
     }
 
     //TODO split mvc and security config
@@ -404,40 +427,10 @@ public class SpringConfig extends WebMvcConfigurerAdapter {
       };
     }
 
-    @Bean(name = "messageSource")
-    public MessageSource messageSource() {
-      ResourceBundleMessageSource b = new ResourceBundleMessageSource();
-      b.setBasenames(
-          "i18n.LoginResource"
-      );
-      b.setUseCodeAsDefaultMessage(true);
-      return b;
-    }
-
-    @Override
-    protected UserDetailsService userDetailsService() {
-      return userDetailsService;
-    }
-
     @Bean
-
-    public CorsFilter corsFilter() {
-      UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
-      CorsConfiguration config = new CorsConfiguration();
-      config.setAllowCredentials(true); // you USUALLY want this
-      config.addAllowedOrigin("*");
-      config.addAllowedHeader("*");
-      config.addAllowedMethod("GET");
-      config.addAllowedMethod("HEAD");
-      config.addAllowedMethod("POST");
-      config.addAllowedMethod("DELETE");
-      config.addAllowedMethod("PATCH");
-      config.addAllowedMethod("PUT");
-
-      config.addExposedHeader("Location");
-      config.addExposedHeader("X-AUTH-TOKEN");
-      source.registerCorsConfiguration("/**", config);
-      return new CorsFilter(source);
+    public Boolean hideUserNotFound() {
+      return false;
     }
+
   }
 }
