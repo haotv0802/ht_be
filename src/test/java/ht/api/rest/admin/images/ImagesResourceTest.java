@@ -74,28 +74,73 @@ public class ImagesResourceTest extends BaseDocumentation {
   }
 
 
+//  @Test
+//  public void testUpdateImageInfo() throws Exception {
+//    MvcResult result = mockMvc
+//        .perform(get("/svc/admin/images/{id}/info", 1)
+//            .header("Accept-Language", "en")
+//            .header("X-AUTH-TOKEN", authTokenService.getAuthToken())
+//        )
+//        .andExpect(status().is(200))
+//        .andReturn()
+//        ;
+//
+//    ObjectMapper objectMapper = new ObjectMapper();
+//    JSONObject jsonObject = new JSONObject(result.getResponse().getContentAsString());
+//    Image image = objectMapper.readValue(result.getResponse().getContentAsString(), Image.class);
+//
+//    mockMvc
+////        .perform(post("/svc/admin/images/update")
+//        .perform(post("/svc/admin/images/updateImageInfo")
+//            .header("Accept-Language", "en")
+//            .header("X-AUTH-TOKEN", authTokenService.getAuthToken())
+//            .content(objectMapper.writeValueAsString(image))
+//            .contentType(MediaType.APPLICATION_JSON)
+//        )
+//        .andExpect(status().is(200))
+//    ;
+//  }
+
+
   @Test
   public void testUpdateImageInfo() throws Exception {
     MvcResult result = mockMvc
         .perform(get("/svc/admin/images/{id}/info", 1)
-            .header("Accept-Language", "en")
-            .header("X-AUTH-TOKEN", authTokenService.getAuthToken())
+                .header("Accept-Language", "en")
+//            .header("txId", txId)
+                .header("X-AUTH-TOKEN", authTokenService.getAuthToken())
         )
         .andExpect(status().is(200))
         .andReturn()
         ;
 
-    ObjectMapper objectMapper = new ObjectMapper();
     JSONObject jsonObject = new JSONObject(result.getResponse().getContentAsString());
     Image image = objectMapper.readValue(result.getResponse().getContentAsString(), Image.class);
+    image.setDescription("Hello Hao");
 
     mockMvc
-//        .perform(post("/svc/admin/images/update")
         .perform(post("/svc/admin/images/updateImageInfo")
             .header("Accept-Language", "en")
             .header("X-AUTH-TOKEN", authTokenService.getAuthToken())
             .content(objectMapper.writeValueAsString(image))
             .contentType(MediaType.APPLICATION_JSON)
+        )
+        .andExpect(status().is(204))
+    ;
+
+//    mockMvc
+//        .perform(get("/svc/admin/images/{id}/info", 1)
+//            .header("Accept-Language", "en")
+//            .header("txId", txId)
+//            .header("X-AUTH-TOKEN", authTokenService.getAuthToken())
+//        )
+//        .andExpect(status().is(200))
+    ;
+    mockMvc
+        .perform(get("/svc/admin/images/{id}/info", image.getId())
+                .header("Accept-Language", "en")
+//            .header("txId", txId)
+                .header("X-AUTH-TOKEN", authTokenService.getAuthToken())
         )
         .andExpect(status().is(200))
     ;

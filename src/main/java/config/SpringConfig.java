@@ -155,6 +155,7 @@ public class SpringConfig extends WebMvcConfigurerAdapter {
     return new TransactionTemplate(txManager());
   }
 
+
   @Override
   public void configureContentNegotiation(ContentNegotiationConfigurer configurer) {
     configurer.defaultContentType(MediaType.APPLICATION_JSON);
@@ -244,7 +245,7 @@ public class SpringConfig extends WebMvcConfigurerAdapter {
   @Bean(destroyMethod = "stop")
   public ConnectionsWatchdog connectionsWatchdog() {
     TransactionsList transactions = TransactionsList.getInstance();
-    ConnectionsWatchdog watcher = new ConnectionsWatchdog(TimeUnit.SECONDS.toMillis(sessionTimeoutInSec), transactions);
+    ConnectionsWatchdog watcher = new ConnectionsWatchdog(TimeUnit.SECONDS.toMillis(60), transactions);
     Thread watcherThread = new Thread(watcher);
     watcherThread.setDaemon(true);
     watcherThread.start();

@@ -11,8 +11,6 @@ import java.util.concurrent.TimeUnit;
  * If needed will close it.<br>
  * <p>
  * NOTE: When the thread is terminated, then will close all connections
- *
- * @author rpaskalev
  */
 public class ConnectionsWatchdog implements Runnable {
   private Logger log = LogManager.getLogger(getClass());
@@ -64,7 +62,7 @@ public class ConnectionsWatchdog implements Runnable {
   // /**
   // * Check and remove expired connections
   // *
-  // * @return the time to sleep untill the next check
+  // * @return the time to sleep until the next check
   // */
   // private long checkConnections() {
   // // scan all connections in the pool

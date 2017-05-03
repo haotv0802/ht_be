@@ -67,7 +67,7 @@ public class ImagesResource extends BaseAdminResource {
       @HeaderLang String lang,
       @RequestBody Image image
   ){
-//    this.imageService.updateImage(image, uploadedFile);
+    this.imageService.updateImageInfo(image);
     return new ResponseEntity(HttpStatus.NO_CONTENT);
   }
 }

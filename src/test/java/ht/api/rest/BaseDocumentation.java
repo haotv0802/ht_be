@@ -1,5 +1,6 @@
 package ht.api.rest;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
 import ht.transaction.TransactionFilter;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -45,18 +46,16 @@ import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.
 import static org.springframework.util.StringUtils.collectionToDelimitedString;
 
 /**
- * Property of CODIX Bulgaria EAD
  * Created by haho
  * Date:  05/05/2016 Time: 5:15 PM
  */
 @WebAppConfiguration
 @ContextConfiguration(
     locations = {
-         "/config/spring-mvc.xml"
-        ,"/config/spring-mvc-test.xml"
+        "/config/spring-mvc.xml"
+        , "/config/spring-mvc-test.xml"
     })
-public abstract class BaseDocumentation extends AbstractTransactionalTestNGSpringContextTests
-{
+public abstract class BaseDocumentation extends AbstractTransactionalTestNGSpringContextTests {
   protected final Logger logger = LogManager.getLogger(getClass());
 
   @Autowired
@@ -72,34 +71,28 @@ public abstract class BaseDocumentation extends AbstractTransactionalTestNGSprin
   protected MockMvc mockMvc;
 
   @Autowired
-  private WebApplicationContext wac;
+  @Qualifier("testObjectMapper")
+  protected ObjectMapper objectMapper;
 
-//  @Autowired
-//  private TransactionFilter txFilter;
+  @Autowired
+  private WebApplicationContext wac;
 
   @Autowired
   @Qualifier("tstMsgSource")
   private MessageSource messageSource;
 
-  public final ManualRestDocumentation restDocumentation = new ManualRestDocumentation( "target/generated-snippets");
+  public final ManualRestDocumentation restDocumentation = new ManualRestDocumentation("target/generated-snippets");
 
   @Autowired
   private SessionRepositoryFilter<? extends ExpiringSession> sessionRepositoryFilter;
-//  @Qualifier("springSessionRepositoryFilter")
-//  @Autowired
-//  private Filter sessionRepositoryFilter;
 
   public static Locale locale = new Locale("en");
 
   @Autowired
   private TransactionFilter txFilter;
 
-//  @JsonFilter("iMXClients")
-//  protected static class ImxClientsMixIn{}
-
   @BeforeClass
-  public void setup() throws UnknownHostException
-  {
+  public void setup() throws UnknownHostException {
     final PrintWriter printWriter = IoBuilder.forLogger(logger).buildPrintWriter();
 
     mockMvc =
@@ -109,24 +102,24 @@ public abstract class BaseDocumentation extends AbstractTransactionalTestNGSprin
             .addFilter(txFilter)
             .apply(springSecurity())
             .apply(documentationConfiguration(this.restDocumentation)
-                          .uris()
-                          .withScheme("http")
-                          .withHost(InetAddress.getLocalHost().getHostName())
-                          .withPort(8080)
-                          .and()
-                          .snippets()
-                          .withDefaults(
-                             curlRequest(getCurlRequestAttributes())
-                            ,httpRequest(getHttpRequestAttributes())
-                            ,httpResponse(getHttpResponseAttributes())
-                          )
+                .uris()
+                .withScheme("http")
+                .withHost(InetAddress.getLocalHost().getHostName())
+                .withPort(8080)
+                .and()
+                .snippets()
+                .withDefaults(
+                    curlRequest(getCurlRequestAttributes())
+                    , httpRequest(getHttpRequestAttributes())
+                    , httpResponse(getHttpResponseAttributes())
+                )
             )
             .alwaysDo(print(printWriter))
             .build();
   }
 
   @BeforeMethod
-  public void setUp(Method method){
+  public void setUp(Method method) {
     this.restDocumentation.beforeTest(getClass(), method.getName());
   }
 
@@ -148,7 +141,6 @@ public abstract class BaseDocumentation extends AbstractTransactionalTestNGSprin
   }
 
 
-
 //  protected RestDocumentationResultHandler documentPrettyPrintReqResp(String useCase) {
 //    return document(useCase,
 //                    preprocessRequest(prettyPrint()),
@@ -158,7 +150,7 @@ public abstract class BaseDocumentation extends AbstractTransactionalTestNGSprin
 //    return documentPrettyPrintReqResp(SNIPPET_NAME_PATTERN);
 //  }
 
-//  protected Snippet getRequestHeaders() {
+  //  protected Snippet getRequestHeaders() {
 //    return requestHeaders(
 //        getRequestHeadersAttributes()
 //        ,headerWithName("X-AUTH-TOKEN").description(msgI18n(MessageProperties.X_AUTH_TOKEN))

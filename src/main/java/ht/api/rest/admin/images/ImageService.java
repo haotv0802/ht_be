@@ -38,7 +38,11 @@ public class ImageService implements IImageService {
   @Override
   public void updateImage(Image image, MultipartFile multipartFile) {
     // TODO save the file to folder.
+    this.imageDao.updateImage(image);
+  }
 
+  @Override
+  public void updateImageInfo(Image image) {
     this.imageDao.updateImage(image);
   }
 }
