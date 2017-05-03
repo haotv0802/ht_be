@@ -15,7 +15,7 @@ import org.springframework.util.Assert;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
-import javax.validation.Valid;
+import java.io.IOException;
 import java.util.List;
 
 /**
@@ -52,12 +52,12 @@ public class ImagesResource extends BaseAdminResource {
 
   @PostMapping(value = "/images/{id}/updateImage", consumes = "multipart/form-data")
   public ResponseEntity updateImage(
-    @AuthenticationPrincipal UserDetailsImpl userDetails,
-    @HeaderLang String lang,
-    @RequestParam("imageFile") MultipartFile imageFile,
-    @PathVariable("id") Integer id
-  ){
-//    this.imageService.updateImage(image, uploadedFile);
+      @AuthenticationPrincipal UserDetailsImpl userDetails,
+      @HeaderLang String lang,
+      @RequestParam("imageFile") MultipartFile imageFile,
+      @PathVariable("id") Integer id
+  ) throws IOException {
+    this.imageService.updateImage(id, imageFile);
     return new ResponseEntity(HttpStatus.NO_CONTENT);
   }
 
@@ -66,7 +66,7 @@ public class ImagesResource extends BaseAdminResource {
       @AuthenticationPrincipal UserDetailsImpl userDetails,
       @HeaderLang String lang,
       @RequestBody Image image
-  ){
+  ) {
     this.imageService.updateImageInfo(image);
     return new ResponseEntity(HttpStatus.NO_CONTENT);
   }

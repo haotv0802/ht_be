@@ -9,6 +9,9 @@ import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
+import java.io.*;
+import java.nio.file.Files;
+import java.nio.file.Paths;
 import java.util.List;
 
 /**
@@ -36,9 +39,32 @@ public class ImageService implements IImageService {
   }
 
   @Override
-  public void updateImage(Image image, MultipartFile multipartFile) {
-    // TODO save the file to folder.
-    this.imageDao.updateImage(image);
+  public void updateImage(int id, MultipartFile uploadedFile) throws IOException {
+    String dir = "src/images";
+//    String dir = "src/test/resources/files2";
+    BufferedInputStream bis = null;
+    FileOutputStream fos = null;
+    BufferedOutputStream bos = null;
+    Files.createDirectories(Paths.get(dir));
+    try {
+      bis = new BufferedInputStream(uploadedFile.getInputStream());
+      fos = new FileOutputStream(dir + "/" + id + ".jpg");
+      bos = new BufferedOutputStream(fos);
+      byte[] bytes = new byte[1024];
+      int count;
+      while ((count = bis.read(bytes)) > 0) {
+        bos.write(bytes, 0, count);
+        bos.flush();
+      }
+    } catch (FileNotFoundException e) {
+      e.printStackTrace();
+    } catch (IOException e) {
+      e.printStackTrace();
+    } finally {
+      bos.close();
+      fos.close();
+      bis.close();
+    }
   }
 
   @Override
