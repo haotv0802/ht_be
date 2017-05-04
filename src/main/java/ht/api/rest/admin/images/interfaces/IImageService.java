@@ -1,7 +1,6 @@
 package ht.api.rest.admin.images.interfaces;
 
 import ht.api.rest.admin.images.beans.Image;
-import org.springframework.http.ResponseEntity;
 import org.springframework.web.multipart.MultipartFile;
 
 import javax.servlet.http.HttpServletResponse;
@@ -20,5 +19,5 @@ public interface IImageService {
 
   void updateImageInfo(Image image);
 
-  ResponseEntity getImageFileById(Integer id, HttpServletResponse response, String ext) throws IOException;
+  String getImageFileById(Integer id, HttpServletResponse response, String ext) throws IOException;
 }

@@ -60,7 +60,14 @@ public class ImagesResource extends BaseAdminResource {
       @PathVariable("ext") String ext,
       HttpServletResponse response
   ) throws IOException {
-    return imageService.getImageFileById(id, response, ext);
+    String str = imageService.getImageFileById(id, response, ext);
+    if ("".equals(str)) {
+      return new ResponseEntity(HttpStatus.NOT_FOUND);
+    } else {
+      return new ResponseEntity(new Object(){
+        public final String encodedString = str;
+      }, HttpStatus.OK);
+    }
   }
 
   @PostMapping(value = "/images/{id}/updateImage", consumes = "multipart/form-data")
