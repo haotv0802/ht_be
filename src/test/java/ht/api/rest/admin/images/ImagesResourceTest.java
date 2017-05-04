@@ -42,6 +42,17 @@ public class ImagesResourceTest extends BaseDocumentation {
   }
 
   @Test
+  public void testGetImageFileById() throws Exception {
+    mockMvc
+        .perform(get("/svc/admin/images/{id}.{ext}/file", 1, "JPG")
+            .header("Accept-Language", "en")
+            .header("X-AUTH-TOKEN", authTokenService.getAuthToken())
+        )
+        .andExpect(status().is(200))
+    ;
+  }
+
+  @Test
   public void testUpdateImage() throws Exception {
     MvcResult result = mockMvc
         .perform(get("/svc/admin/images/{id}/info", 1)

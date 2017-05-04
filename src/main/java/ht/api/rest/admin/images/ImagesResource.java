@@ -15,6 +15,7 @@ import org.springframework.util.Assert;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
+import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.util.List;
 
@@ -48,6 +49,18 @@ public class ImagesResource extends BaseAdminResource {
       @PathVariable("id") Integer id
   ) {
     return imageService.getImageById(id);
+  }
+
+  @GetMapping("/images/{id}.{ext}/file")
+  @PreAuthorize("hasAuthority('ADMIN')")
+  public ResponseEntity getImageFileById(
+      @AuthenticationPrincipal UserDetailsImpl userDetails,
+      @HeaderLang String lang,
+      @PathVariable("id") Integer id,
+      @PathVariable("ext") String ext,
+      HttpServletResponse response
+  ) throws IOException {
+    return imageService.getImageFileById(id, response, ext);
   }
 
   @PostMapping(value = "/images/{id}/updateImage", consumes = "multipart/form-data")
