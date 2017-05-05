@@ -20,6 +20,7 @@ import javax.servlet.http.HttpServletResponse;
 import java.io.*;
 import java.nio.file.Files;
 import java.nio.file.Paths;
+import java.util.Calendar;
 import java.util.List;
 
 /**
@@ -74,7 +75,7 @@ public class ImageService implements IImageService {
 
   // Return binary as base64
   @Override
-  public String getImageFileById(
+  public ResponseEntity getImageFileById(
       Integer id,
       HttpServletResponse response,
       String ext
@@ -84,17 +85,31 @@ public class ImageService implements IImageService {
     try {
       file = new File(path);
       if (!file.exists()) {
-        return "";
+        return new ResponseEntity<>(HttpStatus.NOT_FOUND);
       }
     } catch (Exception ex) {
       logger.debug("message: " + ex.getMessage());
-      return "";
+      return new ResponseEntity<>(HttpStatus.NOT_FOUND);
     }
     byte[] bytes = loadFile(file);
     byte[] encoded = Base64.encodeBase64(bytes);
-    String encodedString = new String(encoded);
-
-    return encodedString;
+    String str = new String(encoded);
+    String extension = ext.toUpperCase();
+    HttpHeaders headers = new HttpHeaders();
+    if ("JPEG".equals(extension) || "JPG".equals(extension)) {
+      headers.setContentType(MediaType.IMAGE_JPEG);
+    } else if ("PDF".equals(extension)) {
+      headers.setContentType(MediaType.parseMediaType("application/pdf"));
+    } else if ("XML".equals(extension)) {
+      headers.setContentType(new MediaType("application", "xml"));
+    } else if ("XLS".equals(extension) || "XLSX".equals(extension)) {
+      headers.setContentType(new MediaType("application", "vnd.ms-excel"));
+    } else if ("DOC".equals(extension) || "DOCX".equals(extension)) {
+      headers.setContentType(new MediaType("application", "msword"));
+    }
+    return new ResponseEntity(new Object() {
+      public final String encodedString = str;
+    }, headers, HttpStatus.OK);
   }
 
   // Return binary
@@ -166,9 +181,15 @@ public class ImageService implements IImageService {
     FileOutputStream fos = null;
     BufferedOutputStream bos = null;
     Files.createDirectories(Paths.get(dir));
+    String fileToBeStored = dir + "/" + id + ".jpg";
+    File imageFile = new File(fileToBeStored);
+
+    if (imageFile.exists()) {
+      imageFile.renameTo(new File(dir + "/" + id + "_" + Calendar.getInstance().getTimeInMillis() + ".jpg"));
+    }
     try {
       bis = new BufferedInputStream(uploadedFile.getInputStream());
-      fos = new FileOutputStream(dir + "/" + id + ".jpg");
+      fos = new FileOutputStream(fileToBeStored);
       bos = new BufferedOutputStream(fos);
       byte[] bytes = new byte[1024];
       int count;
