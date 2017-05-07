@@ -10,7 +10,6 @@ public class Image {
   private int id;
   private String name;
   private String imageURL;
-  private String imageBEURL;
   private String imageInfo;
   private String description;
   private Date createdOn;
@@ -61,13 +60,5 @@ public class Image {
 
   public void setCreatedOn(Date createdOn) {
     this.createdOn = createdOn;
-  }
-
-  public String getImageBEURL() {
-    return imageBEURL;
-  }
-
-  public void setImageBEURL(String imageBEURL) {
-    this.imageBEURL = imageBEURL;
   }
 }

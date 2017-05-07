@@ -86,7 +86,7 @@ public class ImageDao implements IImageDao {
     final String sql = "UPDATE image                 "
                      + "SET                          "
                      + "	name = :name,              "
-                     + "	image_url = :imageURL,     "
+//                     + "	image_url = :imageURL,     "
                      + "	image_info = :imageInfo,   "
                      + "	description = :description,"
                      + "	updated_on = NOW()         "
@@ -96,7 +96,7 @@ public class ImageDao implements IImageDao {
     final MapSqlParameterSource paramsMap = new MapSqlParameterSource();
     paramsMap.addValue("id", image.getId());
     paramsMap.addValue("name", image.getName());
-    paramsMap.addValue("imageURL", image.getImageURL());
+//    paramsMap.addValue("imageURL", image.getImageURL());
     paramsMap.addValue("imageInfo", image.getImageInfo());
     paramsMap.addValue("description", image.getDescription());
 
