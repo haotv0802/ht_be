@@ -31,7 +31,7 @@ public class UpdateImageValidator implements Validator<Image> {
     Image oldImage = this.imageDao.getImageById(image.getId());
     if (!image.getName().equals(oldImage.getName())) {
       if (this.imageDao.isImageNameExisting(oldImage.getName())) {
-        throw new ValidationException("admin123");
+        throw new ValidationException("admin.image.nameExisting");
       }
     }
   }

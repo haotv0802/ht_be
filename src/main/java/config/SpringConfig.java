@@ -297,7 +297,7 @@ public class SpringConfig extends WebMvcConfigurerAdapter {
       ResourceBundleMessageSource messageSource = new ResourceBundleMessageSource();
       messageSource.setBasenames(
           "i18n.LoginResource",
-          "i18n.admin.image2"
+          "i18n.admin_image"
       );
       messageSource.setUseCodeAsDefaultMessage(true);
       return messageSource;
