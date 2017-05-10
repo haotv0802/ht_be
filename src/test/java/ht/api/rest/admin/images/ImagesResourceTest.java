@@ -128,6 +128,7 @@ public class ImagesResourceTest extends BaseDocumentation {
     JSONObject jsonObject = new JSONObject(result.getResponse().getContentAsString());
     Image image = objectMapper.readValue(result.getResponse().getContentAsString(), Image.class);
     image.setDescription("Hello Hao");
+    image.setName("image 6");
 
     mockMvc
         .perform(post("/svc/admin/images/updateImageInfo")

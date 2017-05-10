@@ -13,4 +13,6 @@ public interface IImageDao {
   Image getImageById(Integer id);
 
   void updateImage(Image image);
+
+  Boolean isImageNameExisting(String name);
 }

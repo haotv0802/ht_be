@@ -23,7 +23,6 @@ import ht.transaction.TransactionsList;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.context.MessageSource;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
@@ -40,9 +39,6 @@ import org.springframework.http.converter.json.MappingJackson2HttpMessageConvert
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate;
 import org.springframework.jdbc.datasource.DataSourceTransactionManager;
-import org.springframework.security.authentication.AuthenticationProvider;
-import org.springframework.security.authentication.dao.DaoAuthenticationProvider;
-import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.config.annotation.method.configuration.EnableGlobalMethodSecurity;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
@@ -298,12 +294,13 @@ public class SpringConfig extends WebMvcConfigurerAdapter {
 
     @Bean(name = "messageSource")
     public MessageSource messageSource() {
-      ResourceBundleMessageSource b = new ResourceBundleMessageSource();
-      b.setBasenames(
-          "i18n.LoginResource"
+      ResourceBundleMessageSource messageSource = new ResourceBundleMessageSource();
+      messageSource.setBasenames(
+          "i18n.LoginResource",
+          "i18n.admin.image2"
       );
-      b.setUseCodeAsDefaultMessage(true);
-      return b;
+      messageSource.setUseCodeAsDefaultMessage(true);
+      return messageSource;
     }
 
     @Bean

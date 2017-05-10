@@ -1,10 +1,9 @@
 package ht.common;
 
 /**
- * Created by glengarski on 02/11/2016.
+ * Created by haho on 10/05/2017.
  */
-public class FaultBase
-{
+public class FaultBase {
   /**
    * Fault code
    */
@@ -15,34 +14,27 @@ public class FaultBase
    */
   private String faultMessage;
 
-
-  public FaultBase()
-  {
+  public FaultBase() {
   }
 
-  public FaultBase(String faultCode, String faultMessage)
-  {
+  public FaultBase(String faultCode, String faultMessage) {
     this.faultCode = faultCode;
     this.faultMessage = faultMessage;
   }
 
-  public String getFaultCode()
-  {
+  public String getFaultCode() {
     return faultCode;
   }
 
-  public void setFaultCode(String faultCode)
-  {
+  public void setFaultCode(String faultCode) {
     this.faultCode = faultCode;
   }
 
-  public String getFaultMessage()
-  {
+  public String getFaultMessage() {
     return faultMessage;
   }
 
-  public void setFaultMessage(String faultMessage)
-  {
+  public void setFaultMessage(String faultMessage) {
     this.faultMessage = faultMessage;
   }
 

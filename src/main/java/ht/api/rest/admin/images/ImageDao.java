@@ -105,4 +105,17 @@ public class ImageDao implements IImageDao {
     namedTemplate.update(sql, paramsMap);
   }
 
+  @Override
+  public Boolean isImageNameExisting(String name) {
+    final String sql = "SELECT COUNT(*) FROM image WHERE name = :name"
+        ;
+
+    final MapSqlParameterSource paramsMap = new MapSqlParameterSource();
+    paramsMap.addValue("name", name);
+
+    DaoUtils.debugQuery(LOGGER, sql, paramsMap.getValues());
+
+    return namedTemplate.queryForObject(sql, paramsMap, Integer.class) > 0 ? true : false;
+  }
+
 }

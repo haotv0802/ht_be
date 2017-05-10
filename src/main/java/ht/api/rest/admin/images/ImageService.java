@@ -3,6 +3,8 @@ package ht.api.rest.admin.images;
 import ht.api.rest.admin.images.beans.Image;
 import ht.api.rest.admin.images.interfaces.IImageDao;
 import ht.api.rest.admin.images.interfaces.IImageService;
+import ht.api.rest.admin.images.validators.UpdateImageValidator;
+import ht.common.Validator;
 import io.jsonwebtoken.lang.Assert;
 import org.apache.commons.codec.binary.Base64;
 import org.apache.logging.log4j.LogManager;
@@ -33,10 +35,18 @@ public class ImageService implements IImageService {
 
   private final IImageDao imageDao;
 
+  private final Validator updateImageValidator;
+
   @Autowired
-  public ImageService(@Qualifier("adminImageDao") IImageDao imageDao) {
+  public ImageService(
+      @Qualifier("adminImageDao") IImageDao imageDao,
+      @Qualifier("updateImageNameValidator") Validator updateImageValidator
+  ) {
     Assert.notNull(imageDao);
+    Assert.notNull(updateImageValidator);
+
     this.imageDao = imageDao;
+    this.updateImageValidator = updateImageValidator;
   }
 
   @Override
@@ -210,6 +220,8 @@ public class ImageService implements IImageService {
 
   @Override
   public void updateImageInfo(Image image) {
+    updateImageValidator.validate(image);
+
     this.imageDao.updateImage(image);
   }
 }
