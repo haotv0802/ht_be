@@ -52,8 +52,8 @@ import static org.springframework.util.StringUtils.collectionToDelimitedString;
 @WebAppConfiguration
 @ContextConfiguration(
     locations = {
-        "/config/spring-mvc.xml"
-        , "/config/spring-mvc-test.xml"
+        "/config/spring-mvc.xml",
+        "/config/spring-mvc-test.xml"
     })
 public abstract class BaseDocumentation extends AbstractTransactionalTestNGSpringContextTests {
   protected final Logger logger = LogManager.getLogger(getClass());

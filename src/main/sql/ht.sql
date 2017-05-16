@@ -134,6 +134,27 @@ INSERT INTO `image` (`name`, `image_url`, `image_info`, `description`, `updated_
 VALUES ('image 10', './app/assets/individuals&promotions/DSC_4377.JPG', 'info 10', 'description', sysdate());
 
 --
+-- Table structure for table `error_tracking`
+--
+DROP TABLE IF EXISTS `error_tracking`;
+CREATE TABLE `error_tracking` (
+  `id`            BIGINT       NOT NULL AUTO_INCREMENT,
+  `error_message` VARCHAR(100) NOT NULL,
+  `stack_trace`   TEXT         NOT NULL,
+  `user`          VARCHAR(50),
+  `error_date`    DATETIME     NOT NULL DEFAULT now(),
+  PRIMARY KEY (`id`),
+  UNIQUE KEY `error_tracking_id_unique` (`id`)
+)
+  ENGINE = InnoDB
+  DEFAULT CHARSET = utf8;
+
+# INSERT INTO `room_type` VALUES (1, 'Balcony room', 4, 2, "Double Bed & Single Bed");
+# INSERT INTO `room_type` VALUES (2, 'Near-elevator room', 2, 1, "Double Bed");
+# INSERT INTO `room_type` VALUES (3, 'Room 3', 2, 1, "Single Bed");
+# INSERT INTO `room_type` VALUES (4, 'Family or big room', 4, 2, "2 Double Beds");
+
+--
 -- Table structure for table `room_type`
 --
 DROP TABLE IF EXISTS `room_type`;

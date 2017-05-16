@@ -7,11 +7,12 @@ import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.JdbcTemplate;
+import org.springframework.jdbc.core.namedparam.MapSqlParameterSource;
 import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate;
+import org.springframework.jdbc.support.GeneratedKeyHolder;
+import org.springframework.jdbc.support.KeyHolder;
 import org.springframework.stereotype.Repository;
 import org.springframework.util.Assert;
-
-import java.util.Calendar;
 
 /**
  * Created by haho on 10/05/2017.
@@ -136,53 +137,27 @@ public class ErrorDao implements IErrorDao {
     return jdbcTemplate.queryForObject(sql, String.class);
   }
 
-
   /**
-   * Insert error and return the its database id
-   *
-   * @param errMsg error message
-   * @param dump   process dump as string
-   * @param stack  stack as string
-   * @return the id of the error
+   * Insert error and return the id
+   * @param errMsg
+   * @param dump
+   * @param process
+   * @param stack
+   * @return
    */
   private String insertError(String errMsg, String dump, String process, String stack) {
-//    final String T = "texte";
-//
-//    String sql =
-//        "INSERT INTO    "
-//            + " t_erreur  (   "
-//            + "    referreur  " // error ID
-//            + "  , msgcof     " // message and error code
-//            + "  , dterreur_dt"
-//            + "  , dump       " // dump and context
-//            + "  , processus  "
-//            + "  , stack      "
-//            + " )             "
-//            + " VALUES (      "
-//            + "    newref.f_get_new_reference(:T) "
-//            + "  , :errorMsg  "
-//            + "  , SYSDATE    "
-//            + "  , :dump      "
-//            + "  , :process   "
-//            + "  , :stack     "
-//            + " )             ";
-//
-//    MapSqlParameterSource paramsMap = new MapSqlParameterSource()
-//        .addValue("T", T)
-//        .addValue("errorMsg", errMsg)
-//        .addValue("dump", dump)
-//        .addValue("process", process)
-//        .addValue("stack", stack);
-//
-//    DaoUtils.debugQuery(logger, sql, new Object[]{T, errMsg, "SkippedDumpClob", process, "SkippedStackClob"});
-//    KeyHolder kh = new GeneratedKeyHolder();
-//
-//    namedTemplate.update(sql, paramsMap, kh, new String[]{"referreur"});
-//    final String referreur = (String) kh.getKeys().get("referreur");
-//
-//    logger.debug("referreur: " + referreur);
-//    return referreur;
-    return String.valueOf(Calendar.getInstance().getTime());
+    final String sql = "INSERT INTO error_tracking (error_message, stack_trace, user)"
+        + "  VALUES (:errorMessage, :stackTrace, :user)                 ";
+
+    MapSqlParameterSource paramsMap = new MapSqlParameterSource()
+        .addValue("errorMessage", errMsg)
+        .addValue("stackTrace", stack)
+        .addValue("user", "haho");
+
+    KeyHolder keyHolder = new GeneratedKeyHolder();
+    namedTemplate.update(sql, paramsMap, keyHolder, new String[]{"user"});
+    final String errorId = String.valueOf(keyHolder.getKey().longValue());
+    return errorId;
   }
 
 }
