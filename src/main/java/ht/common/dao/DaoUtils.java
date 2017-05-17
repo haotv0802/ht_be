@@ -109,9 +109,12 @@ public final class DaoUtils {
     final int base = pageSize * pageRequest.getPageNumber();
 
     PagingIndex pi = new PagingIndex();
-    pi.setStartIdx(base + 1);
-    pi.setEndIdx(base + pageSize + 1);
+//    pi.setStartIdx(base + 1);
+//    pi.setEndIdx(base + pageSize + 1);
     pi.setPageSize(pageSize + 1);
+    pi.setStartIdx(base);
+    pi.setEndIdx(base + pageSize);
+//    pi.setPageSize(pageSize);
 
     return pi;
   }
@@ -132,7 +135,7 @@ public final class DaoUtils {
     final int pageSize = pageRequest.getPageSize();
 
     if (pageSize < size) {
-      //todo: if the difference is more then one
+      //TODO: if the difference is more than one
       theList.remove(size - 1);
       hasNext = true;
     }

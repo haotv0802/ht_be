@@ -6,6 +6,8 @@ import ht.auth.UserDetailsImpl;
 import ht.common.beans.HeaderLang;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Slice;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
@@ -16,7 +18,6 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
-import javax.xml.ws.Response;
 import java.util.List;
 
 /**
@@ -36,20 +37,30 @@ public class IndividualsResource extends BaseAdminResource {
   @GetMapping("/individuals")
   @PreAuthorize("hasAuthority('ADMIN')")
   public List<IndividualPresenter> getIndividuals(
-       @AuthenticationPrincipal UserDetailsImpl userDetails
-      ,@HeaderLang String lang) {
+      @AuthenticationPrincipal UserDetailsImpl userDetails,
+      @HeaderLang String lang) {
     return this.individualService.getIndividuals();
+  }
+
+  @GetMapping("/individuals/paging")
+  @PreAuthorize("hasAuthority('ADMIN')")
+  public Slice<IndividualPresenter> getIndividualsWithPagination(
+      @AuthenticationPrincipal UserDetailsImpl userDetails,
+      @HeaderLang String lang,
+      Pageable pageable
+  ) {
+    return this.individualService.getIndividuals(pageable);
   }
 
   @GetMapping("/individuals/isUserNameExisting/{username}")
   @PreAuthorize("hasAuthority('ADMIN')")
   public ResponseEntity isUserNameExisting(
-      @AuthenticationPrincipal UserDetailsImpl userDetails
-      ,@HeaderLang String lang
-      ,@PathVariable(value = "username") String username
+      @AuthenticationPrincipal UserDetailsImpl userDetails,
+      @HeaderLang String lang,
+      @PathVariable(value = "username") String username
   ) {
     boolean value = this.individualService.isUserNameExisting(username);
-    return new ResponseEntity(new Object(){
+    return new ResponseEntity(new Object() {
       public final Boolean isUserNameExisting = value;
     }, HttpStatus.OK);
   }
@@ -57,16 +68,16 @@ public class IndividualsResource extends BaseAdminResource {
   @GetMapping("/individuals/isUserNameExisting")
   @PreAuthorize("hasAuthority('ADMIN')")
   public ResponseEntity isUserNameExisting(
-      @AuthenticationPrincipal UserDetailsImpl userDetails
-      ,@HeaderLang String lang
-      ,@RequestParam(value = "oldUserName") String oldUserName
-      ,@RequestParam(value = "userName") String userName
+      @AuthenticationPrincipal UserDetailsImpl userDetails,
+      @HeaderLang String lang,
+      @RequestParam(value = "oldUserName") String oldUserName,
+      @RequestParam(value = "userName") String userName
   ) {
     if (!this.individualService.isUserNameExisting(oldUserName)) {
       return new ResponseEntity(HttpStatus.BAD_REQUEST);
     }
     final boolean value = this.individualService.isUserNameExisting(oldUserName, userName);
-    return new ResponseEntity(new Object(){
+    return new ResponseEntity(new Object() {
       public final Boolean isUserNameExisting = value;
     }, HttpStatus.OK);
   }

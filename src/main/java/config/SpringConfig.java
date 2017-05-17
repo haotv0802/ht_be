@@ -195,7 +195,7 @@ public class SpringConfig extends WebMvcConfigurerAdapter {
   /**
    * RestControllers argument injections
    * 1) Paging and Sorting arguments
-   * 2) ImxLang arguments
+   * 2) HTLang arguments
    *
    * @param argumentResolvers list af argumentResolvers
    */

@@ -24,6 +24,20 @@ public class IndividualsResourceTest extends BaseDocumentation {
   }
 
   @Test
+  public void testGetIndividualsWithPaging() throws Exception {
+    mockMvc
+        .perform(get("/svc/admin/individuals/paging")
+            .header("Accept-Language", "en")
+            .header("X-AUTH-TOKEN", authTokenService.getAuthToken())
+            .param("page", "5")
+            .param("size", "5")
+//            .param("sort", "first_name,desc")
+        )
+        .andExpect(status().is(200))
+    ;
+  }
+
+  @Test
   public void testIsUserNameExisting() throws Exception {
     mockMvc
         .perform(get("/svc/admin/individuals/isUserNameExisting/haho")

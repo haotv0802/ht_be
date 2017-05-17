@@ -1,6 +1,9 @@
 package ht.api.rest.admin.individuals.interfaces;
 
 import ht.api.rest.admin.individuals.IndividualModel;
+import ht.api.rest.admin.individuals.IndividualPresenter;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Slice;
 
 import java.util.List;
 
@@ -9,6 +12,8 @@ import java.util.List;
  */
 public interface IIndividualDao {
   List<IndividualModel> getIndividuals();
+
+  Slice<IndividualPresenter> getIndividuals(Pageable pageable);
 
   Boolean isUserNameExisting(String username);
 

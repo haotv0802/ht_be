@@ -5,6 +5,8 @@ import ht.api.rest.admin.individuals.interfaces.IIndividualService;
 import io.jsonwebtoken.lang.Assert;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Slice;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
@@ -27,13 +29,18 @@ public class IndividualService implements IIndividualService {
   @Override
   public List<IndividualPresenter> getIndividuals() {
     List<IndividualModel> individuals = this.individualDao.getIndividuals();
-    List<IndividualPresenter> individualList = new ArrayList<IndividualPresenter>();
+    List<IndividualPresenter> individualList = new ArrayList<>();
     for (IndividualModel model : individuals) {
       IndividualPresenter presenter = new IndividualPresenter(model);
       individualList.add(presenter);
     }
 
     return individualList;
+  }
+
+  @Override
+  public Slice<IndividualPresenter> getIndividuals(Pageable pageable) {
+    return this.individualDao.getIndividuals(pageable);
   }
 
   @Override
