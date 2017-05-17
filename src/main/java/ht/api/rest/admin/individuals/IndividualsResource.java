@@ -42,6 +42,17 @@ public class IndividualsResource extends BaseAdminResource {
     return this.individualService.getIndividuals();
   }
 
+  @GetMapping("/individuals/count")
+  @PreAuthorize("hasAuthority('ADMIN')")
+  public ResponseEntity getIndividualsCount(
+      @AuthenticationPrincipal UserDetailsImpl userDetails,
+      @HeaderLang String lang) {
+    int count = this.individualService.getNumberOfIndividuals();
+    return new ResponseEntity(new Object() {
+      public final Integer individualsCount = count;
+    }, HttpStatus.OK);
+  }
+
   @GetMapping("/individuals/paging")
   @PreAuthorize("hasAuthority('ADMIN')")
   public Slice<IndividualPresenter> getIndividualsWithPagination(

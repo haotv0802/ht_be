@@ -123,6 +123,17 @@ public class IndividualDao implements IIndividualDao {
     return DaoUtils.calcSlice(individualList, pageable);
   }
 
+  @Override
+  public Integer getNumberOfIndividuals() {
+    final String sql = "SELECT COUNT(*) FROM individual"
+        ;
+    final MapSqlParameterSource paramsMap = new MapSqlParameterSource();
+
+    DaoUtils.debugQuery(LOGGER, sql, paramsMap.getValues());
+
+    return namedTemplate.queryForObject(sql, paramsMap, Integer.class);
+  }
+
   private String buildSQLWithPaging(String sql, Pageable pageable) {
     final DaoUtils.PagingIndex pi = DaoUtils.pagingIdxForSlice(pageable);
     String fooSql = String.format(

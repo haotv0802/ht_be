@@ -14,6 +14,8 @@ public interface IIndividualService {
 
   Slice<IndividualPresenter> getIndividuals(Pageable pageable);
 
+  Integer getNumberOfIndividuals();
+
   Boolean isUserNameExisting(String username);
 
   Boolean isUserNameExisting(String oldUserName, String userName);

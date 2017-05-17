@@ -24,6 +24,17 @@ public class IndividualsResourceTest extends BaseDocumentation {
   }
 
   @Test
+  public void testGetIndividualsCount() throws Exception {
+    mockMvc
+        .perform(get("/svc/admin/individuals/count")
+            .header("Accept-Language", "en")
+            .header("X-AUTH-TOKEN", authTokenService.getAuthToken())
+        )
+        .andExpect(status().is(200))
+    ;
+  }
+
+  @Test
   public void testGetIndividualsWithPaging() throws Exception {
     mockMvc
         .perform(get("/svc/admin/individuals/paging")

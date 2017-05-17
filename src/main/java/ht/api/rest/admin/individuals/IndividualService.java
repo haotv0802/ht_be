@@ -44,6 +44,11 @@ public class IndividualService implements IIndividualService {
   }
 
   @Override
+  public Integer getNumberOfIndividuals() {
+    return this.individualDao.getNumberOfIndividuals();
+  }
+
+  @Override
   public Boolean isUserNameExisting(String username) {
     return this.individualDao.isUserNameExisting(username);
   }
