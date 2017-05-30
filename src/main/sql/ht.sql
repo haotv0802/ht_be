@@ -46,7 +46,16 @@ VALUES
   (29, 'haho29', 'hoanhhao'), (30, 'haho30', 'hoanhhao'), (31, 'haho31', 'hoanhhao'),
   (32, 'haho32', 'hoanhhao'), (33, 'haho33', 'hoanhhao'), (34, 'haho34', 'hoanhhao'),
   (36, 'haho36', 'hoanhhao'), (37, 'haho37', 'hoanhhao'), (38, 'haho38', 'hoanhhao'),
-  (39, 'customer', 'customer'), (40, 'staff', 'staff');
+  (39, 'customer', 'customer'), (40, 'staff', 'staff'),
+  (41, 'haho41', 'hoanhhao'), (42, 'haho42', 'hoanhhao'), (43, 'haho43', 'hoanhhao'),
+  (44, 'haho44', 'hoanhhao'), (45, 'haho45', 'hoanhhao'), (46, 'haho46', 'hoanhhao'),
+  (47, 'haho47', 'hoanhhao'), (48, 'haho48', 'hoanhhao'), (5, 'haho5', 'hoanhhao'),
+  (10, 'haho10', 'hoanhhao'), (11, 'haho11', 'hoanhhao'), (49, 'haho49', 'hoanhhao'),
+  (50, 'haho50', 'hoanhhao'), (51, 'haho52', 'hoanhhao'), (53, 'haho53', 'hoanhhao'),
+  (54, 'haho55', 'hoanhhao'), (56, 'haho56', 'hoanhhao'), (57, 'haho57', 'hoanhhao'),
+  (58, 'haho58', 'hoanhhao'), (59, 'haho59', 'hoanhhao'), (60, 'haho60', 'hoanhhao'),
+  (61, 'haho61', 'hoanhhao'), (62, 'haho62', 'hoanhhao'), (63, 'haho63', 'hoanhhao')
+;
 
 --
 -- Table structure for table `user_role_details`
@@ -73,8 +82,17 @@ CREATE TABLE `user_role_details` (
 # ;
 
 INSERT INTO `user_role_details` VALUES
-  (1, 1, 1), (10, 2, 1), (9, 3, 1), (6, 4, 1),
-  (7, 39, 3), (8, 40, 2)
+  (1, 1, 1), (2, 2, 1), (3, 3, 1), (4, 4, 1),
+  (5, 39, 3), (6, 40, 2), (7, 5, 2), (8, 6, 2)
+#   (9, 7, 3), (10, 8, 2), (11, 9, 2), (12, 10, 2),
+#   (13, 11, 3), (14, 12, 2), (15, 13, 2), (16, 14, 2),
+#   (17, 15, 3), (18, 41, 2), (19, 16, 2), (20, 17, 2),
+#   (21, 18, 3), (22, 19, 2), (23, 42, 2), (24, 20, 2),
+#   (25, 21, 3), (26, 22, 2), (27, 23, 2), (28, 24, 2),
+#   (29, 25, 3), (30, 26, 2), (31, 27, 2), (32, 28, 2),
+#   (33, 29, 3), (34, 30, 2), (35, 31, 2), (36, 32, 2),
+#   (37, 33, 3), (38, 34, 2), (39, 35, 2), (40, 36, 2),
+#   (41, 37, 3), (42, 38, 2), (43, 39, 2), (44, 40, 2)
 ;
 
 --
