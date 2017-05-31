@@ -21,4 +21,15 @@ public class RolesResourceTest extends BaseDocumentation {
         .andExpect(status().is(200))
     ;
   }
+
+  @Test
+  public void testGetRolesInfo() throws Exception {
+    mockMvc
+        .perform(get("/svc/admin/roles/keyValuePair")
+            .header("Accept-Language", "en")
+            .header("X-AUTH-TOKEN", authTokenService.getAuthToken())
+        )
+        .andExpect(status().is(200))
+    ;
+  }
 }

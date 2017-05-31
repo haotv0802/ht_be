@@ -7,6 +7,7 @@ public class UserBean {
   private int id;
   private String name;
   private String role;
+  private String roleId;
 
   public int getId() {
     return id;
@@ -30,5 +31,13 @@ public class UserBean {
 
   public void setRole(String role) {
     this.role = role;
+  }
+
+  public String getRoleId() {
+    return roleId;
+  }
+
+  public void setRoleId(String roleId) {
+    this.roleId = roleId;
   }
 }

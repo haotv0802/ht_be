@@ -5,8 +5,8 @@ import ht.common.dao.DaoUtils;
 import io.jsonwebtoken.lang.Assert;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
+import org.apache.logging.log4j.core.util.KeyValuePair;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.jdbc.core.BeanPropertyRowMapper;
 import org.springframework.jdbc.core.RowMapper;
 import org.springframework.jdbc.core.namedparam.MapSqlParameterSource;
 import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate;
@@ -40,6 +40,24 @@ public class RoleDao implements IRoleDao {
     DaoUtils.debugQuery(LOGGER, sql, paramsMap.getValues());
 
     return namedTemplate.query(sql, paramsMap, (rs, i) -> rs.getString("role_name"));
+  }
+
+  @Override
+  public List<KeyValuePair> getRolesInfo() {
+    final String sql = "SELECT id, role_name FROM ht_db.user_role ORDER BY id asc";
+
+    final MapSqlParameterSource paramsMap = new MapSqlParameterSource();
+
+    DaoUtils.debugQuery(LOGGER, sql, paramsMap.getValues());
+
+    return namedTemplate.query(sql, paramsMap, new RowMapper<KeyValuePair>() {
+      @Override
+      public KeyValuePair mapRow(ResultSet rs, int rowNum) throws SQLException {
+        KeyValuePair pair =
+            new KeyValuePair(rs.getString("id"), rs.getString("role_name"));
+        return pair;
+      }
+    });
   }
 
 }

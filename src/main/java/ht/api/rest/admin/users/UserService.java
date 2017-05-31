@@ -27,4 +27,11 @@ public class UserService implements IUserService {
   public List<UserBean> getUsers() {
     return userDao.getUsers();
   }
+
+  @Override
+  public void updateUsersRoles(List<UserBean> users) {
+    for (UserBean user: users) {
+      this.userDao.updateUserRole(user);
+    }
+  }
 }

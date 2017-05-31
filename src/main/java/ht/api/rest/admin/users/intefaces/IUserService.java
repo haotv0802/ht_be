@@ -9,4 +9,5 @@ import java.util.List;
  */
 public interface IUserService {
   List<UserBean> getUsers();
+  void updateUsersRoles(List<UserBean> users);
 }

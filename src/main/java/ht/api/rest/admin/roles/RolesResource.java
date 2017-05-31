@@ -4,6 +4,7 @@ import ht.api.rest.admin.BaseAdminResource;
 import ht.api.rest.admin.roles.interfaces.IRoleService;
 import ht.auth.UserDetailsImpl;
 import ht.common.beans.HeaderLang;
+import org.apache.logging.log4j.core.util.KeyValuePair;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.security.access.prepost.PreAuthorize;
@@ -34,5 +35,13 @@ public class RolesResource extends BaseAdminResource {
       @AuthenticationPrincipal UserDetailsImpl userDetails
       ,@HeaderLang String lang) {
     return this.roleService.getRoles();
+  }
+
+  @GetMapping("/roles/keyValuePair")
+  @PreAuthorize("hasAuthority('ADMIN')")
+  public List<KeyValuePair> getRolesInfo(
+      @AuthenticationPrincipal UserDetailsImpl userDetails
+      ,@HeaderLang String lang) {
+    return this.roleService.getRolesInfo();
   }
 }

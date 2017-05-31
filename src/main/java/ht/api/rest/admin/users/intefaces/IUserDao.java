@@ -9,4 +9,6 @@ import java.util.List;
  */
 public interface IUserDao {
   List<UserBean> getUsers();
+
+  void updateUserRole(UserBean user);
 }
