@@ -11,6 +11,8 @@ import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.util.Assert;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PatchMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 
 import java.util.List;
@@ -31,9 +33,20 @@ public class RoomsResource extends BaseAdminResource {
 
   @GetMapping("/rooms/roomTypes")
   @PreAuthorize("hasAuthority('ADMIN')")
-  public List<RoomTypeBean> getUsers(
-      @AuthenticationPrincipal UserDetailsImpl userDetails
-      ,@HeaderLang String lang) {
+  public List<RoomTypeBean> getRoomTypes(
+      @AuthenticationPrincipal UserDetailsImpl userDetails,
+      @HeaderLang String lang
+  ) {
     return roomService.getRoomTypes();
+  }
+
+  @PatchMapping("/rooms/roomTypes/update")
+  @PreAuthorize("hasAuthority('ADMIN')")
+  public void updateRoomType(
+      @AuthenticationPrincipal UserDetailsImpl userDetails,
+      @HeaderLang String lang,
+      @RequestBody RoomTypeBean bean
+  ) {
+    this.roomService.updateRoomType(bean);
   }
 }

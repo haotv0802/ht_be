@@ -28,4 +28,9 @@ public class RoomService implements IRoomService {
   public List<RoomTypeBean> getRoomTypes() {
     return roomDao.getRoomTypes();
   }
+
+  @Override
+  public void updateRoomType(RoomTypeBean bean) {
+    this.roomDao.updateRoomType(bean);
+  }
 }

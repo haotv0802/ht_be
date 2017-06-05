@@ -9,4 +9,6 @@ import java.util.List;
  */
 public interface IRoomService {
   List<RoomTypeBean> getRoomTypes();
+
+  void updateRoomType(RoomTypeBean bean);
 }

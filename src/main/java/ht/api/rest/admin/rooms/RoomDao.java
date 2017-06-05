@@ -60,6 +60,27 @@ public class RoomDao implements IRoomDao {
     return roomTypes;
   }
 
+  @Override
+  public void updateRoomType(RoomTypeBean bean) {
+    final String sql = "UPDATE room_type                "
+                     + "SET                             "
+                     + "	name = :name,                 "
+                     + "	num_of_people = :numOfPeople, "
+                     + "	num_of_bed = :numOfBed,       "
+                     + "	type_of_bed = :typeOfBed      "
+                     + "WHERE                           "
+                     + "	id = :id                      "
+        ;
+    final MapSqlParameterSource paramsMap = new MapSqlParameterSource();
+    paramsMap.addValue("name", bean.getName());
+    paramsMap.addValue("numOfPeople", bean.getNumOfPeople());
+    paramsMap.addValue("numOfBed", bean.getNumOfBeds());
+    paramsMap.addValue("typeOfBed", bean.getTypeOfBed());
+    paramsMap.addValue("id", bean.getId());
+
+    namedTemplate.update(sql, paramsMap);
+  }
+
   private List<DayPrice> getPrices(int roomTypeId) {
     final String sql =  "SELECT                         "
                       + "    day, price                 "
