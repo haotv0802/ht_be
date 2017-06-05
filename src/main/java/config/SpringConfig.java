@@ -76,7 +76,7 @@ import java.util.concurrent.TimeUnit;
 @Configuration
 //Enable API documentation
 // Specifies which package to scan
-@ComponentScan({"ht"})
+@ComponentScan({"ht"}) // xml config: <context:component-scan base-package="ht"/>
 // Enables Spring's annotations
 @EnableWebMvc
 @EnableAspectJAutoProxy(proxyTargetClass = true)
@@ -263,7 +263,8 @@ public class SpringConfig extends WebMvcConfigurerAdapter {
 
   @Configuration
   @EnableWebSecurity
-  @EnableGlobalMethodSecurity(prePostEnabled = true)
+  @EnableGlobalMethodSecurity(prePostEnabled = true) // ENABLE @PreAuthorize & @PostAuthorize annotations
+                                                     // <security:global-method-security pre-post-annotations="enabled" />
   protected static class SecurityConfig extends WebSecurityConfigurerAdapter {
     @Autowired
     PlatformTransactionManager txManager;
