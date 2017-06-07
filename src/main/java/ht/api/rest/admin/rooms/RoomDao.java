@@ -78,6 +78,8 @@ public class RoomDao implements IRoomDao {
     paramsMap.addValue("typeOfBed", bean.getTypeOfBed());
     paramsMap.addValue("id", bean.getId());
 
+    DaoUtils.debugQuery(LOGGER, sql, paramsMap.getValues());
+
     namedTemplate.update(sql, paramsMap);
   }
 
