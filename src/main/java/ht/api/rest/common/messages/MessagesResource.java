@@ -10,6 +10,8 @@ import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import java.util.Map;
+
 /**
  * Created by haho on 6/7/2017.
  */
@@ -22,11 +24,11 @@ public class MessagesResource extends BaseResource {
 
   @GetMapping("/messages")
   @PreAuthorize("hasAuthority('ADMIN')")
-  public void getMessages(
+  public Map<String, String> getMessages(
       @AuthenticationPrincipal UserDetailsImpl userDetails,
       @HeaderLang String lang
   ) {
-    messagesService.getAdminMessages(lang);
+    return messagesService.getAdminMessages(lang);
   }
 
 }
