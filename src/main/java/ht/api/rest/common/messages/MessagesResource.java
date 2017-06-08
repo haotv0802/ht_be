@@ -26,7 +26,7 @@ public class MessagesResource extends BaseResource {
       @AuthenticationPrincipal UserDetailsImpl userDetails,
       @HeaderLang String lang
   ) {
-    messagesService.getAdminMessages();
+    messagesService.getAdminMessages(lang);
   }
 
 }
