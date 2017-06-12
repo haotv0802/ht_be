@@ -1,8 +1,11 @@
 package ht.api.rest.common.messages;
 
+import ht.api.rest.admin.BaseAdminResource;
 import ht.api.rest.common.BaseResource;
 import ht.auth.UserDetailsImpl;
 import ht.common.beans.HeaderLang;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.security.access.prepost.PreAuthorize;
@@ -18,6 +21,8 @@ import java.util.Map;
 @RestController
 public class MessagesResource extends BaseResource {
 
+  private final Logger logger = LogManager.getLogger(getClass());
+
   @Autowired
   @Qualifier("messagesService")
   private MessagesService messagesService;
@@ -28,7 +33,9 @@ public class MessagesResource extends BaseResource {
       @AuthenticationPrincipal UserDetailsImpl userDetails,
       @HeaderLang String lang
   ) {
-    return messagesService.getAdminMessages(lang);
+    Map<String, String> maps = messagesService.getAdminMessages(lang);
+    logger.info("maps: " + maps);
+    return maps;
   }
 
 }
