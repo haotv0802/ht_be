@@ -11,6 +11,7 @@ import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RestController;
 
 import java.util.Map;
@@ -38,4 +39,13 @@ public class MessagesResource extends BaseResource {
     return maps;
   }
 
+  @GetMapping("/{name}/messages")
+  @PreAuthorize("hasAuthority('ADMIN')")
+  public Map<String, Map<String, String>> getMessagesByPageName(
+      @AuthenticationPrincipal UserDetailsImpl userDetails,
+      @HeaderLang String lang,
+      @PathVariable(value = "name") String name
+  ) {
+    return this.messagesService.getAdminMessages(lang, "");
+  }
 }

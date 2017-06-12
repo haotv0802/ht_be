@@ -22,4 +22,14 @@ public class MessagesResourceTest extends BaseDocumentation {
     ;
   }
 
+  @Test
+  public void testGetMessagesByName() throws Exception {
+    mockMvc
+        .perform(get("/svc/name/messages")
+            .header("Accept-Language", "en")
+            .header("X-AUTH-TOKEN", authTokenService.getAuthToken())
+        )
+        .andExpect(status().is(200))
+    ;
+  }
 }

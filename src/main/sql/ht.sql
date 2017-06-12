@@ -96,6 +96,25 @@ INSERT INTO `user_role_details` VALUES
 ;
 
 --
+-- Table structure for table `messages`
+--
+DROP TABLE IF EXISTS `messages`;
+CREATE TABLE `messages` (
+  `id`             BIGINT AUTO_INCREMENT,
+  `role_id`        BIGINT       NOT NULL,
+  `component_name` VARCHAR(45)  NOT NULL,
+  `message_key`    VARCHAR(45)  NOT NULL,
+  `message_en`     VARCHAR(100) NOT NULL,
+  `message_fr`     VARCHAR(100) NOT NULL,
+  PRIMARY KEY (`id`),
+  UNIQUE KEY `messages_id_unique` (`id`),
+  UNIQUE KEY `messages_role_id_component_name_key_unique` (`role_id`, `component_name`, `message_key`),
+  CONSTRAINT `messages_role_id` FOREIGN KEY (`role_id`) REFERENCES `user_role` (`id`)
+)
+  ENGINE = InnoDB
+  DEFAULT CHARSET = utf8;
+
+--
 -- Table structure for table `auth_token`
 --
 DROP TABLE IF EXISTS `auth_token`;
