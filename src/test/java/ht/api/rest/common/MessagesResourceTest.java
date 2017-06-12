@@ -22,7 +22,7 @@ public class MessagesResourceTest extends BaseDocumentation {
     ;
   }
 
-  @Test
+//  @Test
   public void testGetMessagesByName() throws Exception {
     mockMvc
         .perform(get("/svc/name/messages")

@@ -30,22 +30,22 @@ public class MessagesResource extends BaseResource {
 
   @GetMapping("/messages")
   @PreAuthorize("hasAuthority('ADMIN')")
-  public Map<String, String> getMessages(
+  public Map<String, Map<String, String>> getMessages(
       @AuthenticationPrincipal UserDetailsImpl userDetails,
       @HeaderLang String lang
   ) {
-    Map<String, String> maps = messagesService.getAdminMessages(lang);
+    Map<String, Map<String, String>> maps = messagesService.getAdminMessages(lang, "");
     logger.info("maps: " + maps);
     return maps;
   }
 
-  @GetMapping("/{name}/messages")
-  @PreAuthorize("hasAuthority('ADMIN')")
-  public Map<String, Map<String, String>> getMessagesByPageName(
-      @AuthenticationPrincipal UserDetailsImpl userDetails,
-      @HeaderLang String lang,
-      @PathVariable(value = "name") String name
-  ) {
-    return this.messagesService.getAdminMessages(lang, "");
-  }
+//  @GetMapping("/{name}/messages")
+//  @PreAuthorize("hasAuthority('ADMIN')")
+//  public Map<String, Map<String, String>> getMessagesByPageName(
+//      @AuthenticationPrincipal UserDetailsImpl userDetails,
+//      @HeaderLang String lang,
+//      @PathVariable(value = "name") String name
+//  ) {
+//    return this.messagesService.getAdminMessages(lang, "");
+//  }
 }
