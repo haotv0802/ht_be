@@ -1,4 +1,4 @@
-package ht.api.rest.common.messages.interfaces;
+package ht.api.rest.admin.messages.interfaces;
 
 import java.util.Map;
 

@@ -1,6 +1,6 @@
-package ht.api.rest.common.messages;
+package ht.api.rest.admin.messages;
 
-import ht.api.rest.common.messages.interfaces.IMessagesDao;
+import ht.api.rest.admin.messages.interfaces.IMessagesDao;
 import ht.common.dao.DaoUtils;
 import io.jsonwebtoken.lang.Assert;
 import org.apache.logging.log4j.LogManager;
@@ -84,7 +84,6 @@ public class MessagesDao implements IMessagesDao {
 
     return messages;
   }
-
 
   private List<String> getComponentsList(String role) {
     final String sql = "SELECT DISTINCT                   "

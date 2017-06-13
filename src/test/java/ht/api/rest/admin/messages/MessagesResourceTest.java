@@ -1,4 +1,4 @@
-package ht.api.rest.common;
+package ht.api.rest.admin.messages;
 
 import ht.api.rest.BaseDocumentation;
 import org.testng.annotations.Test;
@@ -14,19 +14,8 @@ public class MessagesResourceTest extends BaseDocumentation {
   @Test
   public void testGetMessages() throws Exception {
     mockMvc
-        .perform(get("/svc/messages")
-            .header("Accept-Language", "en")
-            .header("X-AUTH-TOKEN", authTokenService.getAuthToken())
-        )
-        .andExpect(status().is(200))
-    ;
-  }
-
-//  @Test
-  public void testGetMessagesByName() throws Exception {
-    mockMvc
-        .perform(get("/svc/name/messages")
-            .header("Accept-Language", "en")
+        .perform(get("/svc/admin/messages")
+            .header("Accept-Language", "")
             .header("X-AUTH-TOKEN", authTokenService.getAuthToken())
         )
         .andExpect(status().is(200))

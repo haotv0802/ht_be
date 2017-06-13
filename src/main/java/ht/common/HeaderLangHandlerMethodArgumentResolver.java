@@ -1,6 +1,7 @@
 package ht.common;
 
 import ht.common.beans.HeaderLang;
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.core.MethodParameter;
 import org.springframework.http.HttpHeaders;
 import org.springframework.web.bind.support.WebDataBinderFactory;
@@ -25,7 +26,7 @@ public final class HeaderLangHandlerMethodArgumentResolver implements HandlerMet
   ) throws Exception {
     String acceptLang = webRequest.getHeader(HttpHeaders.ACCEPT_LANGUAGE);
 
-    if (null == acceptLang) {
+    if (StringUtils.isEmpty(acceptLang)) {
       return defaultLang;
     }
 
