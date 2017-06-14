@@ -16,7 +16,7 @@ public class MessagesResourceTest extends BaseDocumentation {
     mockMvc
         .perform(get("/svc/messages")
             .header("Accept-Language", "")
-            .header("X-AUTH-TOKEN", authTokenService.getAuthToken())
+//            .header("X-AUTH-TOKEN", authTokenService.getAuthToken())
         )
         .andExpect(status().is(200))
     ;
