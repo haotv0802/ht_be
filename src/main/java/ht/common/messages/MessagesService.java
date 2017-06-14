@@ -1,7 +1,7 @@
-package ht.api.rest.admin.messages;
+package ht.common.messages;
 
-import ht.api.rest.admin.messages.interfaces.IMessagesDao;
-import ht.api.rest.admin.messages.interfaces.IMessagesService;
+import ht.common.messages.interfaces.IMessagesDao;
+import ht.common.messages.interfaces.IMessagesService;
 import io.jsonwebtoken.lang.Assert;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Service;
@@ -11,12 +11,12 @@ import java.util.Map;
 /**
  * Created by haho on 6/7/2017.
  */
-@Service("adminMessagesService")
+@Service("messagesService")
 public class MessagesService implements IMessagesService {
 
   private final IMessagesDao messagesDao;
 
-  public MessagesService(@Qualifier("adminMessagesDao") IMessagesDao messagesDao) {
+  public MessagesService(@Qualifier("messagesDao") IMessagesDao messagesDao) {
     Assert.notNull(messagesDao);
 
     this.messagesDao = messagesDao;

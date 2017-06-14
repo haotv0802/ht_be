@@ -1,7 +1,7 @@
-package ht.api.rest.admin.messages;
+package ht.common.messages;
 
-import ht.api.rest.admin.messages.interfaces.IMessagesDao;
 import ht.common.dao.DaoUtils;
+import ht.common.messages.interfaces.IMessagesDao;
 import io.jsonwebtoken.lang.Assert;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -21,7 +21,7 @@ import java.util.TreeMap;
 /**
  * Created by haho on 6/12/2017.
  */
-@Repository("adminMessagesDao")
+@Repository("messagesDao")
 public class MessagesDao implements IMessagesDao {
 
   private static final Logger LOGGER = LogManager.getLogger(MessagesDao.class);
@@ -37,46 +37,40 @@ public class MessagesDao implements IMessagesDao {
   @Override
   public Map<String, Map<String, String>> getMessages(String language) {
     final String sql = "SELECT                            "
-                     + "	m.id,                           "
-                     + "	m.role_id,                      "
-                     + "	r.role_name,                    "
-                     + "	m.component_name,               "
+//                     + "	m.id,                           "
+//                     + "	m.role_id,                      "
+//                     + "	r.role_name,                    "
+//                     + "	m.component_name,               "
                      + "	m.message_key,                  "
                      + "	m.message_en,                   "
                      + "	m.message_fr                    "
                      + "FROM                              "
                      + "	ht_db.messages m                "
-                     + "		INNER JOIN                    "
-                     + "	user_role r ON m.role_id = r.id "
                      + "WHERE                             "
-                     + "	r.role_name = UPPER(:role)      "
+                     + "	m.role_id is null               "
                      + "AND m.component_name = :name      "
         ;
-    List<String> componentsList = this.getComponentsList("ADMIN");
+    List<String> componentsList = this.getComponentsList();
 
     Map<String, Map<String, String>> messages = new TreeMap<>();
     for (String component : componentsList) {
       final MapSqlParameterSource paramsMap = new MapSqlParameterSource();
-      paramsMap.addValue("role", "admin");
       paramsMap.addValue("name", component);
 
 
       DaoUtils.debugQuery(LOGGER, sql, paramsMap.getValues());
 
-      Map<String, String> keysValuesMap = namedTemplate.query(sql, paramsMap, new ResultSetExtractor<Map<String, String>>() {
-        @Override
-        public Map<String, String> extractData(ResultSet rs) throws SQLException, DataAccessException {
-          Map<String, String> keysValues = new TreeMap<>();
+      Map<String, String> keysValuesMap = namedTemplate.query(sql, paramsMap, rs -> {
+        Map<String, String> keysValues = new TreeMap<>();
 
-          while (rs.next()) {
-            keysValues.put(
-                rs.getString("message_key"),
-                rs.getString("message_" + language.toLowerCase())
-            );
-          }
-
-          return keysValues;
+        while (rs.next()) {
+          keysValues.put(
+              rs.getString("message_key"),
+              rs.getString("message_" + language.toLowerCase())
+          );
         }
+
+        return keysValues;
       });
 
       messages.put(component, keysValuesMap);
@@ -85,19 +79,16 @@ public class MessagesDao implements IMessagesDao {
     return messages;
   }
 
-  private List<String> getComponentsList(String role) {
-    final String sql = "SELECT DISTINCT                   "
-                     + "	m.component_name                "
-                     + "FROM                              "
-                     + "	ht_db.messages m                "
-                     + "		INNER JOIN                    "
-                     + "	user_role r ON m.role_id = r.id "
-                     + "WHERE                             "
-                     + "	r.role_name = UPPER(:role)    "
+  private List<String> getComponentsList() {
+    final String sql = "SELECT DISTINCT     "
+                     + "	m.component_name  "
+                     + "FROM                "
+                     + "	ht_db.messages m  "
+                     + "WHERE               "
+                     + "	m.role_id IS NULL "
         ;
 
     final MapSqlParameterSource paramsMap = new MapSqlParameterSource();
-    paramsMap.addValue("role", role);
 
     DaoUtils.debugQuery(LOGGER, sql, paramsMap.getValues());
 

@@ -101,7 +101,7 @@ INSERT INTO `user_role_details` VALUES
 DROP TABLE IF EXISTS `messages`;
 CREATE TABLE `messages` (
   `id`             BIGINT AUTO_INCREMENT,
-  `role_id`        BIGINT       NOT NULL,
+  `role_id`        BIGINT       NULL, # NULL is for anyone
   `component_name` VARCHAR(45)  NOT NULL,
   `message_key`    VARCHAR(45)  NOT NULL,
   `message_en`     VARCHAR(100) NOT NULL,
