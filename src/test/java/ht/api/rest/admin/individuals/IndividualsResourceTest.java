@@ -1,6 +1,6 @@
 package ht.api.rest.admin.individuals;
 
-import ht.api.rest.BaseDocumentation;
+import ht.api.rest.BaseAdminDocumentation;
 import org.springframework.test.web.servlet.result.MockMvcResultMatchers;
 import org.testng.annotations.Test;
 
@@ -10,7 +10,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 /**
  * Created by haho on 04/03/2017.
  */
-public class IndividualsResourceTest extends BaseDocumentation {
+public class IndividualsResourceTest extends BaseAdminDocumentation {
 
   @Test
   public void testGetIndividuals() throws Exception {

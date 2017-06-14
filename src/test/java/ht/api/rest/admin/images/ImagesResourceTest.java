@@ -1,7 +1,7 @@
 package ht.api.rest.admin.images;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import ht.api.rest.BaseDocumentation;
+import ht.api.rest.BaseAdminDocumentation;
 import ht.api.rest.admin.images.beans.Image;
 import org.json.JSONObject;
 import org.springframework.http.MediaType;
@@ -17,7 +17,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 /**
  * Created by haho on 3/22/2017.
  */
-public class ImagesResourceTest extends BaseDocumentation {
+public class ImagesResourceTest extends BaseAdminDocumentation {
 
   @Test
   public void testGetImages() throws Exception {

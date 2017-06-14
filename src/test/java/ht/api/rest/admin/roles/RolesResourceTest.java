@@ -1,6 +1,6 @@
 package ht.api.rest.admin.roles;
 
-import ht.api.rest.BaseDocumentation;
+import ht.api.rest.BaseAdminDocumentation;
 import org.testng.annotations.Test;
 
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
@@ -9,7 +9,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 /**
  * Created by haho on 3/22/2017.
  */
-public class RolesResourceTest extends BaseDocumentation {
+public class RolesResourceTest extends BaseAdminDocumentation {
 
   @Test
   public void testGetRoles() throws Exception {

@@ -18,7 +18,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
          "/config/spring-mvc.xml"
         ,"/config/spring-mvc-test.xml"
     })
-public class TestingResourceTest extends BaseDocumentation {
+public class TestingResourceTest extends BaseAdminDocumentation {
 
   @Autowired
   @Qualifier("authTokenService")

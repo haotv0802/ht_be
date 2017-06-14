@@ -1,7 +1,7 @@
 package ht.api.rest.admin.rooms;
 
 import com.fasterxml.jackson.databind.type.TypeFactory;
-import ht.api.rest.BaseDocumentation;
+import ht.api.rest.BaseAdminDocumentation;
 import ht.api.rest.admin.rooms.beans.RoomTypeBean;
 import io.jsonwebtoken.lang.Assert;
 import org.springframework.http.MediaType;
@@ -17,7 +17,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 /**
  * Created by haho on 3/22/2017.
  */
-public class RoomsResourceTest extends BaseDocumentation {
+public class RoomsResourceTest extends BaseAdminDocumentation {
 
   @Test
   public void testGetRoomTypes() throws Exception {

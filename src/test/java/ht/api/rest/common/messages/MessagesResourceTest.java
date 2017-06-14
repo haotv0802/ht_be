@@ -1,6 +1,6 @@
 package ht.api.rest.common.messages;
 
-import ht.api.rest.BaseDocumentation;
+import ht.api.rest.BaseAdminDocumentation;
 import org.testng.annotations.Test;
 
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
@@ -9,7 +9,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 /**
  * Created by haho on 6/7/2017.
  */
-public class MessagesResourceTest extends BaseDocumentation {
+public class MessagesResourceTest extends BaseAdminDocumentation {
 
   @Test
   public void testGetMessages() throws Exception {
