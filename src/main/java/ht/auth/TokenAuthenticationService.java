@@ -52,7 +52,7 @@ public class TokenAuthenticationService {
         final Integer tokenId = tokenHandler.getAuthId(token);
 
         if (null != tokenId) {
-          final UserDetails userDetails = loginDao.readUserDetailsForToken(tokenId);
+          final UserDetails userDetails = loginDao.readUserDetailsFromToken(tokenId);
           if (userDetails != null) {
             return new UsernamePasswordAuthenticationToken(userDetails, userDetails.getPassword(), userDetails.getAuthorities());
           }

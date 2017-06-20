@@ -152,7 +152,7 @@ public class LoginDao {
     return id;
   }
 
-  public UserDetails readUserDetailsForToken(Integer id) {
+  public UserDetails readUserDetailsFromToken(Integer id) {
     final String getTokenSql = "SELECT TOKEN_TYPE, AUTH_OBJECT, EXP_DATE FROM AUTH_TOKEN WHERE ID = ?";
     final Object[] args = {id};
 
