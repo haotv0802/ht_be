@@ -43,8 +43,8 @@ CREATE TABLE `fm_user_role_details` (
   UNIQUE KEY `fm_user_role_unique` (`user_id`, `role_id`),
   UNIQUE KEY `fm_user_role_user_id_unique` (`user_id`), #  A user has just ONLY 1 role.
   KEY `role_id` (`role_id`),
-  CONSTRAINT `fm_user_role_details_role_id` FOREIGN KEY (`role_id`) REFERENCES `fm_user_role` (`id`),
-  CONSTRAINT `fm_user_role_details_user_id` FOREIGN KEY (`user_id`) REFERENCES `fm_user` (`id`)
+  CONSTRAINT `fm_user_role_details_role_id` FOREIGN KEY (`role_id`) REFERENCES `fm_user_roles` (`id`),
+  CONSTRAINT `fm_user_role_details_user_id` FOREIGN KEY (`user_id`) REFERENCES `fm_users` (`id`)
 )
   ENGINE = InnoDB
   AUTO_INCREMENT = 11
@@ -58,7 +58,7 @@ CREATE TABLE `fm_earnings` (
   `date`    DATETIME DEFAULT now(),
   PRIMARY KEY (`id`),
   UNIQUE KEY `fm_earnings_id_unique` (`id`),
-  CONSTRAINT `fm_earnings_user_id` FOREIGN KEY (`user_id`) REFERENCES `fm_user` (`id`)
+  CONSTRAINT `fm_earnings_user_id` FOREIGN KEY (`user_id`) REFERENCES `fm_users` (`id`)
 )
   ENGINE = InnoDB
   DEFAULT CHARSET = utf8;
@@ -108,6 +108,16 @@ CREATE TABLE `fm_expenses` (
   ENGINE = InnoDB
   DEFAULT CHARSET = utf8;
 
+DROP TABLE IF EXISTS `fm_event_types`;
+CREATE TABLE `fm_event_types` (
+  `id`   BIGINT      NOT NULL,
+  `name` VARCHAR(45) NULL, # group sharing, traveling, group party, borrow money, pay back money
+  PRIMARY KEY (`id`),
+  UNIQUE KEY `fm_event_types_id_unique` (`id`)
+)
+  ENGINE = InnoDB
+  DEFAULT CHARSET = utf8;
+
 DROP TABLE IF EXISTS `fm_event_expenses`; # the event that you involve in spending money with others in the group
 # in the end, this data will be used for calculation of expense of each person
 # it is mandatory that, you involve in this even you are not a host (main person spending, but the other)
@@ -132,12 +142,3 @@ CREATE TABLE `fm_event_expenses` (
   ENGINE = InnoDB
   DEFAULT CHARSET = utf8;
 
-DROP TABLE IF EXISTS `fm_event_types`;
-CREATE TABLE `fm_event_types` (
-  `id`   BIGINT      NOT NULL,
-  `name` VARCHAR(45) NULL, # group sharing, traveling, group party, borrow money, pay back money
-  PRIMARY KEY (`id`),
-  UNIQUE KEY `fm_event_types_id_unique` (`id`)
-)
-  ENGINE = InnoDB
-  DEFAULT CHARSET = utf8;
