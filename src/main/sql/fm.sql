@@ -76,13 +76,14 @@ CREATE TABLE `fm_payment_methods` (
 
 DROP TABLE IF EXISTS `fm_cards_information`;
 CREATE TABLE `fm_cards_information` (
-  `id`           BIGINT      NOT NULL,
-  `name`         VARCHAR(45) NULL, # HSBC, ANZ 123
-  `start_date`   DATE        NULL,
-  `expiry_date`  DATE        NULL,
-  `card_number`  VARCHAR(45) NULL, # last 6 digits
-  `amount`       VARCHAR(45) NULL,
-  `card_type_id` BIGINT      NULL,
+  `id`            BIGINT      NOT NULL,
+  `name`          VARCHAR(45) NULL, # HSBC, ANZ 123
+  `start_date`    DATE        NULL,
+  `expiry_date`   DATE        NULL,
+  `card_number`   VARCHAR(45) NULL, # last 6 digits
+  `amount`        DOUBLE      NOT NULL,
+  `card_type_id`  BIGINT      NULL,
+  `is_terminated` BOOLEAN DEFAULT FALSE,
   PRIMARY KEY (`id`),
   UNIQUE KEY `fm_cards_information_id_unique` (`id`),
   CONSTRAINT `fm_cards_information_user_id` FOREIGN KEY (`card_type_id`) REFERENCES `fm_payment_methods` (`id`)
@@ -90,9 +91,39 @@ CREATE TABLE `fm_cards_information` (
   ENGINE = InnoDB
   DEFAULT CHARSET = utf8;
 
+DROP TABLE IF EXISTS `fm_cards_payments_tracking`;
+CREATE TABLE `fm_cards_payments_tracking` (
+  `id`      BIGINT      NOT NULL,
+  `name`    VARCHAR(45) NULL, # name of payment
+  `date`    DATETIME    NULL,
+  `amount`  DOUBLE      NOT NULL,
+  `card_id` BIGINT      NOT NULL,
+  PRIMARY KEY (`id`),
+  UNIQUE KEY `fm_cards_payments_tracking_id_unique` (`id`),
+  CONSTRAINT `fm_cards_payments_tracking_card_id` FOREIGN KEY (`card_id`) REFERENCES `fm_cards_information` (`id`)
+)
+  ENGINE = InnoDB
+  DEFAULT CHARSET = utf8;
+
+DROP TABLE IF EXISTS `fm_cards_invoices`;
+CREATE TABLE `fm_cards_invoices` (
+  `id`               BIGINT      NOT NULL,
+  `name`             VARCHAR(45) NULL, # name of statement
+  `amount`           DOUBLE      NOT NULL,
+  `stament_date`     DATETIME    NULL,
+  `payment_due_date` DATETIME    NULL,
+  `card_id`          BIGINT      NOT NULL,
+  PRIMARY KEY (`id`),
+  UNIQUE KEY `fm_cards_payments_tracking_id_unique` (`id`),
+  CONSTRAINT `fm_cards_invoices_card_id` FOREIGN KEY (`card_id`) REFERENCES `fm_cards_information` (`id`)
+)
+  ENGINE = InnoDB
+  DEFAULT CHARSET = utf8;
+
 DROP TABLE IF EXISTS `fm_expenses`;
 CREATE TABLE `fm_expenses` (
   `id`                BIGINT      NOT NULL,
+  `user_id`           BIGINT      NOT NULL,
   `amount`            DOUBLE      NULL, # if `is_an_event is TRUE, amount can be updated later when event is over
   `date`              DATETIME DEFAULT now(),
   `place`             VARCHAR(45) NOT NULL,
@@ -103,7 +134,8 @@ CREATE TABLE `fm_expenses` (
   `payment_method_id` BIGINT      NOT NULL, # if `is_an_event is TRUE, payment_method is NULL
   PRIMARY KEY (`id`),
   UNIQUE KEY `fm_expenses_id_unique` (`id`),
-  CONSTRAINT `fm_payment_methods_payment_method_id` FOREIGN KEY (`payment_method_id`) REFERENCES `fm_payment_methods` (`id`)
+  CONSTRAINT `fm_expenses_user_id` FOREIGN KEY (`user_id`) REFERENCES `fm_users` (`id`),
+  CONSTRAINT `fm_expenses_payment_method_id` FOREIGN KEY (`payment_method_id`) REFERENCES `fm_payment_methods` (`id`)
 )
   ENGINE = InnoDB
   DEFAULT CHARSET = utf8;
@@ -141,4 +173,3 @@ CREATE TABLE `fm_event_expenses` (
 )
   ENGINE = InnoDB
   DEFAULT CHARSET = utf8;
-
